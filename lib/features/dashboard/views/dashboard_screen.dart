@@ -42,6 +42,9 @@ class DashboardScreen extends StatelessWidget {
                           'Dashboard',
                           style: AppTextStyles.displaySmall.copyWith(
                             color: AppColors.accent,
+                            fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                            fontWeight: FontWeight.w600,
+                            
                           ),
                         ),
                         _PeriodDropdown(),
