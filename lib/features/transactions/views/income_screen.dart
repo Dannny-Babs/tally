@@ -31,11 +31,34 @@ class IncomeScreen extends StatelessWidget {
           }
 
           return Scaffold(
-            backgroundColor: Colors.white,
+            backgroundColor: AppColors.surfaceLight,
+            appBar: AppBar(
+              backgroundColor: AppColors.backgroundLight,
+              title: Text(
+                'Income',
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      color: AppColors.neutral900,
+                      fontWeight: FontWeight.w600,
+                    ),
+              ),
+              actions: [
+                IconButton(
+                  icon: HeroIcon(
+                    HeroIcons.plus,
+                    style: HeroIconStyle.solid,
+                    color: AppColors.primary200.withAlpha(150),
+                    size: 24,
+                  ),
+                  onPressed: () {
+                    // Navigate to add income screen
+                  },
+                ),
+              ],
+            ),
             body: SafeArea(
               child: Container(
                 decoration: BoxDecoration(
-                  color: AppColors.background,
+                  color: AppColors.backgroundLight,
                   borderRadius: BorderRadius.only(
                     bottomRight: Radius.circular(24),
                     bottomLeft: Radius.circular(24),
@@ -47,106 +70,56 @@ class IncomeScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Income',
-                        style: AppTextStyles.displaySmall.copyWith(
-                          color: AppColors.accent,
-                          fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
-                          fontSize: 22,
-                          letterSpacing: -0.5,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        'Total Income',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: AppColors.textSecondaryLight,
+                            ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        '\$2,500',
+                        style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                              color: AppColors.neutral900,
+                              fontWeight: FontWeight.w600,
+                            ),
                       ),
                       const SizedBox(height: 16),
-                      Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          side: BorderSide(
-                            color: AppColors.primaryLight.withAlpha(150),
+                      _buildIncomeSplitCard(
+                        sources: {'Freelance': 2800, 'Job': 1400},
+                      ),
+                      const SizedBox(height: 4),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton.icon(
+                          onPressed: () {
+                            // TODO: Navigate to AddTransactionScreen
+                            showModalBottomSheet(
+                              context: context,
+                              backgroundColor: Colors.transparent,
+                              isScrollControlled: true,
+                              builder: (_) => const AddIncomeModal(),
+                            );
+                          },
+                          icon: Icon(
+                            Icons.add,
+                            color: AppColors.surfaceLight,
                           ),
-                        ),
-                        color: Colors.white,
-                        elevation: 0,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 4,
-                            horizontal: 4,
+                          label: Text(
+                            'Add Income / Payment',
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: AppColors.surfaceLight,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const SizedBox(height: 12),
-                              Text(
-                                'Total income this month',
-                                style: AppTextStyles.bodyMedium.copyWith(
-                                  color: AppColors.primary,
-                                  letterSpacing: -0.5,
-                                ),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    '\$',
-                                    style: AppTextStyles.bodyMedium.copyWith(
-                                      fontSize: 28,
-                                      color: AppColors.primary,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    '4200.00',
-                                    style: AppTextStyles.displayLarge.copyWith(
-                                      fontSize: 52,
-                                      color: AppColors.accent,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 16),
-                              _buildIncomeSplitCard(
-                                sources: {'Freelance': 2800, 'Job': 1400},
-                              ),
-                              const SizedBox(height: 4),
-                              SizedBox(
-                                width: double.infinity,
-                                child: ElevatedButton.icon(
-                                  onPressed: () {
-                                    // TODO: Navigate to AddTransactionScreen
-                                    showModalBottomSheet(
-                                      context: context,
-                                      backgroundColor: Colors.transparent,
-                                      isScrollControlled: true,
-                                      builder: (_) => const AddIncomeModal(),
-                                    );
-                                  },
-                                  icon: const Icon(
-                                    Icons.add,
-                                    color: Colors.white,
-                                  ),
-                                  label: Text(
-                                    'Add Income / Payment',
-                                    style: AppTextStyles.bodyMedium.copyWith(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
-                                      letterSpacing: -0.15,
-                                      fontFamily:
-                                          GoogleFonts.spaceMono().fontFamily,
-                                    ),
-                                  ),
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: AppColors.accent,
-                                    foregroundColor: Colors.white,
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 16,
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.neutral900,
+                            foregroundColor: AppColors.surfaceLight,
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 16,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
                           ),
                         ),
                       ),
@@ -155,11 +128,8 @@ class IncomeScreen extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 4.0),
                         child: Text(
                           'Income History',
-                          style: AppTextStyles.displaySmall.copyWith(
-                            color: AppColors.accent,
-                            letterSpacing: -0.5,
-                            fontSize: 16,
-                            fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            color: AppColors.neutral900,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -179,26 +149,17 @@ class IncomeScreen extends StatelessWidget {
                                 : state is TransactionLoaded
                                 ? Container(
                                   decoration: BoxDecoration(
-                                    color: Colors.white,
+                                    color: AppColors.surfaceLight,
                                     borderRadius: BorderRadius.circular(16),
                                     border: Border.all(
-                                      color: AppColors.primaryLight.withAlpha(
-                                        150,
-                                      ),
+                                      color: AppColors.primary200.withAlpha(150),
                                     ),
                                   ),
-                                  child: NotificationListener<
-                                    ScrollNotification
-                                  >(
-                                    onNotification: (
-                                      ScrollNotification scrollInfo,
-                                    ) {
+                                  child: NotificationListener<ScrollNotification>(
+                                    onNotification: (ScrollNotification scrollInfo) {
                                       if (scrollInfo is ScrollEndNotification &&
                                           scrollInfo.metrics.pixels >=
-                                              scrollInfo
-                                                      .metrics
-                                                      .maxScrollExtent -
-                                                  200) {
+                                              scrollInfo.metrics.maxScrollExtent - 200) {
                                         final currentState = state;
                                         if (!currentState.hasReachedMax) {
                                           context.read<TransactionBloc>().add(
@@ -213,32 +174,23 @@ class IncomeScreen extends StatelessWidget {
                                         vertical: 8,
                                         horizontal: 8,
                                       ),
-                                      itemCount:
-                                          (state).transactions.length + 1,
-                                      separatorBuilder:
-                                          (context, index) =>
-                                              const SizedBox(height: 8),
+                                      itemCount: (state).transactions.length + 1,
+                                      separatorBuilder: (context, index) =>
+                                          const SizedBox(height: 8),
                                       itemBuilder: (context, index) {
                                         final currentState = state;
-                                        if (index ==
-                                            currentState.transactions.length) {
+                                        if (index == currentState.transactions.length) {
                                           if (currentState.hasReachedMax) {
                                             return Center(
                                               child: Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                      vertical: 16,
-                                                    ),
+                                                padding: const EdgeInsets.symmetric(
+                                                  vertical: 16,
+                                                ),
                                                 child: Text(
                                                   'Oops, that\'s all!',
-                                                  style: AppTextStyles.bodySmall
-                                                      .copyWith(
-                                                        color:
-                                                            AppColors.primary,
-                                                        fontFamily:
-                                                            GoogleFonts.spaceGrotesk()
-                                                                .fontFamily,
-                                                      ),
+                                                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                                    color: AppColors.textSecondaryLight,
+                                                  ),
                                                 ),
                                               ),
                                             );
@@ -251,25 +203,19 @@ class IncomeScreen extends StatelessWidget {
                                                 child: SizedBox(
                                                   width: 24,
                                                   height: 24,
-                                                  child:
-                                                      CircularProgressIndicator(
-                                                        strokeWidth: 2,
-                                                      ),
+                                                  child: CircularProgressIndicator(
+                                                    strokeWidth: 2,
+                                                  ),
                                                 ),
                                               ),
                                             );
                                           }
                                         }
-                                        final transaction =
-                                            currentState.transactions[index];
+                                        final transaction = currentState.transactions[index];
                                         return ActivityCard(
-                                          icon: _getIconForSource(
-                                            transaction.source,
-                                          ),
-                                          title:
-                                              '${transaction.source}: ${transaction.description}',
-                                          subtitle:
-                                              '${transaction.date} • ${transaction.time}',
+                                          icon: _getIconForSource(transaction.source),
+                                          title: '${transaction.source}: ${transaction.description}',
+                                          subtitle: '${transaction.date} • ${transaction.time}',
                                           amount: transaction.amount,
                                           isIncome: true,
                                         );
@@ -277,7 +223,7 @@ class IncomeScreen extends StatelessWidget {
                                     ),
                                   ),
                                 )
-                                : const SizedBox(),
+                                : const SizedBox.shrink(),
                       ),
                     ],
                   ),
@@ -290,59 +236,67 @@ class IncomeScreen extends StatelessWidget {
     );
   }
 
+  Widget _buildIncomeSplitCard({required Map<String, int> sources}) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.primary200.withAlpha(150),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Income by Source',
+            style: TextStyle(
+              color: AppColors.textSecondaryLight,
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(height: 16),
+          ...sources.entries.map((entry) {
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    entry.key,
+                    style: TextStyle(
+                      color: AppColors.textPrimaryLight,
+                      fontSize: 14,
+                    ),
+                  ),
+                  Text(
+                    '\$${entry.value}',
+                    style: TextStyle(
+                      color: AppColors.neutral900,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
+        ],
+      ),
+    );
+  }
+
   HeroIcons _getIconForSource(String source) {
     switch (source.toLowerCase()) {
+      case 'salary':
+        return HeroIcons.briefcase;
       case 'freelance':
         return HeroIcons.computerDesktop;
-      case 'job':
-        return HeroIcons.briefcase;
+      case 'investment':
+        return HeroIcons.chartBar;
+      case 'gift':
+        return HeroIcons.gift;
       default:
         return HeroIcons.banknotes;
     }
-  }
-
-  Widget _buildIncomeSplitCard({required Map<String, double> sources}) {
-    final entries = sources.entries.take(3).toList();
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: AppColors.background,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AppColors.primaryLight.withAlpha(150)),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children:
-            entries.map((entry) {
-              return Expanded(
-                child: Column(
-                  children: [
-                    Text(
-                      entry.key,
-                      style: AppTextStyles.bodySmall.copyWith(
-                        color: AppColors.primary,
-                        fontSize: 12,
-                        fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: -0.25,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      '\$${entry.value.toStringAsFixed(0)}',
-                      style: AppTextStyles.bodyMedium.copyWith(
-                        color: AppColors.accent,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 22,
-                        letterSpacing: -0.25,
-                        fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }).toList(),
-      ),
-    );
   }
 }

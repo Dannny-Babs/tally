@@ -31,6 +31,10 @@ class LabeledInput extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: AppColors.neutral200,
                     fontWeight: FontWeight.w500,
+                    fontSize: 14,
+                    height: 1.5,
+                    letterSpacing: 0.5,
+                    fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
                   ),
             ),
             if (isRequired)
@@ -38,6 +42,10 @@ class LabeledInput extends StatelessWidget {
                 ' *',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: AppColors.error.withAlpha(76),
+                      fontSize: 14,
+                      height: 1.5,
+                      letterSpacing: 0.5,
+                      fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
                     ),
               ),
           ],
@@ -59,6 +67,11 @@ class LabeledInput extends StatelessWidget {
             errorText!,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: AppColors.error,
+                  fontSize: 14,
+                  height: 1.5,
+                  letterSpacing: 0.5,
+                  fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+
                 ),
           ),
         ],

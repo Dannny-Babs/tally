@@ -38,7 +38,7 @@ class _AddOptionsModalState extends State<AddOptionsModal> {
                       Text(
                         'Add Something New',
                         style: AppTextStyles.displaySmall.copyWith(
-                          color: AppColors.accent,
+                          color: AppColors.textPrimaryLight,
                           fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
                           fontSize: 20,
                           letterSpacing: -0.5,
@@ -48,7 +48,7 @@ class _AddOptionsModalState extends State<AddOptionsModal> {
                       Text(
                         'What do you want to log right now?',
                         style: AppTextStyles.bodyMedium.copyWith(
-                          color: AppColors.primary,
+                          color: AppColors.textPrimaryLight,
                           letterSpacing: -0.15,
                           fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
 
@@ -60,7 +60,7 @@ class _AddOptionsModalState extends State<AddOptionsModal> {
                   IconButton(
                     onPressed: () => Navigator.pop(context),
                     icon: const Icon(Icons.close),
-                    color: AppColors.accent,
+                            color: AppColors.textPrimaryLight,
                   ),
                 ],
               ),
@@ -129,7 +129,7 @@ class _AddOptionsModalState extends State<AddOptionsModal> {
                             Navigator.pop(context);
                           },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.accent,
+                    backgroundColor: AppColors.textPrimaryLight,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
@@ -139,7 +139,7 @@ class _AddOptionsModalState extends State<AddOptionsModal> {
                   child: Text(
                     'Continue',
                     style: AppTextStyles.bodyMedium.copyWith(
-                      color: Colors.white,
+                          color: Colors.white,
                       fontWeight: FontWeight.w600,
                       letterSpacing: -0.15,
                       fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
@@ -182,14 +182,14 @@ class _OptionCard extends StatelessWidget {
           decoration: BoxDecoration(
             color:
                 isSelected
-                    ? AppColors.accent.withOpacity(0.1)
-                    : AppColors.background,
+                    ? AppColors.textPrimaryLight.withOpacity(0.1)
+                    : AppColors.backgroundLight,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color:
                   isSelected
-                      ? AppColors.accent
-                      : AppColors.primaryLight.withAlpha(150),
+                      ? AppColors.textPrimaryLight
+                      : AppColors.primary200.withAlpha(150),
             ),
           ),
           child: Row(
@@ -199,14 +199,14 @@ class _OptionCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   color:
                       isSelected
-                          ? AppColors.accent.withOpacity(0.1)
+                          ? AppColors.textPrimaryLight.withOpacity(0.1)
                           : Colors.white,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: HeroIcon(
                   icon,
                   style: HeroIconStyle.solid,
-                  color: isSelected ? AppColors.accent : AppColors.primary,
+                  color: isSelected ? AppColors.textPrimaryLight : AppColors.primary200,
                   size: 24,
                 ),
               ),
@@ -218,7 +218,7 @@ class _OptionCard extends StatelessWidget {
                     Text(
                       label,
                       style: AppTextStyles.bodyMedium.copyWith(
-                        color: AppColors.accent,
+                        color: AppColors.textPrimaryLight,
                         fontWeight: FontWeight.w600,
                         fontSize: 16,
                         letterSpacing: -0.15,
@@ -229,7 +229,7 @@ class _OptionCard extends StatelessWidget {
                     Text(
                       description,
                       style: AppTextStyles.bodySmall.copyWith(
-                        color: AppColors.primary,
+                          color: AppColors.textPrimaryLight,
                         fontSize: 12,
                         letterSpacing: -0.08,
                         fontFamily: GoogleFonts.spaceGrotesk().fontFamily,

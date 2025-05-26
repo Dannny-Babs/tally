@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:heroicons/heroicons.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../bloc/transaction_bloc.dart';
@@ -137,7 +138,7 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
                             Text(
                               'Add Income',
                               style: AppTextStyles.displaySmall.copyWith(
-                                color: AppColors.accent,
+                                color: AppColors.neutral900,
                                 fontFamily:
                                     GoogleFonts.spaceGrotesk().fontFamily,
                                 fontSize: 20,
@@ -148,7 +149,7 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
                             Text(
                               'Log a new payment to keep your earnings up-to-date',
                               style: AppTextStyles.bodyMedium.copyWith(
-                                color: AppColors.primary,
+                                color: AppColors.textSecondaryLight,
                                 letterSpacing: -0.15,
                                 fontFamily:
                                     GoogleFonts.spaceGrotesk().fontFamily,
@@ -181,7 +182,7 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
                       Text(
                         'Amount',
                         style: AppTextStyles.bodyMedium.copyWith(
-                          color: AppColors.accentLight,
+                          color: AppColors.textPrimaryLight,
                           fontWeight: FontWeight.w600,
                           fontSize: 14,
                           letterSpacing: -0.15,
@@ -205,7 +206,7 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
                           decoration: InputDecoration(
                             hintText: '0.00',
                             hintStyle: AppTextStyles.bodyMedium.copyWith(
-                              color: AppColors.accentLight,
+                                color: AppColors.textSecondaryLight,
                               fontWeight: FontWeight.w600,
                               fontSize: 14,
                               letterSpacing: -0.15,
@@ -252,7 +253,7 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
                       Text(
                         'Source',
                         style: AppTextStyles.bodyMedium.copyWith(
-                          color: AppColors.accentLight,
+                          color: AppColors.textPrimaryLight,
                           fontWeight: FontWeight.w600,
                           fontSize: 14,
                           letterSpacing: -0.15,
@@ -263,18 +264,18 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
                       Container(
                         height: 48,
                         decoration: BoxDecoration(
-                          color: AppColors.secondary.withOpacity(0.3),
+                          color: AppColors.primary200.withAlpha( (0.3 * 255).round() ),
                           borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: AppColors.primaryLight),
+                          border: Border.all(color: AppColors.borderLight),
                         ),
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton2<String>(
                             dropdownStyleData: DropdownStyleData(
                               decoration: BoxDecoration(
-                                color: AppColors.background,
+                                color: AppColors.backgroundLight,
                                 borderRadius: BorderRadius.circular(8),
                                 border: Border.all(
-                                  color: AppColors.primaryLight,
+                                  color: AppColors.neutral200,
                                 ),
                               ),
                             ),
@@ -282,7 +283,7 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
                             hint: Text(
                               'Choose or type source',
                               style: AppTextStyles.bodyMedium.copyWith(
-                                color: AppColors.accentLight,
+                                color: AppColors.textSecondaryLight,
                                 fontWeight: FontWeight.w600,
                                 fontSize: 14,
                                 letterSpacing: -0.15,
@@ -299,7 +300,7 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
                                           source,
                                           style: AppTextStyles.bodyMedium
                                               .copyWith(
-                                                color: AppColors.accent,
+                                                color: AppColors.neutral900,
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 16,
                                                 letterSpacing: -0.15,
@@ -324,7 +325,7 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
                       Text(
                         'Payment Method',
                         style: AppTextStyles.bodyMedium.copyWith(
-                          color: AppColors.accentLight,
+                          color: AppColors.textPrimaryLight,
                           fontWeight: FontWeight.w600,
                           fontSize: 14,
                           letterSpacing: -0.15,
@@ -334,18 +335,18 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
                       const SizedBox(height: 2),
                       Container(
                         decoration: BoxDecoration(
-                          color: AppColors.secondary.withOpacity(0.3),
+                          color: AppColors.primary200.withAlpha( (0.3 * 255).round() ),
                           borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: AppColors.primaryLight),
+                          border: Border.all(color: AppColors.borderLight),
                         ),
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton2<String>(
                             dropdownStyleData: DropdownStyleData(
                               decoration: BoxDecoration(
-                                color: AppColors.background,
+                                color: AppColors.backgroundLight,
                                 borderRadius: BorderRadius.circular(8),
                                 border: Border.all(
-                                  color: AppColors.primaryLight,
+                                  color: AppColors.neutral200,
                                 ),
                               ),
                             ),
@@ -353,7 +354,7 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
                             hint: Text(
                               'Select method',
                               style: AppTextStyles.bodyMedium.copyWith(
-                                color: AppColors.accentLight,
+                                color: AppColors.textSecondaryLight,
                                 fontWeight: FontWeight.w600,
                                 fontSize: 14,
                                 letterSpacing: -0.15,
@@ -370,7 +371,7 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
                                           method,
                                           style: AppTextStyles.bodyMedium
                                               .copyWith(
-                                                color: AppColors.accentLight,
+                                                color: AppColors.neutral900,
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 16,
                                                 letterSpacing: -0.15,
@@ -395,7 +396,7 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
                       Text(
                         'Category / Tag',
                         style: AppTextStyles.bodyMedium.copyWith(
-                          color: AppColors.accentLight,
+                          color: AppColors.textPrimaryLight,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -525,7 +526,7 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
                             }
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.accent,
+                            backgroundColor: AppColors.neutral900,
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
@@ -566,10 +567,10 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
         });
       },
       backgroundColor: Colors.transparent,
-      selectedColor: AppColors.accent.withOpacity(0.2),
-      checkmarkColor: AppColors.accent,
+      selectedColor: AppColors.primary200.withAlpha( (0.3 * 255).round() ),
+      checkmarkColor: AppColors.neutral900,
       labelStyle: AppTextStyles.bodySmall.copyWith(
-        color: isSelected ? AppColors.accent : AppColors.primary,
+        color: isSelected ? AppColors.neutral900 : AppColors.textSecondaryLight,
       ),
     );
   }

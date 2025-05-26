@@ -90,7 +90,7 @@ class StatsScreen extends StatelessWidget {
                       barRods: [
                         BarChartRodData(
                           toY: state.monthlyIncome,
-                          color: AppColors.accent,
+                          color: AppColors.textPrimaryLight,
                           width: 20,
                           borderRadius: const BorderRadius.vertical(
                             top: Radius.circular(4),
@@ -103,7 +103,7 @@ class StatsScreen extends StatelessWidget {
                       barRods: [
                         BarChartRodData(
                           toY: state.monthlyExpenses,
-                          color: AppColors.primary,
+                          color: AppColors.textPrimaryLight,
                           width: 20,
                           borderRadius: const BorderRadius.vertical(
                             top: Radius.circular(4),
@@ -164,11 +164,11 @@ class StatsScreen extends StatelessWidget {
 
   List<PieChartSectionData> _createPieChartSections(StatsState state) {
     final colors = [
-      AppColors.primary,
-      AppColors.accent,
-      AppColors.secondary,
-      AppColors.primaryLight,
-      AppColors.accentLight,
+      AppColors.textPrimaryLight,
+      AppColors.textPrimaryLight,
+      AppColors.textPrimaryLight,
+      AppColors.textPrimaryLight,
+      AppColors.textPrimaryLight,
     ];
 
     return state.categoryBreakdown.entries.map((entry) {
@@ -210,8 +210,8 @@ class StatsScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(4),
           child: LinearProgressIndicator(
             value: progress,
-            backgroundColor: AppColors.primary.withOpacity(0.2),
-            valueColor: AlwaysStoppedAnimation<Color>(AppColors.accent),
+            backgroundColor: AppColors.primary200.withOpacity(0.2),
+              valueColor: AlwaysStoppedAnimation<Color>(AppColors.textPrimaryLight),
             minHeight: 8,
           ),
         ),
