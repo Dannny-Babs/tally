@@ -52,7 +52,7 @@ class InsightModal extends StatelessWidget {
                                 Text(
                                   'A quick, data-driven snapshot of your spending habits',
                                   style: AppTextStyles.bodyMedium.copyWith(
-                                    color: AppColors.textPrimaryLight,
+                                    color: AppColors.neutral700,
                                     letterSpacing: -0.15,
                                     fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
                                     fontSize: 14,
@@ -138,10 +138,16 @@ class InsightModal extends StatelessWidget {
                           ),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.textPrimaryLight,
-                            foregroundColor: Colors.white,
+                            foregroundColor: AppColors.primary100,
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             shape: RoundedRectangleBorder(
+
                               borderRadius: BorderRadius.circular(12),
+                              side: BorderSide(
+                                color: AppColors.neutral700,                                
+                                width: 2,
+                              ),
+                            
                             ),
                           ),
                         ),
@@ -166,10 +172,10 @@ class InsightModal extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.textPrimaryLight.withOpacity(0.1),
+        color: AppColors.neutral100,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: AppColors.textPrimaryLight.withOpacity(0.2),
+          color: AppColors.borderLight,
         ),
       ),
       child: Row(
@@ -181,7 +187,7 @@ class InsightModal extends StatelessWidget {
                 Text(
                   'Net This Month',
                   style: GoogleFonts.spaceGrotesk(
-                    color: AppColors.textPrimaryLight,
+                    color: AppColors.neutral800,
                     fontSize: 14,
                     letterSpacing: -0.15,
                   ),
@@ -204,7 +210,7 @@ class InsightModal extends StatelessWidget {
               Text(
                 'Earned: \$${income.toStringAsFixed(0)}',
                 style: GoogleFonts.spaceGrotesk(
-                      color: AppColors.textPrimaryLight,
+                      color: AppColors.neutral700,
                   fontSize: 14,
                   letterSpacing: -0.15,
                 ),
@@ -213,7 +219,7 @@ class InsightModal extends StatelessWidget {
               Text(
                 'Spent: \$${spent.toStringAsFixed(0)}',
                 style: GoogleFonts.spaceGrotesk(
-                  color: AppColors.textPrimaryLight,
+                  color: AppColors.neutral700,
                   fontSize: 14,
                   letterSpacing: -0.15,
                 ),
@@ -240,13 +246,13 @@ class InsightModal extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: AppColors.textPrimaryLight.withOpacity(0.1),
+            color: AppColors.neutral100,
             borderRadius: BorderRadius.circular(8),
           ),
           child: HeroIcon(
             icon,
             style: HeroIconStyle.solid,
-            color: AppColors.textPrimaryLight,
+            color: AppColors.neutral800,
             size: 20,
           ),
         ),
@@ -258,9 +264,9 @@ class InsightModal extends StatelessWidget {
               Text(
                 title,
                 style: AppTextStyles.bodyMedium.copyWith(
-                  color: AppColors.textPrimaryLight,
+                  color: AppColors.neutral800,
                   fontWeight: FontWeight.w600,
-                  fontSize: 14,
+                  fontSize: 13.5,
                   letterSpacing: -0.15,
                   fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
                 ),
@@ -301,7 +307,7 @@ class InsightModal extends StatelessWidget {
               Text(
                 details,
                 style: AppTextStyles.bodySmall.copyWith(
-                  color: AppColors.textPrimaryLight,
+                  color: AppColors.neutral700,
                   fontSize: 12,
                   letterSpacing: -0.08,
                   fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
@@ -324,7 +330,7 @@ class InsightModal extends StatelessWidget {
         color: AppColors.backgroundLight,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: AppColors.primary200.withAlpha(150),
+          color: AppColors.borderLight,
         ),
       ),
       child: Column(
@@ -335,7 +341,7 @@ class InsightModal extends StatelessWidget {
               HeroIcon(
                 HeroIcons.lightBulb,
                 style: HeroIconStyle.solid,
-                color: AppColors.textPrimaryLight,
+                color: AppColors.neutral800,
                 size: 20,
               ),
               const SizedBox(width: 8),
@@ -371,7 +377,7 @@ class InsightModal extends StatelessWidget {
                       child: Text(
                         suggestion,
                         style: AppTextStyles.bodySmall.copyWith(
-                          color: AppColors.textPrimaryLight,
+                          color: AppColors.neutral800,
                           fontSize: 14,
                           letterSpacing: -0.08,
                           fontFamily: GoogleFonts.spaceGrotesk().fontFamily,

@@ -48,7 +48,7 @@ class _AddOptionsModalState extends State<AddOptionsModal> {
                       Text(
                         'What do you want to log right now?',
                         style: AppTextStyles.bodyMedium.copyWith(
-                          color: AppColors.textPrimaryLight,
+                          color: AppColors.neutral700,
                           letterSpacing: -0.15,
                           fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
 
@@ -182,14 +182,14 @@ class _OptionCard extends StatelessWidget {
           decoration: BoxDecoration(
             color:
                 isSelected
-                    ? AppColors.textPrimaryLight.withOpacity(0.1)
-                    : AppColors.backgroundLight,
+                    ? AppColors.textPrimaryLight.withAlpha((0.1 *255).round())
+                    : Colors.transparent,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color:
                   isSelected
                       ? AppColors.textPrimaryLight
-                      : AppColors.primary200.withAlpha(150),
+                      : AppColors.borderLight,
             ),
           ),
           child: Row(
@@ -199,14 +199,14 @@ class _OptionCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   color:
                       isSelected
-                          ? AppColors.textPrimaryLight.withOpacity(0.1)
-                          : Colors.white,
+                          ? AppColors.textPrimaryLight.withAlpha((0.1 *255).round())
+                          : AppColors.neutral100,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: HeroIcon(
                   icon,
                   style: HeroIconStyle.solid,
-                  color: isSelected ? AppColors.textPrimaryLight : AppColors.primary200,
+                        color: isSelected ? AppColors.textPrimaryLight : AppColors.neutral600,
                   size: 24,
                 ),
               ),
