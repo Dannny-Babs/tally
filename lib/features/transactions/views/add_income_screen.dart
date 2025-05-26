@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:heroicons/heroicons.dart';
 import 'package:tally/core/widgets/multi_selector.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
@@ -657,26 +656,4 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
     );
   }
 
-  Widget _buildCategoryChip(String label) {
-    final isSelected = _selectedCategories.contains(label);
-    return FilterChip(
-      label: Text(label),
-      selected: isSelected,
-      onSelected: (bool selected) {
-        setState(() {
-          if (selected) {
-            _selectedCategories.add(label);
-          } else {
-            _selectedCategories.remove(label);
-          }
-        });
-      },
-      backgroundColor: Colors.transparent,
-      selectedColor: AppColors.primary200.withAlpha((0.3 * 255).round()),
-      checkmarkColor: AppColors.neutral900,
-      labelStyle: AppTextStyles.bodySmall.copyWith(
-        color: isSelected ? AppColors.neutral900 : AppColors.textSecondaryLight,
-      ),
-    );
-  }
 }
