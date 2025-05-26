@@ -10,6 +10,7 @@ class ActivityCard extends StatelessWidget {
   final String subtitle;
   final double amount;
   final bool isIncome;
+  final VoidCallback? onTap;
 
   const ActivityCard({
     super.key,
@@ -18,73 +19,68 @@ class ActivityCard extends StatelessWidget {
     required this.subtitle,
     required this.amount,
     this.isIncome = false,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: AppColors.background,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: AppColors.primaryLight.withAlpha(150),
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: AppColors.backgroundLight,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: AppColors.primary200.withAlpha(150),
+          ),
         ),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: AppColors.accent.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(8),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: AppColors.neutral900.withAlpha(25),
+                shape: BoxShape.circle,
+              ),
+              child: HeroIcon(
+                icon,
+                style: HeroIconStyle.solid,
+                color: AppColors.neutral900,
+                size: 20,
+              ),
             ),
-            child: HeroIcon(
-              icon,
-              style: HeroIconStyle.solid,
-              color: AppColors.accent,
-              size: 20,
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppColors.neutral900,
+                          fontWeight: FontWeight.w500,
+                        ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    subtitle,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: AppColors.textSecondaryLight,
+                        ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: AppTextStyles.bodyMedium.copyWith(
-                    color: AppColors.accent,
+            Text(
+              '${isIncome ? '+' : '-'}\$${amount.toStringAsFixed(0)}',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: isIncome ? AppColors.success : AppColors.error,
                     fontWeight: FontWeight.w600,
-                    fontSize: 14,
-                    letterSpacing: -0.15,
-                    fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
                   ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  subtitle,
-                  style: AppTextStyles.bodySmall.copyWith(
-                    color: AppColors.primary,
-                    fontSize: 12,
-                    letterSpacing: -0.08,
-                    fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
-                  ),
-                ),
-              ],
             ),
-          ),
-          Text(
-            '${isIncome ? '+' : '-'}\$${amount.toStringAsFixed(0)}',
-            style: AppTextStyles.bodyMedium.copyWith(
-              color: isIncome ? Colors.green : Colors.red,
-              fontWeight: FontWeight.w600,
-              fontSize: 16,
-              letterSpacing: -0.15,
-              fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

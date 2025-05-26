@@ -34,16 +34,16 @@ class MultiSelector extends StatelessWidget {
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 12.sp, vertical: 4.sp),
             decoration: BoxDecoration(
-              color: isSelected ? AppColors.primary500 : AppColors.white,
+              color: isSelected ? AppColors.primary500 : AppColors.surfaceLight,
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: isSelected ? AppColors.primary700 : AppColors.grey300,
+                color: isSelected ? AppColors.primary700 : AppColors.borderLight,
               ),
             ),
             child: Text(
               item,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: isSelected ? AppColors.white : AppColors.neutral500,
+                    color: isSelected ? AppColors.textPrimaryLight : AppColors.textSecondaryLight,
                     fontSize: 12.5.sp,
                   ),
             ),

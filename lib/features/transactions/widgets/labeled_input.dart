@@ -8,6 +8,7 @@ class LabeledInput extends StatelessWidget {
   final String? hint;
   final String? errorText;
   final Widget child;
+  final bool isRequired;
 
   const LabeledInput({
     super.key,
@@ -15,6 +16,7 @@ class LabeledInput extends StatelessWidget {
     this.hint,
     this.errorText,
     required this.child,
+    this.isRequired = false,
   });
 
   @override
@@ -22,27 +24,31 @@ class LabeledInput extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: AppTextStyles.bodyMedium.copyWith(
-            color: AppColors.accentLight,
-            fontWeight: FontWeight.w600,
-            fontSize: 14,
-            letterSpacing: -0.15,
-            fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
-          ),
+        Row(
+          children: [
+            Text(
+              label,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.neutral200,
+                    fontWeight: FontWeight.w500,
+                  ),
+            ),
+            if (isRequired)
+              Text(
+                ' *',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: AppColors.error.withAlpha(76),
+                    ),
+              ),
+          ],
         ),
         const SizedBox(height: 8),
         Container(
           decoration: BoxDecoration(
-            color: AppColors.secondary.withOpacity(0.3),
+            color: errorText != null
+                ? AppColors.error.withAlpha(127)
+                : AppColors.primary200.withAlpha(150),
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              color:
-                  errorText != null
-                      ? Colors.red.withOpacity(0.5)
-                      : AppColors.primaryLight.withAlpha(150),
-            ),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: child,
@@ -51,10 +57,9 @@ class LabeledInput extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             errorText!,
-            style: AppTextStyles.bodySmall.copyWith(
-              color: Colors.red,
-              fontSize: 12,
-            ),
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: AppColors.error,
+                ),
           ),
         ],
       ],
