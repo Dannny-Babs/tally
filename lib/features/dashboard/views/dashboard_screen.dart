@@ -28,6 +28,7 @@ class DashboardScreen extends StatelessWidget {
                   bottomRight: Radius.circular(24),
                   bottomLeft: Radius.circular(24),
                 ),
+                border: Border.all(color: AppColors.borderLight),
               ),
               height: MediaQuery.of(context).size.height,
               child: SingleChildScrollView(
@@ -103,11 +104,7 @@ class DashboardScreen extends StatelessWidget {
                     Card(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
-                        side: BorderSide(
-                          color: AppColors.primary200.withAlpha(
-                            (0.2 * 255).round(),
-                          ),
-                        ),
+                        side: BorderSide(color: AppColors.borderLight),
                       ),
                       color: Colors.white,
                       elevation: 0,
@@ -117,6 +114,7 @@ class DashboardScreen extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 12.0,
+                              vertical: 12.0,
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -132,8 +130,8 @@ class DashboardScreen extends StatelessWidget {
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
-                                TextButton(
-                                  onPressed: () {
+                                InkWell(
+                                  onTap: () {
                                     showModalBottomSheet(
                                       context: context,
                                       backgroundColor: Colors.transparent,
@@ -144,7 +142,7 @@ class DashboardScreen extends StatelessWidget {
                                   child: Text(
                                     'Add more',
                                     style: AppTextStyles.bodyMedium.copyWith(
-                                      color: Colors.black54,
+                                      color: AppColors.neutral700,
                                       fontSize: 14,
                                       letterSpacing: -0.35,
                                     ),
@@ -162,17 +160,13 @@ class DashboardScreen extends StatelessWidget {
                             itemBuilder:
                                 (context, index) => ActivityCard(
                                   icon: Icons.shopping_bag,
-                                  bgColor: AppColors.primary200.withAlpha(
-                                    (0.2 * 255).round(),
-                                  ),
-                                  strokeColor: AppColors.primary200.withAlpha(
-                                    (0.2 * 255).round(),
-                                  ),
+                                  bgColor: AppColors.neutral100,
+                                  strokeColor: AppColors.neutral300,
                                   title: 'Grocery Shopping',
                                   category: 'Food',
                                   time: index == 0 ? '12:30 PM' : 'Yesterday',
                                   amount: index.isEven ? '+\$120' : '-\$45',
-                                  amountColor: AppColors.textPrimaryLight,
+                                  amountColor: AppColors.neutral800,
                                 ),
                           ),
                           const SizedBox(height: 6),
@@ -243,9 +237,7 @@ class _TotalIncomeCard extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(
-          color: AppColors.primary200.withAlpha((0.2 * 255).round()),
-        ),
+        side: BorderSide(color: AppColors.borderLight),
       ),
 
       color: Colors.white,
@@ -259,7 +251,7 @@ class _TotalIncomeCard extends StatelessWidget {
             Text(
               'Total income this month',
               style: AppTextStyles.bodyMedium.copyWith(
-                color: AppColors.textPrimaryLight,
+                color: AppColors.neutral600,
                 letterSpacing: -0.5,
               ),
             ),
@@ -271,7 +263,7 @@ class _TotalIncomeCard extends StatelessWidget {
                   currency,
                   style: AppTextStyles.bodyMedium.copyWith(
                     fontSize: 28,
-                    color: AppColors.textPrimaryLight,
+                    color: AppColors.neutral500,
                   ),
                 ),
                 const SizedBox(width: 4),
@@ -303,11 +295,9 @@ class _TaxNetCard extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
-        side: BorderSide(
-          color: AppColors.primary200.withAlpha((0.2 * 255).round()),
-        ),
+        side: BorderSide(color: AppColors.neutral300),
       ),
-      color: AppColors.primary200.withAlpha((0.2 * 255).round()),
+      color: AppColors.neutral50,
       elevation: 0,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
@@ -338,11 +328,7 @@ class _TaxNetCard extends StatelessWidget {
                 ),
               ],
             ),
-            Container(
-              width: 1,
-              height: 48,
-              color: AppColors.primary200.withAlpha((0.2 * 255).round()),
-            ),
+            Container(width: 1, height: 48, color: AppColors.neutral300),
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -382,9 +368,7 @@ class _SavingsCard extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(
-          color: AppColors.primary200.withAlpha((0.2 * 255).round()),
-        ),
+        side: BorderSide(color: AppColors.borderLight),
       ),
       color: Colors.white,
       elevation: 0,
@@ -409,7 +393,7 @@ class _SavingsCard extends StatelessWidget {
                 Text(
                   '\$',
                   style: AppTextStyles.bodyMedium.copyWith(
-                    color: AppColors.textPrimaryLight,
+                    color: AppColors.textSecondaryLight,
                     fontSize: 20,
                   ),
                 ),
@@ -430,7 +414,15 @@ class _SavingsCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Progress', style: AppTextStyles.bodySmall),
+                Text(
+                  'Progress',
+                  style: AppTextStyles.bodySmall.copyWith(
+                    color: AppColors.neutral700,
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: -0.15,
+                    fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                  ),
+                ),
                 Text(
                   '${(percent * 100).round()}%',
                   style: AppTextStyles.bodySmall.copyWith(
@@ -443,10 +435,9 @@ class _SavingsCard extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(4),
               child: LinearProgressIndicator(
+                borderRadius: BorderRadius.circular(4),
                 value: percent.toDouble(),
-                backgroundColor: AppColors.primary200.withAlpha(
-                  (0.2 * 255).round(),
-                ),
+                backgroundColor: AppColors.neutral200,
                 valueColor: AlwaysStoppedAnimation<Color>(
                   AppColors.textPrimaryLight,
                 ),
@@ -470,9 +461,7 @@ class _ExpensesCard extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(
-          color: AppColors.primary200.withAlpha((0.2 * 255).round()),
-        ),
+        side: BorderSide(color: AppColors.borderLight),
       ),
       color: Colors.white,
       elevation: 0,
@@ -508,11 +497,9 @@ class _ExpensesCard extends StatelessWidget {
             Spacer(),
             Container(
               decoration: BoxDecoration(
-                color: AppColors.primary200.withAlpha((0.2 * 255).round()),
+                color: AppColors.neutral100,
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: AppColors.primary200.withAlpha((0.2 * 255).round()),
-                ),
+                border: Border.all(color: AppColors.neutral300),
               ),
               width: double.infinity,
               padding: const EdgeInsets.all(8),
@@ -529,7 +516,7 @@ class _ExpensesCard extends StatelessWidget {
                                 Text(
                                   e.key,
                                   style: AppTextStyles.bodySmall.copyWith(
-                                    color: AppColors.textPrimaryLight,
+                                    color: AppColors.neutral700,
                                     fontFamily:
                                         GoogleFonts.spaceGrotesk().fontFamily,
                                     letterSpacing: -0.25,
@@ -572,9 +559,7 @@ class _IncomeBreakdownCard extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(
-          color: AppColors.primary200.withAlpha((0.2 * 255).round()),
-        ),
+        side: BorderSide(color: AppColors.borderLight),
       ),
       color: Colors.white,
       elevation: 0,
@@ -601,6 +586,7 @@ class _IncomeBreakdownCard extends StatelessWidget {
                   style: AppTextStyles.bodySmall.copyWith(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
+                    color: AppColors.neutral500,
                     letterSpacing: -0.5,
                     fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
                   ),
@@ -608,7 +594,10 @@ class _IncomeBreakdownCard extends StatelessWidget {
                 const SizedBox(width: 2),
                 Text(
                   freelance.toStringAsFixed(2),
-                  style: AppTextStyles.displaySmall.copyWith(fontSize: 36),
+                  style: AppTextStyles.displaySmall.copyWith(
+                    fontSize: 36,
+                    color: AppColors.textPrimaryLight,
+                  ),
                 ),
               ],
             ),
@@ -632,12 +621,16 @@ class _IncomeBreakdownCard extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                     letterSpacing: -0.5,
                     fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                    color: AppColors.neutral500,
                   ),
                 ),
                 const SizedBox(width: 2),
                 Text(
                   job.toStringAsFixed(2),
-                  style: AppTextStyles.displaySmall.copyWith(fontSize: 36),
+                  style: AppTextStyles.displaySmall.copyWith(
+                    fontSize: 36,
+                    color: AppColors.textPrimaryLight,
+                  ),
                 ),
               ],
             ),
@@ -657,9 +650,7 @@ class _AIInsightsCard extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(
-          color: AppColors.primary200.withAlpha((0.2 * 255).round()),
-        ),
+        side: BorderSide(color: AppColors.borderLight),
       ),
       color: Colors.white,
       elevation: 0,
@@ -703,11 +694,9 @@ class _AIInsightsCard extends StatelessWidget {
             const SizedBox(height: 12),
             Container(
               decoration: BoxDecoration(
-                color: AppColors.primary200.withAlpha((0.2 * 255).round()),
+                color: AppColors.neutral100,
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: AppColors.primary200.withAlpha((0.2 * 255).round()),
-                ),
+                border: Border.all(color: AppColors.neutral300),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               child: Row(
@@ -797,8 +786,9 @@ class ActivityCard extends StatelessWidget {
                     Text(
                       category,
                       style: AppTextStyles.bodySmall.copyWith(
-                        color: AppColors.textPrimaryLight,
+                        color: AppColors.primary700,
                         letterSpacing: -0.25,
+                        fontWeight: FontWeight.w600,
                         fontSize: 12,
                         fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
                       ),
@@ -808,9 +798,7 @@ class ActivityCard extends StatelessWidget {
                       width: 3,
                       height: 3,
                       decoration: BoxDecoration(
-                        color: AppColors.primary200.withAlpha(
-                          (0.2 * 255).round(),
-                        ),
+                        color: AppColors.primary500,
                         shape: BoxShape.circle,
                       ),
                     ),
@@ -818,7 +806,7 @@ class ActivityCard extends StatelessWidget {
                     Text(
                       time,
                       style: AppTextStyles.bodySmall.copyWith(
-                        color: AppColors.textPrimaryLight,
+                        color: AppColors.primary600,
                         letterSpacing: -0.25,
                         fontSize: 12,
                         fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
@@ -851,9 +839,7 @@ class InsightCard extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(
-          color: AppColors.primary200.withAlpha((0.2 * 255).round()),
-        ),
+        side: BorderSide(color: AppColors.borderLight),
       ),
       color: Colors.white,
       elevation: 0,

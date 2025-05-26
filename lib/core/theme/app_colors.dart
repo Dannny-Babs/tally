@@ -16,7 +16,7 @@ class AppColors {
   static const Color primary900 = Color(0xFF7D5852);
 
   // Neutral Scale (beige‐offwhite)
-  static const Color neutral50  = Color(0xFFFCFBFA);
+  static const Color neutral50  = Color(0xFFF5F4F1);
   static const Color neutral100 = Color(0xFFF7F5F2);
   static const Color neutral200 = Color(0xFFF1EFEA);
   static const Color neutral300 = Color(0xFFECE9E3);
