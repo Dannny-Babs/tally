@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -12,6 +13,29 @@ abstract class TransactionEvent extends Equatable {
 class IncomeLoaded extends TransactionEvent {}
 
 class TransactionLoadMore extends TransactionEvent {}
+
+class AddIncomeSubmitted extends TransactionEvent {
+  final double amount;
+  final String source;
+  final String description;
+  final DateTime date;
+  final TimeOfDay time;
+  final List<String> categories;
+  final String? notes;
+
+  const AddIncomeSubmitted({
+    required this.amount,
+    required this.source,
+    required this.description,
+    required this.date,
+    required this.time,
+    required this.categories,
+    this.notes,
+  });
+
+  @override
+  List<Object> get props => [amount, source, description, date, time, categories, notes ?? ''];
+}
 
 // States
 abstract class TransactionState extends Equatable {
@@ -99,6 +123,7 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
   TransactionBloc() : super(TransactionInitial()) {
     on<IncomeLoaded>(_onIncomeLoaded);
     on<TransactionLoadMore>(_onTransactionLoadMore);
+    on<AddIncomeSubmitted>(_onAddIncomeSubmitted);
   }
 
   Future<void> _onIncomeLoaded(
@@ -167,6 +192,36 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
         }
       } catch (e) {
         print('Error loading more: $e'); // Debug print
+        // Don't emit error state, just keep current state
+      }
+    }
+  }
+
+  Future<void> _onAddIncomeSubmitted(
+    AddIncomeSubmitted event,
+    Emitter<TransactionState> emit,
+  ) async {
+    if (state is TransactionLoaded) {
+      final currentState = state as TransactionLoaded;
+      
+      try {
+        // TODO: Replace with actual API call
+        await Future.delayed(const Duration(seconds: 1));
+        
+        final newTransaction = Transaction(
+          id: DateTime.now().millisecondsSinceEpoch.toString(),
+          source: event.source,
+          description: event.description,
+          amount: event.amount,
+          date: '${event.date.day}/${event.date.month}/${event.date.year}',
+          time: '${event.time.hour.toString().padLeft(2, '0')}:${event.time.minute.toString().padLeft(2, '0')}',
+          isIncome: true,
+        );
+
+        emit(currentState.copyWith(
+          transactions: [newTransaction, ...currentState.transactions],
+        ));
+      } catch (e) {
         // Don't emit error state, just keep current state
       }
     }

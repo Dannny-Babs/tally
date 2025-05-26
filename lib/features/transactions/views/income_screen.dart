@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:heroicons/heroicons.dart';
+import 'package:tally/features/transactions/views/add_income_screen.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../bloc/transaction_bloc.dart';
@@ -19,7 +20,7 @@ class IncomeScreen extends StatelessWidget {
       child: BlocBuilder<TransactionBloc, TransactionState>(
         builder: (context, state) {
           print('Current state: $state'); // Debug print
-          
+
           if (state is TransactionError) {
             return ErrorScreen(
               message: state.message,
@@ -57,7 +58,7 @@ class IncomeScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 16),
                       Card(
-                        shape: RoundedRectangleBorder(                      
+                        shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                           side: BorderSide(
                             color: AppColors.primaryLight.withAlpha(150),
@@ -112,6 +113,12 @@ class IncomeScreen extends StatelessWidget {
                                 child: ElevatedButton.icon(
                                   onPressed: () {
                                     // TODO: Navigate to AddTransactionScreen
+                                    showModalBottomSheet(
+                                      context: context,
+                                      backgroundColor: Colors.transparent,
+                                      isScrollControlled: true,
+                                      builder: (_) => const AddIncomeModal(),
+                                    );
                                   },
                                   icon: const Icon(
                                     Icons.add,
@@ -159,81 +166,118 @@ class IncomeScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       Expanded(
-                        child: state is TransactionLoading
-                            ? const Center(child: CircularProgressIndicator())
-                            : state is TransactionEmpty
+                        child:
+                            state is TransactionLoading
+                                ? const Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                                : state is TransactionEmpty
                                 ? const EmptyStatePlaceholder(
-                                    message:
-                                        'No income logged yet. Tap + Add to record your first payment.',
-                                  )
+                                  message:
+                                      'No income logged yet. Tap + Add to record your first payment.',
+                                )
                                 : state is TransactionLoaded
-                                    ? Container(
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.circular(16),
-                                          border: Border.all(
-                                            color: AppColors.primaryLight.withAlpha(150),
-                                          ),
-                                        ),
-                                        child: NotificationListener<ScrollNotification>(
-                                          onNotification: (ScrollNotification scrollInfo) {
-                                            if (scrollInfo is ScrollEndNotification &&
-                                                scrollInfo.metrics.pixels >= scrollInfo.metrics.maxScrollExtent - 200) {
-                                              final currentState = state;
-                                              if (!currentState.hasReachedMax) {
-                                                context.read<TransactionBloc>().add(TransactionLoadMore());
-                                              }
-                                            }
-                                            return true;
-                                          },
-                                          child: ListView.separated(
-                                            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                                            itemCount: (state).transactions.length + 1,
-                                            separatorBuilder: (context, index) => const SizedBox(height: 8),
-                                            itemBuilder: (context, index) {
-                                              final currentState = state;
-                                              if (index == currentState.transactions.length) {
-                                                if (currentState.hasReachedMax) {
-                                                  return Center(
-                                                    child: Padding(
-                                                      padding: const EdgeInsets.symmetric(vertical: 16),
-                                                      child: Text(
-                                                        'Oops, that\'s all!',
-                                                        style: AppTextStyles.bodySmall.copyWith(
-                                                          color: AppColors.primary,
-                                                          fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
-                                                        ),
-                                                      ),
+                                ? Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(16),
+                                    border: Border.all(
+                                      color: AppColors.primaryLight.withAlpha(
+                                        150,
+                                      ),
+                                    ),
+                                  ),
+                                  child: NotificationListener<
+                                    ScrollNotification
+                                  >(
+                                    onNotification: (
+                                      ScrollNotification scrollInfo,
+                                    ) {
+                                      if (scrollInfo is ScrollEndNotification &&
+                                          scrollInfo.metrics.pixels >=
+                                              scrollInfo
+                                                      .metrics
+                                                      .maxScrollExtent -
+                                                  200) {
+                                        final currentState = state;
+                                        if (!currentState.hasReachedMax) {
+                                          context.read<TransactionBloc>().add(
+                                            TransactionLoadMore(),
+                                          );
+                                        }
+                                      }
+                                      return true;
+                                    },
+                                    child: ListView.separated(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 8,
+                                        horizontal: 8,
+                                      ),
+                                      itemCount:
+                                          (state).transactions.length + 1,
+                                      separatorBuilder:
+                                          (context, index) =>
+                                              const SizedBox(height: 8),
+                                      itemBuilder: (context, index) {
+                                        final currentState = state;
+                                        if (index ==
+                                            currentState.transactions.length) {
+                                          if (currentState.hasReachedMax) {
+                                            return Center(
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                      vertical: 16,
                                                     ),
-                                                  );
-                                                } else {
-                                                  return const Center(
-                                                    child: Padding(
-                                                      padding: EdgeInsets.symmetric(vertical: 16),
-                                                      child: SizedBox(
-                                                        width: 24,
-                                                        height: 24,
-                                                        child: CircularProgressIndicator(
-                                                          strokeWidth: 2,
-                                                        ),
+                                                child: Text(
+                                                  'Oops, that\'s all!',
+                                                  style: AppTextStyles.bodySmall
+                                                      .copyWith(
+                                                        color:
+                                                            AppColors.primary,
+                                                        fontFamily:
+                                                            GoogleFonts.spaceGrotesk()
+                                                                .fontFamily,
                                                       ),
-                                                    ),
-                                                  );
-                                                }
-                                              }
-                                              final transaction = currentState.transactions[index];
-                                              return ActivityCard(
-                                                icon: _getIconForSource(transaction.source),
-                                                title: '${transaction.source}: ${transaction.description}',
-                                                subtitle: '${transaction.date} • ${transaction.time}',
-                                                amount: transaction.amount,
-                                                isIncome: true,
-                                              );
-                                            },
+                                                ),
+                                              ),
+                                            );
+                                          } else {
+                                            return const Center(
+                                              child: Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                  vertical: 16,
+                                                ),
+                                                child: SizedBox(
+                                                  width: 24,
+                                                  height: 24,
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                        strokeWidth: 2,
+                                                      ),
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                        }
+                                        final transaction =
+                                            currentState.transactions[index];
+                                        return ActivityCard(
+                                          icon: _getIconForSource(
+                                            transaction.source,
                                           ),
-                                        ),
-                                      )
-                                    : const SizedBox(),
+                                          title:
+                                              '${transaction.source}: ${transaction.description}',
+                                          subtitle:
+                                              '${transaction.date} • ${transaction.time}',
+                                          amount: transaction.amount,
+                                          isIncome: true,
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                )
+                                : const SizedBox(),
                       ),
                     ],
                   ),
@@ -268,35 +312,36 @@ class IncomeScreen extends StatelessWidget {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: entries.map((entry) {
-          return Expanded(
-            child: Column(
-              children: [
-                Text(
-                  entry.key,
-                  style: AppTextStyles.bodySmall.copyWith(
-                    color: AppColors.primary,
-                    fontSize: 12,
-                    fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: -0.25,
-                  ),
+        children:
+            entries.map((entry) {
+              return Expanded(
+                child: Column(
+                  children: [
+                    Text(
+                      entry.key,
+                      style: AppTextStyles.bodySmall.copyWith(
+                        color: AppColors.primary,
+                        fontSize: 12,
+                        fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: -0.25,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      '\$${entry.value.toStringAsFixed(0)}',
+                      style: AppTextStyles.bodyMedium.copyWith(
+                        color: AppColors.accent,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 22,
+                        letterSpacing: -0.25,
+                        fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  '\$${entry.value.toStringAsFixed(0)}',
-                  style: AppTextStyles.bodyMedium.copyWith(
-                    color: AppColors.accent,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 22,
-                    letterSpacing: -0.25,
-                    fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
-                  ),
-                ),
-              ],
-            ),
-          );
-        }).toList(),
+              );
+            }).toList(),
       ),
     );
   }
