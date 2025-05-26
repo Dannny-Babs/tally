@@ -29,8 +29,8 @@ class LabeledInput extends StatelessWidget {
             Text(
               label,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: AppColors.neutral200,
-                    fontWeight: FontWeight.w500,
+                    color: AppColors.textPrimaryLight,
+                    fontWeight: FontWeight.w600,
                     fontSize: 14,
                     height: 1.5,
                     letterSpacing: 0.5,
@@ -55,8 +55,12 @@ class LabeledInput extends StatelessWidget {
           decoration: BoxDecoration(
             color: errorText != null
                 ? AppColors.error.withAlpha(127)
-                : AppColors.primary200.withAlpha(150),
+                : AppColors.backgroundLight,
             borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color: AppColors.borderLight,
+              width: 1,
+            ),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: child,

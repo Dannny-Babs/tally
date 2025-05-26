@@ -27,7 +27,7 @@ class AppTheme {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
           side: BorderSide(
-            color: AppColors.primary200.withAlpha( (0.2 * 255).round() ),
+            color: AppColors.borderLight,
             width: 1,
           ),
         ),
@@ -38,19 +38,19 @@ class AppTheme {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(
-            color: AppColors.primary200.withAlpha( (0.2 * 255).round() ),
+            color: AppColors.borderLight,
           ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(
-            color: AppColors.primary200.withAlpha( (0.2 * 255).round() ),
+            color: AppColors.neutral500,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(
-            color: AppColors.primary200.withAlpha( (0.2 * 255).round() ),
+            color: AppColors.neutral500,
           ),
         ),
       ),

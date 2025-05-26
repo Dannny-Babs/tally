@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:heroicons/heroicons.dart';
+import 'package:tally/core/widgets/multi_selector.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../bloc/transaction_bloc.dart';
@@ -44,7 +45,16 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
     'Monthly',
     'Yearly',
   ];
-  final List<String> _selectedCategories = [];
+  List<String> _selectedCategories = [];
+  final List<String> _categories = [
+    'Salary',
+    'Freelance',
+    'Bonus',
+    'Investment',
+    'Gift',
+    'Refund',
+    'Other',
+  ];
 
   @override
   void dispose() {
@@ -206,7 +216,7 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
                           decoration: InputDecoration(
                             hintText: '0.00',
                             hintStyle: AppTextStyles.bodyMedium.copyWith(
-                                color: AppColors.textSecondaryLight,
+                              color: AppColors.textSecondaryLight,
                               fontWeight: FontWeight.w600,
                               fontSize: 14,
                               letterSpacing: -0.15,
@@ -214,7 +224,7 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
                             ),
                             border: InputBorder.none,
                             contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 12,
+                              horizontal: 10,
                             ),
                             prefixText: '\$ ',
                           ),
@@ -238,11 +248,25 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
                               children: [
                                 Text(
                                   '${_selectedDate.day}/${_selectedDate.month}/${_selectedDate.year}',
-                                  style: AppTextStyles.bodyMedium,
+                                  style: AppTextStyles.bodyMedium.copyWith(
+                                    color: AppColors.textPrimaryLight,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14,
+                                    letterSpacing: -0.15,
+                                    fontFamily:
+                                        GoogleFonts.spaceGrotesk().fontFamily,
+                                  ),
                                 ),
                                 Text(
                                   _selectedTime.format(context),
-                                  style: AppTextStyles.bodyMedium,
+                                  style: AppTextStyles.bodyMedium.copyWith(
+                                    color: AppColors.textPrimaryLight,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14,
+                                    letterSpacing: -0.15,
+                                    fontFamily:
+                                        GoogleFonts.spaceGrotesk().fontFamily,
+                                  ),
                                 ),
                               ],
                             ),
@@ -264,7 +288,7 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
                       Container(
                         height: 48,
                         decoration: BoxDecoration(
-                          color: AppColors.primary200.withAlpha( (0.3 * 255).round() ),
+                          color: AppColors.backgroundLight,
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(color: AppColors.borderLight),
                         ),
@@ -275,7 +299,7 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
                                 color: AppColors.backgroundLight,
                                 borderRadius: BorderRadius.circular(8),
                                 border: Border.all(
-                                  color: AppColors.neutral200,
+                                  color: AppColors.borderLight,
                                 ),
                               ),
                             ),
@@ -283,8 +307,8 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
                             hint: Text(
                               'Choose or type source',
                               style: AppTextStyles.bodyMedium.copyWith(
-                                color: AppColors.textSecondaryLight,
-                                fontWeight: FontWeight.w600,
+                                color: AppColors.neutral800,
+                                fontWeight: FontWeight.w500,
                                 fontSize: 14,
                                 letterSpacing: -0.15,
                                 fontFamily:
@@ -335,7 +359,7 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
                       const SizedBox(height: 2),
                       Container(
                         decoration: BoxDecoration(
-                          color: AppColors.primary200.withAlpha( (0.3 * 255).round() ),
+                          color: AppColors.backgroundLight,
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(color: AppColors.borderLight),
                         ),
@@ -346,7 +370,7 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
                                 color: AppColors.backgroundLight,
                                 borderRadius: BorderRadius.circular(8),
                                 border: Border.all(
-                                  color: AppColors.neutral200,
+                                  color: AppColors.borderLight,
                                 ),
                               ),
                             ),
@@ -354,8 +378,8 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
                             hint: Text(
                               'Select method',
                               style: AppTextStyles.bodyMedium.copyWith(
-                                color: AppColors.textSecondaryLight,
-                                fontWeight: FontWeight.w600,
+                                color: AppColors.neutral800,
+                                fontWeight: FontWeight.w500,
                                 fontSize: 14,
                                 letterSpacing: -0.15,
                                 fontFamily:
@@ -398,38 +422,67 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
                         style: AppTextStyles.bodyMedium.copyWith(
                           color: AppColors.textPrimaryLight,
                           fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                          letterSpacing: -0.15,
+                          fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
                         ),
                       ),
-                      Wrap(
-                        spacing: 8,
-                        runSpacing: 8,
-                        children: [
-                          _buildCategoryChip('Salary'),
-                          _buildCategoryChip('Freelance'),
-                          _buildCategoryChip('Bonus'),
-                          _buildCategoryChip('Investment'),
-                          _buildCategoryChip('Gift'),
-                          _buildCategoryChip('Reimbursement'),
-                          _buildCategoryChip('Other'),
-                        ],
+                      const SizedBox(height: 4),
+                      MultiSelector(
+                        items: _categories,
+                        selectedItems: _selectedCategories,
+                        onChanged: (List<String> selectedItems) {
+                          setState(() {
+                            _selectedCategories = selectedItems;
+                          });
+                        },
                       ),
                       const SizedBox(height: 16),
-                      LabeledInput(
-                        label: 'Notes',
-                        child: TextField(
-                          controller: _notesController,
-                          maxLines: 3,
-                          decoration: const InputDecoration(
-                            hintText: 'Optional... add a note',
-                            border: InputBorder.none,
+                      Text(
+                        'Notes',
+                        style: AppTextStyles.bodyMedium.copyWith(
+                          color: AppColors.textPrimaryLight,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                          letterSpacing: -0.15,
+                          fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      TextField(
+                        controller: _notesController,
+                        maxLines: 3,
+                        decoration: InputDecoration(
+                          hintText: 'Optional... add a note',
+                          hintStyle: AppTextStyles.bodyMedium.copyWith(
+                            color: AppColors.textSecondaryLight,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14,
+                            letterSpacing: -0.15,
+                            fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
                           ),
+                          border: InputBorder.none,
                         ),
                       ),
                       const SizedBox(height: 16),
                       SwitchListTile(
-                        title: const Text('Is Taxable?'),
-                        subtitle: const Text(
+                        title: Text(
+                          'Is Taxable?',
+                          style: AppTextStyles.bodyMedium.copyWith(
+                            color: AppColors.textPrimaryLight,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                            letterSpacing: -0.15,
+                          ),
+                        ),
+                        subtitle: Text(
                           'Include this in tax calculations',
+                          style: AppTextStyles.bodyMedium.copyWith(
+                            color: AppColors.neutral700,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 12,
+                            letterSpacing: -0.15,
+                          ),
                         ),
                         value: _isTaxable,
                         onChanged: (bool value) {
@@ -439,8 +492,24 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
                         },
                       ),
                       SwitchListTile(
-                        title: const Text('Recurring?'),
-                        subtitle: const Text('Set up repeat frequency'),
+                        title: Text(
+                          'Recurring?',
+                          style: AppTextStyles.bodyMedium.copyWith(
+                            color: AppColors.textPrimaryLight,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                            letterSpacing: -0.15,
+                          ),
+                        ),
+                        subtitle: Text(
+                          'Set up repeat frequency',
+                          style: AppTextStyles.bodyMedium.copyWith(
+                            color: AppColors.neutral700,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 12,
+                            letterSpacing: -0.15,
+                          ),
+                        ),
                         value: _isRecurring,
                         onChanged: (bool value) {
                           setState(() {
@@ -451,34 +520,70 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
                       ),
                       if (_isRecurring) ...[
                         const SizedBox(height: 8),
-                        LabeledInput(
-                          label: 'Recurrence Frequency',
-                          child: DropdownButtonFormField<String>(
-                            value: _recurrenceFrequency,
-                            decoration: const InputDecoration(
-                              border: InputBorder.none,
-                              hintText: 'Select frequency',
+                        Text(
+                          'Recurrence Frequency',
+                          style: AppTextStyles.bodyMedium.copyWith(
+                            color: AppColors.textPrimaryLight,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                            letterSpacing: -0.15,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: AppColors.backgroundLight,
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: AppColors.borderLight),
+                          ),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton2<String>(
+                              dropdownStyleData: DropdownStyleData(
+                                decoration: BoxDecoration(
+                                  color: AppColors.backgroundLight,
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                    color: AppColors.borderLight,
+                                  ),
+                                ),
+                              ),
+                              isExpanded: true,
+                              hint: Text(
+                                'Select frequency',
+                                style: AppTextStyles.bodyMedium.copyWith(
+                                  color: AppColors.textSecondaryLight,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14,
+                                  letterSpacing: -0.15,
+                                ),
+                              ),
+                              value: _recurrenceFrequency,
+                              items:
+                                  _recurrenceOptions.map((String option) {
+                                    return DropdownMenuItem<String>(
+                                      value: option,
+                                      child: Text(
+                                        option,
+                                        style: AppTextStyles.bodyMedium
+                                            .copyWith(
+                                              color: AppColors.neutral900,
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 14,
+                                              letterSpacing: -0.15,
+                                            ),
+                                      ),
+                                    );
+                                  }).toList(),
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  _recurrenceFrequency = newValue;
+                                });
+                              },
                             ),
-                            items:
-                                _recurrenceOptions.map((String option) {
-                                  return DropdownMenuItem<String>(
-                                    value: option,
-                                    child: Text(option),
-                                  );
-                                }).toList(),
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                _recurrenceFrequency = newValue;
-                              });
-                            },
-                            validator:
-                                (value) =>
-                                    _isRecurring && value == null
-                                        ? 'Configure recurrence details'
-                                        : null,
                           ),
                         ),
                       ],
+
                       const SizedBox(height: 24),
                       SizedBox(
                         width: double.infinity,
@@ -567,7 +672,7 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
         });
       },
       backgroundColor: Colors.transparent,
-      selectedColor: AppColors.primary200.withAlpha( (0.3 * 255).round() ),
+      selectedColor: AppColors.primary200.withAlpha((0.3 * 255).round()),
       checkmarkColor: AppColors.neutral900,
       labelStyle: AppTextStyles.bodySmall.copyWith(
         color: isSelected ? AppColors.neutral900 : AppColors.textSecondaryLight,

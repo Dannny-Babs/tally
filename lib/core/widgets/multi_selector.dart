@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../theme/app_colors.dart';
 
 class MultiSelector extends StatelessWidget {
@@ -17,8 +18,8 @@ class MultiSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Wrap(
-      spacing: 8.sp,
-      runSpacing: 8.sp,
+      spacing: 8,
+      runSpacing: 8,
       children: items.map((item) {
         final isSelected = selectedItems.contains(item);
         return InkWell(
@@ -32,19 +33,22 @@ class MultiSelector extends StatelessWidget {
             onChanged(updatedSelection);
           },
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 12.sp, vertical: 4.sp),
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             decoration: BoxDecoration(
               color: isSelected ? AppColors.primary500 : AppColors.surfaceLight,
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: isSelected ? AppColors.primary700 : AppColors.borderLight,
+                color: isSelected ? AppColors.primary700 : AppColors.neutral700,
               ),
             ),
             child: Text(
               item,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: isSelected ? AppColors.textPrimaryLight : AppColors.textSecondaryLight,
-                    fontSize: 12.5.sp,
+                    color: isSelected ? AppColors.textPrimaryLight : AppColors.neutral800,
+                    fontSize: 12.5,
+                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                    letterSpacing: -0.1,
+                    fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
                   ),
             ),
           ),
