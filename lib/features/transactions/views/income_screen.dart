@@ -6,6 +6,8 @@ import 'package:tally/features/transactions/views/add_income_screen.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../bloc/transaction_bloc.dart';
+import '../bloc/transaction_event.dart';
+import '../bloc/transaction_state.dart';
 import '../widgets/activity_card.dart';
 import '../widgets/empty_state_placeholder.dart';
 import '../widgets/error_screen.dart';

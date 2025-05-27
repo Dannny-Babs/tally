@@ -7,6 +7,7 @@ import 'package:tally/core/widgets/multi_selector.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../bloc/transaction_bloc.dart';
+import '../bloc/transaction_event.dart';
 import '../widgets/labeled_input.dart';
 
 class AddIncomeModal extends StatefulWidget {
