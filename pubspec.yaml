@@ -107,4 +107,5 @@ flutter:
     - android/app/src/main/res/mipmap-xxhdpi/
     - android/app/src/main/res/mipmap-xxxhdpi/
     - assets/icons/
+    - assets/images/
 

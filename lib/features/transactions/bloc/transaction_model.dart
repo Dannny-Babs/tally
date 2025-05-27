@@ -11,6 +11,8 @@ class Transaction extends Equatable {
   final List<String> categories;
   final String? notes;
   final String? paymentMethod;
+  final String? incomeType;
+  final bool isPaid;
 
   const Transaction({
     required this.id,
@@ -23,6 +25,8 @@ class Transaction extends Equatable {
     required this.categories,
     this.notes,
     this.paymentMethod,
+    this.incomeType,
+    this.isPaid = true,
   });
 
   @override
@@ -37,5 +41,7 @@ class Transaction extends Equatable {
     categories,
     notes ?? '',
     paymentMethod ?? '',
+    incomeType ?? '',
+    isPaid,
   ];
 } 

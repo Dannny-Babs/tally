@@ -62,9 +62,7 @@ class IncomeScreen extends StatelessWidget {
                       Card(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
-                          side: BorderSide(
-                            color: AppColors.borderLight,
-                          ),
+                          side: BorderSide(color: AppColors.borderLight),
                         ),
                         color: Colors.white,
                         elevation: 0,
@@ -175,8 +173,9 @@ class IncomeScreen extends StatelessWidget {
                                 )
                                 : state is TransactionEmpty
                                 ? const EmptyStatePlaceholder(
+                                  title: 'No Income Recorded',
                                   message:
-                                      'No income logged yet. Tap + Add to record your first payment.',
+                                      'You haven\'t recorded any income yet. Tap + Add to record your first payment.',
                                 )
                                 : state is TransactionLoaded
                                 ? Container(
@@ -234,7 +233,8 @@ class IncomeScreen extends StatelessWidget {
                                                   style: AppTextStyles.bodySmall
                                                       .copyWith(
                                                         color:
-                                                            AppColors.neutral600,
+                                                            AppColors
+                                                                .neutral600,
                                                         fontFamily:
                                                             GoogleFonts.spaceGrotesk()
                                                                 .fontFamily,
