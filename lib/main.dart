@@ -23,8 +23,8 @@ class MyApp extends StatelessWidget {
         BlocProvider<DashboardBloc>(
           create: (context) {
             final bloc = DashboardBloc();
-            // Schedule the event dispatch for the next frame
-            WidgetsBinding.instance.addPostFrameCallback((_) {
+            // Use compute for heavy initialization
+            Future.microtask(() {
               bloc.add(DashboardLoaded());
             });
             return bloc;
