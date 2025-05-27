@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:heroicons/heroicons.dart';
+import 'package:tally/features/transactions/views/add_income_screen.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 
@@ -77,6 +78,8 @@ class _AddOptionsModalState extends State<AddOptionsModal> {
                       setState(() {
                         selectedOption = 'Income';
                       });
+
+                     
                     },
                   ),
                   const SizedBox(height: 8),
@@ -121,13 +124,17 @@ class _AddOptionsModalState extends State<AddOptionsModal> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed:
-                      selectedOption == null
-                          ? null
-                          : () {
-                            print('$selectedOption selected');
-                            Navigator.pop(context);
-                          },
+                  onPressed: () {
+                    if (selectedOption == 'Income') {
+                      Navigator.pop(context);
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        builder: (context) => const AddIncomeModal(),
+                      );
+                    }
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.textPrimaryLight,
                     foregroundColor: Colors.white,

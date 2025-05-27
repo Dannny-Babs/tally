@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'transaction_event.dart';
+import 'transaction_state.dart';
 
 // Events
 abstract class TransactionEvent extends Equatable {
@@ -11,6 +13,8 @@ abstract class TransactionEvent extends Equatable {
 }
 
 class IncomeLoaded extends TransactionEvent {}
+
+class ExpensesLoaded extends TransactionEvent {}
 
 class TransactionLoadMore extends TransactionEvent {}
 
@@ -37,6 +41,31 @@ class AddIncomeSubmitted extends TransactionEvent {
   List<Object> get props => [amount, source, description, date, time, categories, notes ?? ''];
 }
 
+class AddExpenseSubmitted extends TransactionEvent {
+  final double amount;
+  final String category;
+  final String description;
+  final DateTime date;
+  final TimeOfDay time;
+  final List<String> tags;
+  final String? notes;
+  final String paymentMethod;
+
+  const AddExpenseSubmitted({
+    required this.amount,
+    required this.category,
+    required this.description,
+    required this.date,
+    required this.time,
+    required this.tags,
+    this.notes,
+    required this.paymentMethod,
+  });
+
+  @override
+  List<Object> get props => [amount, category, description, date, time, tags, notes ?? '', paymentMethod];
+}
+
 // States
 abstract class TransactionState extends Equatable {
   const TransactionState();
@@ -53,25 +82,33 @@ class TransactionEmpty extends TransactionState {}
 
 class TransactionLoaded extends TransactionState {
   final List<Transaction> transactions;
+  final double totalAmount;
+  final Map<String, double> categoryTotals;
   final bool hasReachedMax;
 
   const TransactionLoaded({
     required this.transactions,
+    required this.totalAmount,
+    required this.categoryTotals,
     this.hasReachedMax = false,
   });
 
   TransactionLoaded copyWith({
     List<Transaction>? transactions,
+    double? totalAmount,
+    Map<String, double>? categoryTotals,
     bool? hasReachedMax,
   }) {
     return TransactionLoaded(
       transactions: transactions ?? this.transactions,
+      totalAmount: totalAmount ?? this.totalAmount,
+      categoryTotals: categoryTotals ?? this.categoryTotals,
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,
     );
   }
 
   @override
-  List<Object> get props => [transactions, hasReachedMax];
+  List<Object> get props => [transactions, totalAmount, categoryTotals, hasReachedMax];
 }
 
 class TransactionError extends TransactionState {
@@ -92,6 +129,9 @@ class Transaction extends Equatable {
   final String date;
   final String time;
   final bool isIncome;
+  final List<String> categories;
+  final String? notes;
+  final String? paymentMethod;
 
   const Transaction({
     required this.id,
@@ -100,7 +140,10 @@ class Transaction extends Equatable {
     required this.amount,
     required this.date,
     required this.time,
-    this.isIncome = false,
+    required this.isIncome,
+    required this.categories,
+    this.notes,
+    this.paymentMethod,
   });
 
   @override
@@ -112,6 +155,9 @@ class Transaction extends Equatable {
     date,
     time,
     isIncome,
+    categories,
+    notes ?? '',
+    paymentMethod ?? '',
   ];
 }
 
@@ -122,15 +168,16 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
 
   TransactionBloc() : super(TransactionInitial()) {
     on<IncomeLoaded>(_onIncomeLoaded);
+    on<ExpensesLoaded>(_onExpensesLoaded);
     on<TransactionLoadMore>(_onTransactionLoadMore);
     on<AddIncomeSubmitted>(_onAddIncomeSubmitted);
+    on<AddExpenseSubmitted>(_onAddExpenseSubmitted);
   }
 
   Future<void> _onIncomeLoaded(
     IncomeLoaded event,
     Emitter<TransactionState> emit,
   ) async {
-    print('Loading income data...'); // Debug print
     emit(TransactionLoading());
     _currentPage = 1;
 
@@ -138,8 +185,12 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
       // TODO: Replace with actual API call
       await Future.delayed(const Duration(seconds: 1));
 
-      final transactions = _getMockTransactions(page: 1);
-      print('Loaded ${transactions.length} transactions'); // Debug print
+      final transactions = _getMockTransactions(page: 1, isIncome: true);
+      final totalAmount = transactions.fold<double>(
+        0,
+        (sum, transaction) => sum + transaction.amount,
+      );
+      final categoryTotals = _calculateCategoryTotals(transactions);
 
       if (transactions.isEmpty) {
         emit(TransactionEmpty());
@@ -147,13 +198,49 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
         emit(
           TransactionLoaded(
             transactions: transactions,
+            totalAmount: totalAmount,
+            categoryTotals: categoryTotals,
             hasReachedMax: transactions.length < _pageSize,
           ),
         );
       }
     } catch (e) {
-      print('Error loading income: $e'); // Debug print
       emit(TransactionError('Failed to load income data'));
+    }
+  }
+
+  Future<void> _onExpensesLoaded(
+    ExpensesLoaded event,
+    Emitter<TransactionState> emit,
+  ) async {
+    emit(TransactionLoading());
+    _currentPage = 1;
+
+    try {
+      // TODO: Replace with actual API call
+      await Future.delayed(const Duration(seconds: 1));
+
+      final transactions = _getMockTransactions(page: 1, isIncome: false);
+      final totalAmount = transactions.fold<double>(
+        0,
+        (sum, transaction) => sum + transaction.amount,
+      );
+      final categoryTotals = _calculateCategoryTotals(transactions);
+
+      if (transactions.isEmpty) {
+        emit(TransactionEmpty());
+      } else {
+        emit(
+          TransactionLoaded(
+            transactions: transactions,
+            totalAmount: totalAmount,
+            categoryTotals: categoryTotals,
+            hasReachedMax: transactions.length < _pageSize,
+          ),
+        );
+      }
+    } catch (e) {
+      emit(TransactionError('Failed to load expenses data'));
     }
   }
 
@@ -165,33 +252,42 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
       final currentState = state as TransactionLoaded;
 
       if (currentState.hasReachedMax) {
-        print('Already reached max'); // Debug print
         return;
       }
 
       try {
-        print('Loading more transactions...'); // Debug print
         // TODO: Replace with actual API call
         await Future.delayed(const Duration(seconds: 1));
 
-        final newTransactions = _getMockTransactions(page: _currentPage + 1);
-        print(
-          'Loaded ${newTransactions.length} more transactions',
-        ); // Debug print
+        final newTransactions = _getMockTransactions(
+          page: _currentPage + 1,
+          isIncome: currentState.transactions.first.isIncome,
+        );
 
         if (newTransactions.isEmpty) {
           emit(currentState.copyWith(hasReachedMax: true));
         } else {
           _currentPage++;
+          final updatedTransactions = [
+            ...currentState.transactions,
+            ...newTransactions,
+          ];
+          final totalAmount = updatedTransactions.fold<double>(
+            0,
+            (sum, transaction) => sum + transaction.amount,
+          );
+          final categoryTotals = _calculateCategoryTotals(updatedTransactions);
+
           emit(
             currentState.copyWith(
-              transactions: [...currentState.transactions, ...newTransactions],
+              transactions: updatedTransactions,
+              totalAmount: totalAmount,
+              categoryTotals: categoryTotals,
               hasReachedMax: newTransactions.length < _pageSize,
             ),
           );
         }
       } catch (e) {
-        print('Error loading more: $e'); // Debug print
         // Don't emit error state, just keep current state
       }
     }
@@ -203,11 +299,11 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
   ) async {
     if (state is TransactionLoaded) {
       final currentState = state as TransactionLoaded;
-      
+
       try {
         // TODO: Replace with actual API call
         await Future.delayed(const Duration(seconds: 1));
-        
+
         final newTransaction = Transaction(
           id: DateTime.now().millisecondsSinceEpoch.toString(),
           source: event.source,
@@ -216,10 +312,21 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
           date: '${event.date.day}/${event.date.month}/${event.date.year}',
           time: '${event.time.hour.toString().padLeft(2, '0')}:${event.time.minute.toString().padLeft(2, '0')}',
           isIncome: true,
+          categories: event.categories,
+          notes: event.notes,
         );
 
+        final updatedTransactions = [newTransaction, ...currentState.transactions];
+        final totalAmount = updatedTransactions.fold<double>(
+          0,
+          (sum, transaction) => sum + transaction.amount,
+        );
+        final categoryTotals = _calculateCategoryTotals(updatedTransactions);
+
         emit(currentState.copyWith(
-          transactions: [newTransaction, ...currentState.transactions],
+          transactions: updatedTransactions,
+          totalAmount: totalAmount,
+          categoryTotals: categoryTotals,
         ));
       } catch (e) {
         // Don't emit error state, just keep current state
@@ -227,146 +334,112 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
     }
   }
 
-  List<Transaction> _getMockTransactions({required int page}) {
-    print('Getting mock transactions for page $page'); // Debug print
-    // Simulate pagination with mock data
+  Future<void> _onAddExpenseSubmitted(
+    AddExpenseSubmitted event,
+    Emitter<TransactionState> emit,
+  ) async {
+    if (state is TransactionLoaded) {
+      final currentState = state as TransactionLoaded;
+
+      try {
+        // TODO: Replace with actual API call
+        await Future.delayed(const Duration(seconds: 1));
+
+        final newTransaction = Transaction(
+          id: DateTime.now().millisecondsSinceEpoch.toString(),
+          source: event.category,
+          description: event.description,
+          amount: event.amount,
+          date: '${event.date.day}/${event.date.month}/${event.date.year}',
+          time: '${event.time.hour.toString().padLeft(2, '0')}:${event.time.minute.toString().padLeft(2, '0')}',
+          isIncome: false,
+          categories: event.tags,
+          notes: event.notes,
+          paymentMethod: event.paymentMethod,
+        );
+
+        final updatedTransactions = [newTransaction, ...currentState.transactions];
+        final totalAmount = updatedTransactions.fold<double>(
+          0,
+          (sum, transaction) => sum + transaction.amount,
+        );
+        final categoryTotals = _calculateCategoryTotals(updatedTransactions);
+
+        emit(currentState.copyWith(
+          transactions: updatedTransactions,
+          totalAmount: totalAmount,
+          categoryTotals: categoryTotals,
+        ));
+      } catch (e) {
+        // Don't emit error state, just keep current state
+      }
+    }
+  }
+
+  List<Transaction> _getMockTransactions({
+    required int page,
+    required bool isIncome,
+  }) {
     if (page > 2) return []; // Only 2 pages of mock data
 
-    final baseTransactions = [
-      Transaction(
-        id: '1',
-        source: 'Freelance',
-        description: 'Halo Inc',
-        amount: 850,
-        date: 'Mar 15',
-        time: '2:30 PM',
-        isIncome: true,
-      ),
-      Transaction(
-        id: '2',
-        source: 'Job',
-        description: 'Monthly Salary',
-        amount: 1400,
-        date: 'Mar 1',
-        time: '9:00 AM',
-        isIncome: true,
-      ),
-      Transaction(
-        id: '3',
-        source: 'Freelance',
-        description: 'Tech Corp',
-        amount: 1200,
-        date: 'Feb 28',
-        time: '3:45 PM',
-        isIncome: true,
-      ),
-      Transaction(
-        id: '4',
-        source: 'Job',
-        description: 'Bonus',
-        amount: 500,
-        date: 'Feb 15',
-        time: '10:00 AM',
-        isIncome: true,
-      ),
-      Transaction(
-        id: '5',
-        source: 'Freelance',
-        description: 'Design Co',
-        amount: 1500,
-        date: 'Jan 30',
-        time: '11:30 AM',
-        isIncome: true,
-      ),
-      Transaction(
-        id: '6',
-        source: 'Job',
-        description: 'Commission',
-        amount: 200,
-        date: 'Jan 10',
-        time: '4:00 PM',
-        isIncome: true,
-      ),
-      Transaction(
-        id: '7',
-        source: 'Freelance',
-        description: 'Marketing',
-        amount: 1000,
-        date: 'Dec 20',
-        time: '1:00 PM',
-        isIncome: true,
-      ),
-      Transaction(
-        id: '8',
-        source: 'Job',
-        description: 'Bonus',
-        amount: 500,
-        date: 'Dec 15',
-        time: '2:00 PM',
-        isIncome: true,
-      ),
-      Transaction(
-        id: '9',
-        source: 'Freelance',
-        description: 'Design Co',
-        amount: 1500,
-        date: 'Nov 30',
-        time: '11:30 AM',
-        isIncome: true,
-      ),
-      Transaction(
-        id: '10',
-        source: 'Job',
-        description: 'Commission',
-        amount: 200,
-        date: 'Nov 10',
-        time: '4:00 PM',
-        isIncome: true,
-      ),
-      Transaction(
-        id: '11',
-        source: 'Freelance',
-        description: 'Marketing',
-        amount: 1000,
-        date: 'Oct 20',
-        time: '1:00 PM',
-        isIncome: true,
-      ),
-      Transaction(
-        id: '12',
-        source: 'Job',
-        description: 'Bonus',
-        amount: 500,
-        date: 'Oct 15',
-        time: '2:00 PM',
-        isIncome: true,
-      ),
-    ];
-
-    // Simulate different data for page 2
-    if (page == 2) {
+    if (isIncome) {
+      return [
+        Transaction(
+          id: '1',
+          source: 'Freelance',
+          description: 'Halo Inc',
+          amount: 850,
+          date: 'Mar 15',
+          time: '2:30 PM',
+          isIncome: true,
+          categories: ['Work'],
+        ),
+        Transaction(
+          id: '2',
+          source: 'Job',
+          description: 'Monthly Salary',
+          amount: 1400,
+          date: 'Mar 1',
+          time: '9:00 AM',
+          isIncome: true,
+          categories: ['Salary'],
+        ),
+      ];
+    } else {
       return [
         Transaction(
           id: '3',
-          source: 'Freelance',
-          description: 'Tech Corp',
-          amount: 1200,
-          date: 'Feb 28',
+          source: 'Food & Dining',
+          description: 'Grocery Shopping',
+          amount: 120,
+          date: 'Mar 15',
           time: '3:45 PM',
-          isIncome: true,
+          isIncome: false,
+          categories: ['Necessary'],
+          paymentMethod: 'Credit Card',
         ),
         Transaction(
           id: '4',
-          source: 'Job',
-          description: 'Bonus',
-          amount: 500,
-          date: 'Feb 15',
+          source: 'Transportation',
+          description: 'Gas',
+          amount: 50,
+          date: 'Mar 14',
           time: '10:00 AM',
-          isIncome: true,
+          isIncome: false,
+          categories: ['Necessary'],
+          paymentMethod: 'Cash',
         ),
       ];
     }
+  }
 
-    return baseTransactions;
+  Map<String, double> _calculateCategoryTotals(List<Transaction> transactions) {
+    final categoryTotals = <String, double>{};
+    for (final transaction in transactions) {
+      for (final category in transaction.categories) {
+        categoryTotals[category] = (categoryTotals[category] ?? 0) + transaction.amount;
+      }
+    }
+    return categoryTotals;
   }
 }

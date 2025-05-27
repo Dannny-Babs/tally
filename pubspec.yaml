@@ -41,6 +41,7 @@ dependencies:
   equatable: ^2.0.5
   fl_chart: ^0.66.2
   heroicons: ^0.11.0
+  hugeicons: ^0.0.11
 
 dev_dependencies:
   flutter_test:

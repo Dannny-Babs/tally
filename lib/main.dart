@@ -9,6 +9,7 @@ import 'features/settings/bloc/settings_bloc.dart';
 import 'core/widgets/not_found_screen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -19,13 +20,20 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) => DashboardBloc()..add(DashboardLoaded()),
+        BlocProvider<DashboardBloc>(
+          create: (context) {
+            final bloc = DashboardBloc();
+            // Schedule the event dispatch for the next frame
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              bloc.add(DashboardLoaded());
+            });
+            return bloc;
+          },
         ),
-        BlocProvider(
+        BlocProvider<TransactionBloc>(
           create: (context) => TransactionBloc(),
         ),
-        BlocProvider(
+        BlocProvider<SettingsBloc>(
           create: (context) => SettingsBloc(),
         ),
       ],

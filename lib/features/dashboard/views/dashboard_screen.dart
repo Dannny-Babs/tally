@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../bloc/dashboard_bloc.dart';
 import '../bloc/dashboard_state.dart';
-import '../models/transaction.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import 'package:heroicons/heroicons.dart';
@@ -47,7 +46,48 @@ class DashboardScreen extends StatelessWidget {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        _PeriodDropdown(),
+                        InkWell(
+                          onTap: () {
+                            showModalBottomSheet(
+                              context: context,
+                              backgroundColor: Colors.transparent,
+                              isScrollControlled: true,
+                              builder: (_) => const AddOptionsModal(),
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 6,
+                            ),
+                            decoration: BoxDecoration(
+                              color: AppColors.neutral800,
+                              borderRadius: BorderRadius.circular(10),
+                              
+                            ),
+                            child: Row(
+                              children: [
+                                HeroIcon(
+                                  HeroIcons.plus,
+                                  style: HeroIconStyle.solid,
+                                  color: AppColors.neutral100,
+                                  size: 16,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  'Add more',
+                                  style: AppTextStyles.bodyMedium.copyWith(
+                                    color: AppColors.neutral100,
+                                    fontSize: 14,
+                                    letterSpacing: -0.35,
+                                    fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 12),
@@ -130,24 +170,6 @@ class DashboardScreen extends StatelessWidget {
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
-                                InkWell(
-                                  onTap: () {
-                                    showModalBottomSheet(
-                                      context: context,
-                                      backgroundColor: Colors.transparent,
-                                      isScrollControlled: true,
-                                      builder: (_) => const AddOptionsModal(),
-                                    );
-                                  },
-                                  child: Text(
-                                    'Add more',
-                                    style: AppTextStyles.bodyMedium.copyWith(
-                                      color: AppColors.neutral700,
-                                      fontSize: 14,
-                                      letterSpacing: -0.35,
-                                    ),
-                                  ),
-                                ),
                               ],
                             ),
                           ),
@@ -184,40 +206,6 @@ class DashboardScreen extends StatelessWidget {
   }
 }
 
-class _PeriodDropdown extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: AppColors.primary200.withAlpha((0.2 * 255).round()),
-        ),
-      ),
-      child: Row(
-        children: [
-          Text(
-            'Monthly',
-            style: AppTextStyles.bodyMedium.copyWith(
-              color: AppColors.textPrimaryLight,
-              fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-
-          const SizedBox(width: 4),
-          Icon(
-            Icons.keyboard_arrow_down_rounded,
-            color: AppColors.textPrimaryLight,
-            size: 20,
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 class _TotalIncomeCard extends StatelessWidget {
   final double total;
