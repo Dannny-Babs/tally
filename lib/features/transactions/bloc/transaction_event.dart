@@ -54,10 +54,10 @@ class AddExpenseSubmitted extends TransactionEvent {
     required this.date,
     required this.time,
     required this.tags,
-    required this.paymentMethod,
     this.notes,
+    required this.paymentMethod,
   });
 
   @override
-  List<Object> get props => [amount, category, description, date, time, tags, paymentMethod, notes ?? ''];
+  List<Object> get props => [amount, category, description, date, time, tags, notes ?? '', paymentMethod];
 } 
