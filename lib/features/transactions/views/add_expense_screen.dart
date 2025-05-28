@@ -3,10 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:hugeicons/hugeicons.dart';
 import 'package:hugeicons_pro/hugeicons.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:tally/core/widgets/labeled_input.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
@@ -28,6 +28,7 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
   final _amountController = TextEditingController();
   final _notesController = TextEditingController();
   final _descriptionController = TextEditingController();
+  final _imagePicker = ImagePicker();
 
   String? _selectedCategory;
   String? _selectedTag;
@@ -38,6 +39,7 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
   String? _recurrenceFrequency;
   DateTime? _recurrenceEndDate;
   File? _receiptFile;
+  bool _isPickerActive = false;
 
   final List<String> _paymentMethods = [
     'Bank',
@@ -58,6 +60,7 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
   void initState() {
     super.initState();
     context.read<CategoryBloc>().add(CategoriesLoaded());
+    _getLostData();
   }
 
   @override
@@ -66,6 +69,38 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
     _notesController.dispose();
     _descriptionController.dispose();
     super.dispose();
+  }
+
+  Future<void> _getLostData() async {
+    final LostDataResponse response = await _imagePicker.retrieveLostData();
+    if (response.isEmpty) {
+      return;
+    }
+    final List<XFile>? files = response.files;
+    if (files != null) {
+      _handleLostFiles(files);
+    } else {
+      _handleError(response.exception);
+    }
+  }
+
+  void _handleLostFiles(List<XFile> files) {
+    if (files.isNotEmpty && mounted) {
+      setState(() {
+        _receiptFile = File(files.first.path);
+      });
+    }
+  }
+
+  void _handleError(PlatformException? exception) {
+    if (exception != null && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: ${exception.message}'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   Future<void> _selectDate() async {
@@ -108,32 +143,69 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
     }
   }
 
-  Future<void> _pickReceipt() async {
-    print('pickReceipt started');
-    try {
-      print('Creating ImagePicker instance');
-      final ImagePicker picker = ImagePicker();
-      print('Calling pickImage');
-      final XFile? image = await picker.pickImage(
-        source: ImageSource.gallery,
-        maxWidth: 1800,
-        maxHeight: 1800,
-        imageQuality: 85,
-      );
-      print('Image picker result: ${image?.path}');
+  Future<bool> _requestPermissions() async {
+    if (Platform.isAndroid) {
+      try {
+        // First check if we already have permissions
+        final photosStatus = await Permission.photos.status;
+        final storageStatus = await Permission.storage.status;
+        
+        if (photosStatus.isGranted || storageStatus.isGranted) {
+          return true;
+        }
 
-      if (image != null) {
-        print('Setting receipt file');
+        // If we don't have permissions, request them
+        if (photosStatus.isDenied) {
+          final photosResult = await Permission.photos.request();
+          if (photosResult.isGranted) {
+            return true;
+          }
+        }
+
+        if (storageStatus.isDenied) {
+          final storageResult = await Permission.storage.request();
+          if (storageResult.isGranted) {
+            return true;
+          }
+        }
+
+        // If we get here, permissions were denied
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Permission to access photos is required'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+        return false;
+      } catch (e) {
+        print('Error requesting permissions: $e');
+        return false;
+      }
+    }
+    return true;
+  }
+
+  Future<void> _pickReceipt(ImageSource source) async {
+    if (_isPickerActive) return;
+
+    try {
+      setState(() => _isPickerActive = true);
+
+      final XFile? image = await _imagePicker.pickImage(
+        source: source,
+        imageQuality: 80,
+        maxWidth: 1000,
+        maxHeight: 1000,
+      );
+
+      if (image != null && mounted) {
         setState(() {
           _receiptFile = File(image.path);
         });
-        print('Receipt file set successfully');
-      } else {
-        print('No image selected');
       }
-    } catch (e, stackTrace) {
-      print('Error picking image: $e');
-      print('Stack trace: $stackTrace');
+    } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -142,7 +214,40 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
           ),
         );
       }
+    } finally {
+      if (mounted) {
+        setState(() => _isPickerActive = false);
+      }
     }
+  }
+
+  void _showImageSourceSheet() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.photo_library),
+              title: const Text('Choose from Gallery'),
+              onTap: () {
+                Navigator.pop(context);
+                _pickReceipt(ImageSource.gallery);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.camera_alt),
+              title: const Text('Take a Photo'),
+              onTap: () {
+                Navigator.pop(context);
+                _pickReceipt(ImageSource.camera);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   String? _validateAmount(String? value) {
@@ -460,49 +565,63 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
                       LabeledInput(
                         label: 'Receipt',
                         child: InkWell(
-                          onTap: () {
-                            print('Receipt tap detected');
-                            _pickReceipt();
-                          },
+                          onTap: _showImageSourceSheet,
                           child: Container(
-                            height: 100,
+                            width: double.infinity,
+                            height: 150,
+                            padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
                               color: AppColors.backgroundLight,
                               borderRadius: BorderRadius.circular(8),
                               border: Border.all(color: AppColors.borderLight),
                             ),
-                            child: _receiptFile != null
-                                ? ClipRRect(
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                if (_receiptFile != null)
+                                  ClipRRect(
                                     borderRadius: BorderRadius.circular(8),
                                     child: Image.file(
                                       _receiptFile!,
                                       fit: BoxFit.cover,
                                       width: double.infinity,
+                                      height: double.infinity,
                                     ),
                                   )
-                                : Center(
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          HugeIconsSolid.imageUpload01,
-                                          size: 24,
-                                          color: AppColors.neutral800,
+                                else
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        HugeIconsSolid.imageUpload01,
+                                        size: 32,
+                                        color: AppColors.neutral800,
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        'Tap to attach receipt',
+                                        style: AppTextStyles.bodyMedium.copyWith(
+                                          color: AppColors.neutral700,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 14,
+                                          letterSpacing: -0.15,
+                                          fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
                                         ),
-                                        const SizedBox(height: 8),
-                                        Text(
-                                          'Tap to attach receipt',
-                                          style: AppTextStyles.bodyMedium.copyWith(
-                                            color: AppColors.neutral700,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 14,
-                                            letterSpacing: -0.15,
-                                            fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
-                                          ),
-                                        ),
-                                      ],
+                                      ),
+                                    ],
+                                  ),
+                                if (_isPickerActive)
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.black.withOpacity(0.5),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: const Center(
+                                      child: CircularProgressIndicator(),
                                     ),
                                   ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
