@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:heroicons/heroicons.dart';
 import 'package:hugeicons_pro/hugeicons.dart';
 import 'package:tally/features/transactions/views/add_income_screen.dart';
 import '../../../core/theme/app_colors.dart';
@@ -9,9 +8,11 @@ import '../../../core/theme/app_text_styles.dart';
 import '../bloc/transaction_bloc.dart';
 import '../bloc/transaction_event.dart';
 import '../bloc/transaction_state.dart';
+import '../bloc/transaction_model.dart';
 import '../widgets/activity_card.dart';
 import '../widgets/empty_state_placeholder.dart';
 import '../widgets/error_screen.dart';
+import '../widgets/date_filter_widget.dart';
 
 class IncomeScreen extends StatelessWidget {
   const IncomeScreen({super.key});
@@ -74,6 +75,47 @@ class IncomeScreen extends StatelessWidget {
                               fontWeight: FontWeight.w600,
                             ),
                           ),
+                        ),
+                      ),
+
+                      // Date Filter
+                      SliverToBoxAdapter(
+                        child: DateFilterWidget(
+                          selectedRange: DateRange.thisMonth,
+                          onRangeSelected: (range) {
+                            final now = DateTime.now();
+                            DateTime startDate;
+                            DateTime endDate;
+
+                            switch (range) {
+                              case DateRange.thisMonth:
+                                startDate = DateTime(now.year, now.month, 1);
+                                endDate = DateTime(now.year, now.month + 1, 0);
+                                break;
+                              case DateRange.lastMonth:
+                                startDate = DateTime(now.year, now.month - 1, 1);
+                                endDate = DateTime(now.year, now.month, 0);
+                                break;
+                              case DateRange.thisYear:
+                                startDate = DateTime(now.year, 1, 1);
+                                endDate = DateTime(now.year, 12, 31);
+                                break;
+                              case DateRange.custom:
+                                // TODO: Implement custom date picker
+                                return;
+                              case DateRange.all:
+                                startDate = DateTime(1900, 1, 1);
+                                endDate = DateTime(now.year, now.month, now.day);
+                                break;
+                            }
+
+                            context.read<TransactionBloc>().add(
+                              DateFilterChanged(
+                                startDate: startDate,
+                                endDate: endDate,
+                              ),
+                            );
+                          },
                         ),
                       ),
 
@@ -151,8 +193,7 @@ class IncomeScreen extends StatelessWidget {
                                           color: Colors.white,
                                           fontWeight: FontWeight.w600,
                                           letterSpacing: -0.15,
-                                          fontFamily:
-                                              GoogleFonts.spaceMono().fontFamily,
+                                          fontFamily: GoogleFonts.spaceMono().fontFamily,
                                         ),
                                       ),
                                       style: ElevatedButton.styleFrom(
@@ -174,125 +215,29 @@ class IncomeScreen extends StatelessWidget {
                         ),
                       ),
 
-                      // Income History Header
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: Text(
-                            'Income History',
-                            style: AppTextStyles.displaySmall.copyWith(
-                              color: AppColors.textPrimaryLight,
-                              letterSpacing: -0.5,
-                              fontSize: 16,
-                              fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      // Income List
+                      // Transaction Groups
                       if (state is TransactionLoading)
                         const SliverToBoxAdapter(
-                          child: Center(child: CircularProgressIndicator()),
+                          child: SizedBox(
+                            height: 200,
+                            child: Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          ),
                         )
                       else if (state is TransactionEmpty)
-                        const SliverToBoxAdapter(
-                          child: EmptyStatePlaceholder(
-                            title: 'No Income Recorded',
-                            message:
-                                'You haven\'t recorded any income yet. Tap + Add to record your first payment.',
+                        SliverToBoxAdapter(
+                          child: Container(
+                            height: MediaQuery.of(context).size.height * 0.52,
+                            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                            child: const EmptyStatePlaceholder(
+                              title: 'No Income Recorded',
+                              message: 'You haven\'t recorded any income yet. Tap + Add to record your first payment.',
+                            ),
                           ),
                         )
                       else if (state is TransactionLoaded)
-                        SliverPadding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          sliver:SliverToBoxAdapter(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(16),
-                                border: Border.all(
-                                  color: AppColors.borderLight,
-                                ),
-                              ),
-                              child: ListView.builder(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 8,
-                                  horizontal: 8,
-                                ),
-                                itemCount: state.transactions.length + 1,
-                                itemBuilder: (context, index) {
-                                  if (index == state.transactions.length) {
-                                    if (state.hasReachedMax) {
-                                      return Center(
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            vertical: 16,
-                                          ),
-                                          child: Text(
-                                            'Oops, that\'s all!',
-                                            style: AppTextStyles.bodySmall.copyWith(
-                                              color: AppColors.neutral600,
-                                              fontFamily:
-                                                  GoogleFonts.spaceGrotesk().fontFamily,
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    } else {
-                                      return const Center(
-                                        child: Padding(
-                                          padding: EdgeInsets.symmetric(
-                                            vertical: 16,
-                                          ),
-                                          child: SizedBox(
-                                            width: 24,
-                                            height: 24,
-                                            child: CircularProgressIndicator(
-                                              strokeWidth: 2,
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    }
-                                  }
-                            
-                                  final transaction = state.transactions[index];
-                                  return TweenAnimationBuilder<double>(
-                                    tween: Tween(begin: 0.0, end: 1.0),
-                                    duration: const Duration(milliseconds: 300),
-                                    curve: Curves.easeOut,
-                                    builder: (context, value, child) {
-                                      return Transform.translate(
-                                        offset: Offset(0, 20 * (1 - value)),
-                                        child: Opacity(
-                                          opacity: value,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                              bottom: 8,
-                                            ),
-                                            child: ActivityCard(
-                                              icon: _getIconForSource(transaction.source),
-                                              title: transaction.description,
-                                              subtitle:
-                                                  '${transaction.source} • ${transaction.date}',
-                                              amount: transaction.amount,
-                                              isIncome: true,
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  );
-                                },
-
-                              ),
-                            ),
-                          ),
-                        ),
+                        _buildTransactionGroups(state.transactions, state.hasReachedMax),
                     ],
                   ),
                 ),
@@ -304,14 +249,157 @@ class IncomeScreen extends StatelessWidget {
     );
   }
 
-   _getIconForSource(String source) {
-    switch (source.toLowerCase()) {
-      case 'freelance':
-        return HugeIconsSolid.briefcase01;
-      case 'job':
-        return HugeIconsSolid.briefcase02;
+  Widget _buildTransactionGroups(List<Transaction> transactions, bool hasReachedMax) {
+    final groups = _groupTransactions(transactions);
+    final entries = groups.entries.toList();
+
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          if (index >= entries.length * 2) {
+            if (hasReachedMax) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: Text(
+                    'Oops, that\'s all!',
+                    style: AppTextStyles.bodySmall.copyWith(
+                      color: AppColors.neutral600,
+                      fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                    ),
+                  ),
+                ),
+              );
+            } else {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  ),
+                ),
+              );
+            }
+          }
+
+          final groupIndex = index ~/ 2;
+          final isHeader = index.isEven;
+          final group = entries[groupIndex];
+
+          if (isHeader) {
+            return Container(
+              color: AppColors.backgroundLight,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              child: Text(
+                group.key,
+                style: AppTextStyles.bodyMedium.copyWith(
+                  color: AppColors.textPrimaryLight,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                  fontSize: 14,
+                  letterSpacing: -0.15,
+                ),
+              ),
+            );
+          } else {
+            return Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: AppColors.borderLight),
+              ),
+              padding: const EdgeInsets.all(8),
+              margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              child: Column(
+                children: group.value.map((transaction) {
+                  return TweenAnimationBuilder<double>(
+                    tween: Tween(begin: 0.0, end: 1.0),
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeOut,
+                    builder: (context, value, child) {
+                      return Transform.translate(
+                        offset: Offset(0, 20 * (1 - value)),
+                        child: Opacity(
+                          opacity: value,
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 8),
+                            child: ActivityCard(
+                              icon: _getIconForSource(transaction.source),
+                              title: transaction.description,
+                              subtitle: '${transaction.source} • ${transaction.date}',
+                              amount: transaction.amount,
+                              isIncome: true,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                }).toList(),
+              ),
+            );
+          }
+        },
+        childCount: entries.length * 2 + 1,
+      ),
+    );
+  }
+
+  Map<String, List<Transaction>> _groupTransactions(List<Transaction> transactions) {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final thisWeek = today.subtract(Duration(days: today.weekday - 1));
+    final lastWeek = thisWeek.subtract(const Duration(days: 7));
+    final thisMonth = DateTime(now.year, now.month, 1);
+    final lastMonth = DateTime(now.year, now.month - 1, 1);
+
+    final groups = <String, List<Transaction>>{};
+    
+    for (final transaction in transactions) {
+      final date = DateTime.parse(transaction.date);
+      String group;
+
+      if (date.isAtSameMomentAs(today)) {
+        group = 'Today';
+      } else if (date.isAfter(thisWeek.subtract(const Duration(days: 1)))) {
+        group = 'This Week';
+      } else if (date.isAfter(lastWeek.subtract(const Duration(days: 1)))) {
+        group = 'Last Week';
+      } else if (date.isAfter(thisMonth.subtract(const Duration(days: 1)))) {
+        group = 'This Month';
+      } else if (date.isAfter(lastMonth.subtract(const Duration(days: 1)))) {
+        group = 'Last Month';
+      } else {
+        group = 'Older';
+      }
+
+      groups.putIfAbsent(group, () => []).add(transaction);
+    }
+
+    return Map.fromEntries(
+      groups.entries.where((e) => e.value.isNotEmpty).toList()
+        ..sort((a, b) => _getGroupOrder(a.key).compareTo(_getGroupOrder(b.key))),
+    );
+  }
+
+  int _getGroupOrder(String group) {
+    switch (group) {
+      case 'Today':
+        return 0;
+      case 'This Week':
+        return 1;
+      case 'Last Week':
+        return 2;
+      case 'This Month':
+        return 3;
+      case 'Last Month':
+        return 4;
+      case 'Older':
+        return 5;
       default:
-        return HugeIconsSolid.money03;
+        return 6;
     }
   }
 
@@ -358,4 +446,29 @@ class IncomeScreen extends StatelessWidget {
       ),
     );
   }
-}
+
+  _getIconForSource(String source) {
+    switch (source.toLowerCase()) {
+      case 'freelance':
+        return HugeIconsSolid.briefcase01;
+      case 'job':
+        return HugeIconsSolid.briefcase02;
+      case 'design':
+        return HugeIconsSolid.canvas;
+      case 'development':
+        return HugeIconsSolid.developer;
+      case 'marketing':
+        return HugeIconsSolid.megaphone01;
+      case 'investment':
+        return HugeIconsSolid.chart01;
+      case 'family':
+        return HugeIconsSolid.userGroup02;
+      case 'refund':
+        return HugeIconsSolid.cash02;
+      case 'bonus':
+        return HugeIconsSolid.tips;
+      default:
+        return HugeIconsSolid.money03;
+    }
+  }
+} 

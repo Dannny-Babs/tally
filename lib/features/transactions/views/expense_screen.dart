@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:hugeicons_pro/hugeicons.dart';
 import 'package:tally/features/transactions/views/add_expense_screen.dart';
-import 'package:tally/features/transactions/views/income_screen_refactored.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../bloc/transaction_bloc.dart';
@@ -135,13 +134,11 @@ class ExpenseScreen extends StatelessWidget {
                                   ),
                                   IconButton(
                                     onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder:
-                                              (context) =>
-                                                  const IncomeScreenRefactored(),
-                                        ),
+                                      showModalBottomSheet(
+                                        context: context,
+                                        backgroundColor: Colors.transparent,
+                                        isScrollControlled: true,
+                                        builder: (_) => const AddExpenseModal(),
                                       );
                                     },
                                     icon: HeroIcon(
@@ -307,7 +304,88 @@ class ExpenseScreen extends StatelessWidget {
                               ],
                             ),
                           ),
-                        ),
+                        )else if(state is TransactionEmpty)
+                          SliverToBoxAdapter(
+                            child: Container(
+                            padding: const EdgeInsets.all(12),
+                            margin: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(color: AppColors.borderLight),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Total Spent',
+                                  style: AppTextStyles.bodyMedium.copyWith(
+                                    color: AppColors.neutral700,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily:
+                                        GoogleFonts.spaceGrotesk().fontFamily,
+                                    fontSize: 14,
+                                    letterSpacing: -0.15,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  '\$0.00',
+                                  style: AppTextStyles.displaySmall.copyWith(
+                                    color: AppColors.primary900,
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily:
+                                        GoogleFonts.spaceGrotesk().fontFamily,
+                                    fontSize: 32,
+                                    letterSpacing: -0.3,
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                                TopCategoriesWidget(
+                                    categoryTotals: const {},
+                                ),
+                                const SizedBox(height: 12),
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: ElevatedButton.icon(
+                                    onPressed: () {
+                                      showModalBottomSheet(
+                                        context: context,
+                                        backgroundColor: Colors.transparent,
+                                        isScrollControlled: true,
+                                        builder: (_) => const AddExpenseModal(),
+                                      );
+                                    },
+                                    icon: const Icon(
+                                      Icons.add,
+                                      color: Colors.white,
+                                    ),
+                                    label: Text(
+                                      'Add Expense',
+                                      style: AppTextStyles.bodyMedium.copyWith(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600,
+                                        letterSpacing: -0.15,
+                                        fontFamily:
+                                            GoogleFonts.spaceMono().fontFamily,
+                                      ),
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppColors.neutral900,
+                                      foregroundColor: AppColors.surfaceLight,
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 12,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          ),
 
                       // Categories Section
                       SliverToBoxAdapter(
@@ -526,7 +604,7 @@ class ExpenseScreen extends StatelessWidget {
                 ),
               ),
             ),
-            minHeight: 50,
+            minHeight: 45,
             maxHeight: 50,
           ),
         ),
