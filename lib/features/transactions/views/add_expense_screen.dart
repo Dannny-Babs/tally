@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tally/core/theme/app_colors.dart';
-import 'package:tally/core/theme/app_text_styles.dart';
-import 'package:tally/features/transactions/bloc/transaction_bloc.dart';
-import 'package:tally/features/transactions/bloc/category_bloc.dart';
-import 'package:tally/features/transactions/bloc/category_state.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:hugeicons/hugeicons.dart';
+import 'package:hugeicons_pro/hugeicons.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import 'package:tally/core/widgets/labeled_input.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text_styles.dart';
+import '../bloc/transaction_bloc.dart';
+import '../bloc/transaction_event.dart';
+import '../bloc/category_bloc.dart';
+import '../bloc/category_event.dart';
+import '../bloc/category_state.dart';
 
 class AddExpenseModal extends StatefulWidget {
   const AddExpenseModal({super.key});
@@ -17,41 +26,53 @@ class AddExpenseModal extends StatefulWidget {
 class _AddExpenseModalState extends State<AddExpenseModal> {
   final _formKey = GlobalKey<FormState>();
   final _amountController = TextEditingController();
-  final _descriptionController = TextEditingController();
   final _notesController = TextEditingController();
+  final _descriptionController = TextEditingController();
 
+  String? _selectedCategory;
+  String? _selectedTag;
+  String? _selectedPaymentMethod;
   DateTime _selectedDate = DateTime.now();
   TimeOfDay _selectedTime = TimeOfDay.now();
-  String? _selectedCategory;
-  String? _selectedPaymentMethod;
-  final List<String> _selectedTags = [];
+  bool _isRecurring = false;
+  String? _recurrenceFrequency;
+  DateTime? _recurrenceEndDate;
+  File? _receiptFile;
 
   final List<String> _paymentMethods = [
+    'Bank',
     'Cash',
-    'Credit Card',
-    'Debit Card',
-    'Bank Transfer',
+    'Card',
+    'PayPal',
+    'Other',
   ];
 
-  final List<String> _tags = [
-    'Necessary',
-    'Entertainment',
-    'Food',
+  final List<String> _recurrenceOptions = [
+    'Daily',
+    'Weekly',
+    'Monthly',
+    'Yearly',
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<CategoryBloc>().add(CategoriesLoaded());
+  }
 
   @override
   void dispose() {
     _amountController.dispose();
-    _descriptionController.dispose();
     _notesController.dispose();
+    _descriptionController.dispose();
     super.dispose();
   }
 
-  Future<void> _selectDate(BuildContext context) async {
+  Future<void> _selectDate() async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: _selectedDate,
-      firstDate: DateTime(2000),
+      firstDate: DateTime(2020),
       lastDate: DateTime.now(),
     );
     if (picked != null && picked != _selectedDate) {
@@ -61,7 +82,7 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
     }
   }
 
-  Future<void> _selectTime(BuildContext context) async {
+  Future<void> _selectTime() async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: _selectedTime,
@@ -73,314 +94,650 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
     }
   }
 
-  void _submitForm() {
-    if (_formKey.currentState?.validate() ?? false) {
-      if (_selectedCategory == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Please select a category'),
-          ),
-        );
-        return;
-      }
-
-      if (_selectedPaymentMethod == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Please select a payment method'),
-          ),
-        );
-        return;
-      }
-
-      context.read<TransactionBloc>().add(
-            AddExpenseSubmitted(
-              amount: double.parse(_amountController.text),
-              category: _selectedCategory!,
-              description: _descriptionController.text,
-              date: _selectedDate,
-              time: _selectedTime,
-              tags: _selectedTags,
-              notes: _notesController.text.isEmpty ? null : _notesController.text,
-              paymentMethod: _selectedPaymentMethod!,
-            ),
-          );
-
-      Navigator.pop(context);
+  Future<void> _selectRecurrenceEndDate() async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _recurrenceEndDate ?? DateTime.now().add(const Duration(days: 30)),
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(const Duration(days: 365 * 2)),
+    );
+    if (picked != null) {
+      setState(() {
+        _recurrenceEndDate = picked;
+      });
     }
+  }
+
+  Future<void> _pickReceipt() async {
+    print('pickReceipt started');
+    try {
+      print('Creating ImagePicker instance');
+      final ImagePicker picker = ImagePicker();
+      print('Calling pickImage');
+      final XFile? image = await picker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 1800,
+        maxHeight: 1800,
+        imageQuality: 85,
+      );
+      print('Image picker result: ${image?.path}');
+
+      if (image != null) {
+        print('Setting receipt file');
+        setState(() {
+          _receiptFile = File(image.path);
+        });
+        print('Receipt file set successfully');
+      } else {
+        print('No image selected');
+      }
+    } catch (e, stackTrace) {
+      print('Error picking image: $e');
+      print('Stack trace: $stackTrace');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to pick image: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  String? _validateAmount(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Enter a valid amount > 0';
+    }
+    final amount = double.tryParse(value);
+    if (amount == null || amount <= 0) {
+      return 'Enter a valid amount > 0';
+    }
+    return null;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.9,
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(16),
-        ),
-      ),
-      child: Column(
-        children: [
-          _buildHeader(context),
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: Form(
-                key: _formKey,
+    return DraggableScrollableSheet(
+      initialChildSize: 0.9,
+      minChildSize: 0.5,
+      maxChildSize: 0.95,
+      builder: (context, scrollController) {
+        return Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 10,
+                offset: const Offset(0, -2),
+              ),
+            ],
+          ),
+          child: Column(
+            children: [
+              // Drag handle
+              Container(
+                margin: const EdgeInsets.only(top: 12),
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              // Header
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildAmountField(),
-                    const SizedBox(height: 16),
-                    _buildDateAndTimeFields(context),
-                    const SizedBox(height: 16),
-                    _buildCategoryField(context),
-                    const SizedBox(height: 16),
-                    _buildDescriptionField(),
-                    const SizedBox(height: 16),
-                    _buildPaymentMethodField(),
-                    const SizedBox(height: 16),
-                    _buildTagsField(),
-                    const SizedBox(height: 16),
-                    _buildNotesField(),
-                    const SizedBox(height: 32),
-                    _buildSubmitButton(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Add Expense',
+                              style: AppTextStyles.displaySmall.copyWith(
+                                color: AppColors.neutral900,
+                                fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                                fontSize: 20,
+                                letterSpacing: -0.5,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            Text(
+                              'Log a new expense to track your spending',
+                              style: AppTextStyles.bodyMedium.copyWith(
+                                color: AppColors.textSecondaryLight,
+                                letterSpacing: -0.15,
+                                fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
-  Widget _buildHeader(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: const BorderRadius.vertical(
-          top: Radius.circular(16),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            'Add Expense',
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-          IconButton(
-            icon: const Icon(Icons.close),
-            onPressed: () => Navigator.pop(context),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAmountField() {
-    return TextFormField(
-      controller: _amountController,
-      decoration: const InputDecoration(
-        labelText: 'Amount',
-        prefixText: '\$',
-      ),
-      keyboardType: const TextInputType.numberWithOptions(decimal: true),
-      inputFormatters: [
-        FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
-      ],
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Please enter an amount';
-        }
-        final amount = double.tryParse(value);
-        if (amount == null || amount <= 0) {
-          return 'Please enter a valid amount';
-        }
-        return null;
-      },
-    );
-  }
-
-  Widget _buildDateAndTimeFields(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: OutlinedButton.icon(
-            onPressed: () => _selectDate(context),
-            icon: const Icon(Icons.calendar_today),
-            label: Text(
-              '${_selectedDate.day}/${_selectedDate.month}/${_selectedDate.year}',
-            ),
-          ),
-        ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: OutlinedButton.icon(
-            onPressed: () => _selectTime(context),
-            icon: const Icon(Icons.access_time),
-            label: Text(
-              '${_selectedTime.hour.toString().padLeft(2, '0')}:${_selectedTime.minute.toString().padLeft(2, '0')}',
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildCategoryField(BuildContext context) {
-    return BlocBuilder<CategoryBloc, CategoryState>(
-      builder: (context, state) {
-        if (state is CategoryLoading) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        if (state is CategoryEmpty) {
-          return const Center(
-            child: Text('No categories found'),
-          );
-        }
-
-        if (state is CategoryLoaded) {
-          return DropdownButtonFormField<String>(
-            value: _selectedCategory,
-            decoration: const InputDecoration(
-              labelText: 'Category',
-            ),
-            items: state.categories.map((category) {
-              final iconCode = category.icon ?? '0';
-              return DropdownMenuItem(
-                value: category.id,
-                child: Row(
-                  children: [
-                    Icon(
-                      IconData(
-                        int.parse(iconCode),
-                        fontFamily: 'MaterialIcons',
-                      ),
+              // Form
+              Expanded(
+                child: Form(
+                  key: _formKey,
+                  child: ListView(
+                    controller: scrollController,
+                    padding: EdgeInsets.fromLTRB(
+                      16,
+                      0,
+                      16,
+                      MediaQuery.of(context).viewInsets.bottom + 16,
                     ),
-                    const SizedBox(width: 8),
-                    Text(category.name),
-                  ],
+                    children: [
+                      const SizedBox(height: 8),
+                      LabeledInput(
+                        label: 'Amount',
+                        child: TextFormField(
+                          controller: _amountController,
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true,
+                          ),
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                              RegExp(r'^\d*\.?\d{0,2}'),
+                            ),
+                          ],
+                          decoration: InputDecoration(
+                            hintText: '0.00',
+                            hintStyle: AppTextStyles.bodyMedium.copyWith(
+                              color: AppColors.textSecondaryLight,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                              letterSpacing: -0.15,
+                              fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                            ),
+                            border: InputBorder.none,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                            ),
+                            prefixText: '\$ ',
+                          ),
+                          validator: _validateAmount,
+                        ),
+                      ),
+
+                      const SizedBox(height: 16),
+                      LabeledInput(
+                        label: 'Date & Time',
+                        child: InkWell(
+                          onTap: () async {
+                            await _selectDate();
+                            await _selectTime();
+                          },
+                          child: Container(
+                            height: 48,
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            decoration: BoxDecoration(
+                              color: AppColors.backgroundLight,
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: AppColors.borderLight),
+                            ),
+                            child: Row(
+                              children: [
+                                Text(
+                                  '${_selectedDate.day}/${_selectedDate.month}/${_selectedDate.year} • ${_selectedTime.hour.toString().padLeft(2, '0')}:${_selectedTime.minute.toString().padLeft(2, '0')}',
+                                  style: AppTextStyles.bodyMedium.copyWith(
+                                    color: AppColors.neutral900,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 14,
+                                    letterSpacing: -0.15,
+                                    fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 16),
+                      LabeledInput(
+                        label: 'Category',
+                        child: BlocBuilder<CategoryBloc, CategoryState>(
+                          builder: (context, state) {
+                            if (state is CategoryLoaded) {
+                              return Container(
+                                height: 48,
+                                decoration: BoxDecoration(
+                                  color: AppColors.backgroundLight,
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(color: AppColors.borderLight),
+                                ),
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton2<String>(
+                                    dropdownStyleData: DropdownStyleData(
+                                      decoration: BoxDecoration(
+                                        color: AppColors.backgroundLight,
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(
+                                          color: AppColors.borderLight,
+                                        ),
+                                      ),
+                                    ),
+                                    isExpanded: true,
+                                    hint: Text(
+                                      'Select category',
+                                      style: AppTextStyles.bodyMedium.copyWith(
+                                        color: AppColors.neutral800,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 14,
+                                        letterSpacing: -0.15,
+                                        fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                                      ),
+                                    ),
+                                    items: state.categories
+                                        .map(
+                                          (category) => DropdownMenuItem<String>(
+                                            value: category.name,
+                                            child: Text(
+                                              category.name,
+                                              style: AppTextStyles.bodyMedium.copyWith(
+                                                color: AppColors.neutral900,
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 16,
+                                                letterSpacing: -0.15,
+                                                fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                        .toList(),
+                                    value: _selectedCategory,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _selectedCategory = value;
+                                      });
+                                    },
+                                  ),
+                                ),
+                              );
+                            }
+                            return const SizedBox.shrink();
+                          },
+                        ),
+                      ),
+
+                      const SizedBox(height: 16),
+                      LabeledInput(
+                        label: 'Payment Method',
+                        child: Container(
+                          height: 48,
+                          decoration: BoxDecoration(
+                            color: AppColors.backgroundLight,
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: AppColors.borderLight),
+                          ),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton2<String>(
+                              dropdownStyleData: DropdownStyleData(
+                                decoration: BoxDecoration(
+                                  color: AppColors.backgroundLight,
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                    color: AppColors.borderLight,
+                                  ),
+                                ),
+                              ),
+                              isExpanded: true,
+                              hint: Text(
+                                'Select method',
+                                style: AppTextStyles.bodyMedium.copyWith(
+                                  color: AppColors.neutral800,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14,
+                                  letterSpacing: -0.15,
+                                  fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                                ),
+                              ),
+                              items: _paymentMethods
+                                  .map(
+                                    (method) => DropdownMenuItem<String>(
+                                      value: method,
+                                      child: Text(
+                                        method,
+                                        style: AppTextStyles.bodyMedium.copyWith(
+                                          color: AppColors.neutral900,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 16,
+                                          letterSpacing: -0.15,
+                                          fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
+                              value: _selectedPaymentMethod,
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedPaymentMethod = value;
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 16),
+                      LabeledInput(
+                        label: 'Description',
+                        child: TextFormField(
+                          controller: _descriptionController,
+                          decoration: InputDecoration(
+                            hintText: 'What was this expense for?',
+                            hintStyle: AppTextStyles.bodyMedium.copyWith(
+                              color: AppColors.textSecondaryLight,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                              letterSpacing: -0.15,
+                              fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                            ),
+                            border: InputBorder.none,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 12,
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 16),
+                      LabeledInput(
+                        label: 'Receipt',
+                        child: InkWell(
+                          onTap: () {
+                            print('Receipt tap detected');
+                            _pickReceipt();
+                          },
+                          child: Container(
+                            height: 100,
+                            decoration: BoxDecoration(
+                              color: AppColors.backgroundLight,
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: AppColors.borderLight),
+                            ),
+                            child: _receiptFile != null
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: Image.file(
+                                      _receiptFile!,
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                    ),
+                                  )
+                                : Center(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          HugeIconsSolid.imageUpload01,
+                                          size: 24,
+                                          color: AppColors.neutral800,
+                                        ),
+                                        const SizedBox(height: 8),
+                                        Text(
+                                          'Tap to attach receipt',
+                                          style: AppTextStyles.bodyMedium.copyWith(
+                                            color: AppColors.neutral700,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 14,
+                                            letterSpacing: -0.15,
+                                            fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 16),
+                      LabeledInput(
+                        label: 'Notes',
+                        child: TextFormField(
+                          controller: _notesController,
+                          maxLines: 4,
+                          decoration: InputDecoration(
+                            hintText: 'Add a note (optional)',
+                            hintStyle: AppTextStyles.bodyMedium.copyWith(
+                              color: AppColors.textSecondaryLight,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                              letterSpacing: -0.15,
+                              fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                            ),
+                            border: InputBorder.none,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 12,
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 16),
+                      SwitchListTile(
+                        title: Text(
+                          'Repeat this expense',
+                          style: AppTextStyles.bodyMedium.copyWith(
+                            color: AppColors.textPrimaryLight,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                            letterSpacing: -0.15,
+                          ),
+                        ),
+                        subtitle: Text(
+                          'Set up recurring expense',
+                          style: AppTextStyles.bodyMedium.copyWith(
+                            color: AppColors.neutral700,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 12,
+                            letterSpacing: -0.15,
+                          ),
+                        ),
+                        value: _isRecurring,
+                        onChanged: (bool value) {
+                          setState(() {
+                            _isRecurring = value;
+                          });
+                        },
+                      ),
+
+                      if (_isRecurring) ...[
+                        const SizedBox(height: 16),
+                        LabeledInput(
+                          label: 'Frequency',
+                          child: Container(
+                            height: 48,
+                            decoration: BoxDecoration(
+                              color: AppColors.backgroundLight,
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: AppColors.borderLight),
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton2<String>(
+                                dropdownStyleData: DropdownStyleData(
+                                  decoration: BoxDecoration(
+                                    color: AppColors.backgroundLight,
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(
+                                      color: AppColors.borderLight,
+                                    ),
+                                  ),
+                                ),
+                                isExpanded: true,
+                                hint: Text(
+                                  'Select frequency',
+                                  style: AppTextStyles.bodyMedium.copyWith(
+                                    color: AppColors.neutral800,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 14,
+                                    letterSpacing: -0.15,
+                                    fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                                  ),
+                                ),
+                                items: _recurrenceOptions
+                                    .map(
+                                      (option) => DropdownMenuItem<String>(
+                                        value: option,
+                                        child: Text(
+                                          option,
+                                          style: AppTextStyles.bodyMedium.copyWith(
+                                            color: AppColors.neutral900,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 14,
+                                            letterSpacing: -0.15,
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                    .toList(),
+                                value: _recurrenceFrequency,
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    _recurrenceFrequency = newValue;
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        LabeledInput(
+                          label: 'End Date',
+                          child: InkWell(
+                            onTap: _selectRecurrenceEndDate,
+                            child: Container(
+                              height: 48,
+                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              decoration: BoxDecoration(
+                                color: AppColors.backgroundLight,
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(color: AppColors.borderLight),
+                              ),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    _recurrenceEndDate != null
+                                        ? 'Ends on ${_recurrenceEndDate!.day}/${_recurrenceEndDate!.month}/${_recurrenceEndDate!.year}'
+                                        : 'Select end date',
+                                    style: AppTextStyles.bodyMedium.copyWith(
+                                      color: AppColors.neutral900,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14,
+                                      letterSpacing: -0.15,
+                                      fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+
+                      const SizedBox(height: 24),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              if (_selectedCategory == null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Select a category'),
+                                  ),
+                                );
+                                return;
+                              }
+
+                              if (_selectedTag == null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Select a tag'),
+                                  ),
+                                );
+                                return;
+                              }
+
+                              if (_selectedPaymentMethod == null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Select a payment method'),
+                                  ),
+                                );
+                                return;
+                              }
+
+                              final amount = double.tryParse(
+                                _amountController.text,
+                              );
+                              if (amount == null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Enter a valid amount > 0'),
+                                  ),
+                                );
+                                return;
+                              }
+
+                              context.read<TransactionBloc>().add(
+                                AddExpenseSubmitted(
+                                  amount: amount,
+                                  category: _selectedCategory!,
+                                  description: _descriptionController.text,
+                                  date: _selectedDate,
+                                  time: _selectedTime,
+                                  tags: [_selectedTag!],
+                                  notes: _notesController.text.isEmpty
+                                      ? null
+                                      : _notesController.text,
+                                  paymentMethod: _selectedPaymentMethod!,
+                                ),
+                              );
+                              Navigator.pop(context);
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.neutral900,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          child: Text(
+                            'Save Expense',
+                            style: AppTextStyles.bodyMedium.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              );
-            }).toList(),
-            onChanged: (value) {
-              setState(() {
-                _selectedCategory = value;
-              });
-            },
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please select a category';
-              }
-              return null;
-            },
-          );
-        }
-
-        return const SizedBox.shrink();
-      },
-    );
-  }
-
-  Widget _buildDescriptionField() {
-    return TextFormField(
-      controller: _descriptionController,
-      decoration: const InputDecoration(
-        labelText: 'Description',
-      ),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Please enter a description';
-        }
-        return null;
-      },
-    );
-  }
-
-  Widget _buildPaymentMethodField() {
-    return DropdownButtonFormField<String>(
-      value: _selectedPaymentMethod,
-      decoration: const InputDecoration(
-        labelText: 'Payment Method',
-      ),
-      items: _paymentMethods.map((method) {
-        return DropdownMenuItem(
-          value: method,
-          child: Text(method),
+              ),
+            ],
+          ),
         );
-      }).toList(),
-      onChanged: (value) {
-        setState(() {
-          _selectedPaymentMethod = value;
-        });
-      },
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Please select a payment method';
-        }
-        return null;
       },
     );
   }
-
-  Widget _buildTagsField() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text('Tags'),
-        const SizedBox(height: 8),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: _tags.map((tag) {
-            return FilterChip(
-              label: Text(tag),
-              selected: _selectedTags.contains(tag),
-              onSelected: (selected) {
-                setState(() {
-                  if (selected) {
-                    _selectedTags.add(tag);
-                  } else {
-                    _selectedTags.remove(tag);
-                  }
-                });
-              },
-            );
-          }).toList(),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildNotesField() {
-    return TextFormField(
-      controller: _notesController,
-      decoration: const InputDecoration(
-        labelText: 'Notes (Optional)',
-      ),
-      maxLines: 3,
-    );
-  }
-
-  Widget _buildSubmitButton() {
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        onPressed: _submitForm,
-        child: const Text('Add Expense'),
-      ),
-    );
-  }
-} 
+}

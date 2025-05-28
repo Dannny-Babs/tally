@@ -4,6 +4,7 @@ import 'core/theme/app_theme.dart';
 import 'core/app_shell.dart';
 import 'features/dashboard/bloc/dashboard_bloc.dart';
 import 'features/dashboard/bloc/dashboard_event.dart';
+import 'features/transactions/bloc/category_bloc.dart';
 import 'features/transactions/bloc/transaction_bloc.dart';
 import 'features/settings/bloc/settings_bloc.dart';
 import 'core/widgets/not_found_screen.dart';
@@ -36,6 +37,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<SettingsBloc>(
           create: (context) => SettingsBloc(),
         ),
+        BlocProvider<CategoryBloc>(
+          create: (context) => CategoryBloc(),
+        ),  
       ],
       child: MaterialApp(
         title: 'Tally',
