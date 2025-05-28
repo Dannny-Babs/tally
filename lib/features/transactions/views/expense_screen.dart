@@ -72,7 +72,7 @@ class ExpenseScreen extends StatelessWidget {
                       parent: AlwaysScrollableScrollPhysics(),
                     ),
                     slivers: [
-                      // Header with parallax effect                  
+                      // Header with parallax effect
                       SliverPersistentHeader(
                         pinned: true,
                         delegate: _SliverHeaderDelegate(
@@ -81,31 +81,37 @@ class ExpenseScreen extends StatelessWidget {
                             child: Padding(
                               padding: const EdgeInsets.all(12),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'Expenses',
-                                        style: AppTextStyles.displaySmall.copyWith(
-                                          color: AppColors.neutral900,
-                                          fontFamily:
-                                              GoogleFonts.spaceGrotesk().fontFamily,
-                                          fontSize: 20,
-                                          letterSpacing: -0.5,
-                                          fontWeight: FontWeight.w600,
-                                        ),
+                                        style: AppTextStyles.displaySmall
+                                            .copyWith(
+                                              color: AppColors.neutral900,
+                                              fontFamily:
+                                                  GoogleFonts.spaceGrotesk()
+                                                      .fontFamily,
+                                              fontSize: 20,
+                                              letterSpacing: -0.5,
+                                              fontWeight: FontWeight.w600,
+                                            ),
                                       ),
                                       Text(
                                         'Track your spending',
-                                        style: AppTextStyles.bodyMedium.copyWith(
-                                          color: AppColors.neutral700,
-                                          letterSpacing: -0.15,
-                                          fontFamily:
-                                              GoogleFonts.spaceGrotesk().fontFamily,
-                                          fontSize: 14,
-                                        ),
+                                        style: AppTextStyles.bodyMedium
+                                            .copyWith(
+                                              color: AppColors.neutral700,
+                                              letterSpacing: -0.15,
+                                              fontFamily:
+                                                  GoogleFonts.spaceGrotesk()
+                                                      .fontFamily,
+                                              fontSize: 14,
+                                            ),
                                       ),
                                     ],
                                   ),
@@ -116,7 +122,8 @@ class ExpenseScreen extends StatelessWidget {
                                         isScrollControlled: true,
                                         backgroundColor: Colors.transparent,
                                         builder:
-                                            (context) => const AddExpenseModal(),
+                                            (context) =>
+                                                const AddExpenseModal(),
                                       );
                                     },
                                     icon: HeroIcon(
@@ -135,7 +142,7 @@ class ExpenseScreen extends StatelessWidget {
                       if (state is TransactionLoaded)
                         SliverToBoxAdapter(
                           child: Container(
-                            padding: const EdgeInsets.all(16),
+                            padding: const EdgeInsets.all(12),
                             margin: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
                               color: Colors.white,
@@ -172,6 +179,44 @@ class ExpenseScreen extends StatelessWidget {
                                 TopCategoriesWidget(
                                   categoryTotals: state.categoryTotals,
                                 ),
+                                const SizedBox(height: 12),
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: ElevatedButton.icon(
+                                    onPressed: () {
+                                      showModalBottomSheet(
+                                        context: context,
+                                        backgroundColor: Colors.transparent,
+                                        isScrollControlled: true,
+                                        builder: (_) => const AddExpenseModal(),
+                                      );
+                                    },
+                                    icon: const Icon(
+                                      Icons.add,
+                                      color: Colors.white,
+                                    ),
+                                    label: Text(
+                                      'Add Expense',
+                                      style: AppTextStyles.bodyMedium.copyWith(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600,
+                                        letterSpacing: -0.15,
+                                        fontFamily:
+                                            GoogleFonts.spaceMono().fontFamily,
+                                      ),
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppColors.neutral900,
+                                      foregroundColor: AppColors.surfaceLight,
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 16,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -189,15 +234,24 @@ class ExpenseScreen extends StatelessWidget {
                                 style: AppTextStyles.bodyMedium.copyWith(
                                   color: AppColors.textPrimaryLight,
                                   fontWeight: FontWeight.w600,
-                                  fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                                  fontFamily:
+                                      GoogleFonts.spaceGrotesk().fontFamily,
                                   fontSize: 14,
                                   letterSpacing: -0.15,
                                 ),
                               ),
-                              IconButton(
-                                onPressed: () {},
-                                icon: HeroIcon(
-                                  HeroIcons.plus,
+                              InkWell(
+                                onTap: () {},
+                                child: Text(
+                                  'See All',
+                                  style: AppTextStyles.bodyMedium.copyWith(
+                                    color: AppColors.primary500,
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily:
+                                        GoogleFonts.spaceGrotesk().fontFamily,
+                                    fontSize: 14,
+                                    letterSpacing: -0.15,
+                                  ),
                                 ),
                               ),
                             ],
@@ -427,7 +481,11 @@ class _SliverHeaderDelegate extends SliverPersistentHeaderDelegate {
   _SliverHeaderDelegate({required this.child});
 
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
     return child;
   }
 

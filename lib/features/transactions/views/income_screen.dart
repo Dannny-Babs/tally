@@ -21,8 +21,6 @@ class IncomeScreen extends StatelessWidget {
       create: (context) => TransactionBloc()..add(IncomeLoaded()),
       child: BlocBuilder<TransactionBloc, TransactionState>(
         builder: (context, state) {
-          print('Current state: $state'); // Debug print
-
           if (state is TransactionError) {
             return ErrorScreen(
               message: state.message,
@@ -43,242 +41,259 @@ class IncomeScreen extends StatelessWidget {
                     bottomLeft: Radius.circular(24),
                   ),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Income',
-                        style: AppTextStyles.displaySmall.copyWith(
-                          color: AppColors.textPrimaryLight,
-                          fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
-                          fontSize: 22,
-                          letterSpacing: -0.5,
-                          fontWeight: FontWeight.w600,
+                child: NotificationListener<ScrollNotification>(
+                  onNotification: (ScrollNotification scrollInfo) {
+                    if (scrollInfo is ScrollEndNotification &&
+                        scrollInfo.metrics.pixels >=
+                            scrollInfo.metrics.maxScrollExtent - 200) {
+                      if (state is TransactionLoaded && !state.hasReachedMax) {
+                        context.read<TransactionBloc>().add(
+                          TransactionLoadMore(),
+                        );
+                      }
+                    }
+                    return true;
+                  },
+                  child: CustomScrollView(
+                    physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics(),
+                    ),
+                    slivers: [
+                      // Title
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Text(
+                            'Income',
+                            style: AppTextStyles.displaySmall.copyWith(
+                              color: AppColors.textPrimaryLight,
+                              fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                              fontSize: 22,
+                              letterSpacing: -0.5,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
                         ),
                       ),
-                      const SizedBox(height: 16),
-                      Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          side: BorderSide(color: AppColors.borderLight),
-                        ),
-                        color: Colors.white,
-                        elevation: 0,
+
+                      // Total Income Card
+                      SliverToBoxAdapter(
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 4,
-                            horizontal: 4,
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const SizedBox(height: 12),
-                              Text(
-                                'Total income this month',
-                                style: AppTextStyles.bodyMedium.copyWith(
-                                  color: AppColors.textPrimaryLight,
-                                  letterSpacing: -0.5,
-                                ),
+                          padding: const EdgeInsets.all(8),
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              side: BorderSide(color: AppColors.borderLight),
+                            ),
+                            color: Colors.white,
+                            elevation: 0,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 4,
+                                horizontal: 4,
                               ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.end,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
+                                  const SizedBox(height: 12),
                                   Text(
-                                    '\$',
+                                    'Total income this month',
                                     style: AppTextStyles.bodyMedium.copyWith(
-                                      fontSize: 28,
-                                      color: AppColors.primary500,
+                                      color: AppColors.textPrimaryLight,
+                                      letterSpacing: -0.5,
                                     ),
                                   ),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    '4200.00',
-                                    style: AppTextStyles.displayLarge.copyWith(
-                                      fontSize: 52,
-                                      color: AppColors.textPrimaryLight,
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        '\$',
+                                        style: AppTextStyles.bodyMedium.copyWith(
+                                          fontSize: 28,
+                                          color: AppColors.primary500,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        '4200.00',
+                                        style: AppTextStyles.displayLarge.copyWith(
+                                          fontSize: 52,
+                                          color: AppColors.textPrimaryLight,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 16),
+                                  _buildIncomeSplitCard(
+                                    sources: {'Freelance': 2800, 'Job': 1400},
+                                  ),
+                                  const SizedBox(height: 4),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: ElevatedButton.icon(
+                                      onPressed: () {
+                                        showModalBottomSheet(
+                                          context: context,
+                                          backgroundColor: Colors.transparent,
+                                          isScrollControlled: true,
+                                          builder: (_) => const AddIncomeModal(),
+                                        );
+                                      },
+                                      icon: const Icon(
+                                        Icons.add,
+                                        color: Colors.white,
+                                      ),
+                                      label: Text(
+                                        'Add Income / Payment',
+                                        style: AppTextStyles.bodyMedium.copyWith(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w600,
+                                          letterSpacing: -0.15,
+                                          fontFamily:
+                                              GoogleFonts.spaceMono().fontFamily,
+                                        ),
+                                      ),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: AppColors.neutral900,
+                                        foregroundColor: AppColors.surfaceLight,
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 16,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 16),
-                              _buildIncomeSplitCard(
-                                sources: {'Freelance': 2800, 'Job': 1400},
-                              ),
-                              const SizedBox(height: 4),
-                              SizedBox(
-                                width: double.infinity,
-                                child: ElevatedButton.icon(
-                                  onPressed: () {
-                                    // TODO: Navigate to AddTransactionScreen
-                                    showModalBottomSheet(
-                                      context: context,
-                                      backgroundColor: Colors.transparent,
-                                      isScrollControlled: true,
-                                      builder: (_) => const AddIncomeModal(),
-                                    );
-                                  },
-                                  icon: const Icon(
-                                    Icons.add,
-                                    color: Colors.white,
-                                  ),
-                                  label: Text(
-                                    'Add Income / Payment',
-                                    style: AppTextStyles.bodyMedium.copyWith(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
-                                      letterSpacing: -0.15,
-                                      fontFamily:
-                                          GoogleFonts.spaceMono().fontFamily,
-                                    ),
-                                  ),
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: AppColors.neutral900,
-                                    foregroundColor: AppColors.surfaceLight,
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 16,
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                  ),
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      // Income History Header
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Text(
+                            'Income History',
+                            style: AppTextStyles.displaySmall.copyWith(
+                              color: AppColors.textPrimaryLight,
+                              letterSpacing: -0.5,
+                              fontSize: 16,
+                              fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      // Income List
+                      if (state is TransactionLoading)
+                        const SliverToBoxAdapter(
+                          child: Center(child: CircularProgressIndicator()),
+                        )
+                      else if (state is TransactionEmpty)
+                        const SliverToBoxAdapter(
+                          child: EmptyStatePlaceholder(
+                            title: 'No Income Recorded',
+                            message:
+                                'You haven\'t recorded any income yet. Tap + Add to record your first payment.',
+                          ),
+                        )
+                      else if (state is TransactionLoaded)
+                        SliverPadding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          sliver:SliverToBoxAdapter(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                  color: AppColors.borderLight,
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                        child: Text(
-                          'Income History',
-                          style: AppTextStyles.displaySmall.copyWith(
-                            color: AppColors.textPrimaryLight,
-                            letterSpacing: -0.5,
-                            fontSize: 16,
-                            fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Expanded(
-                        child:
-                            state is TransactionLoading
-                                ? const Center(
-                                  child: CircularProgressIndicator(),
-                                )
-                                : state is TransactionEmpty
-                                ? const EmptyStatePlaceholder(
-                                  title: 'No Income Recorded',
-                                  message:
-                                      'You haven\'t recorded any income yet. Tap + Add to record your first payment.',
-                                )
-                                : state is TransactionLoaded
-                                ? Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(16),
-                                    border: Border.all(
-                                      color: AppColors.borderLight,
-                                    ),
-                                  ),
-                                  child: NotificationListener<
-                                    ScrollNotification
-                                  >(
-                                    onNotification: (
-                                      ScrollNotification scrollInfo,
-                                    ) {
-                                      if (scrollInfo is ScrollEndNotification &&
-                                          scrollInfo.metrics.pixels >=
-                                              scrollInfo
-                                                      .metrics
-                                                      .maxScrollExtent -
-                                                  200) {
-                                        final currentState = state;
-                                        if (!currentState.hasReachedMax) {
-                                          context.read<TransactionBloc>().add(
-                                            TransactionLoadMore(),
-                                          );
-                                        }
-                                      }
-                                      return true;
-                                    },
-                                    child: ListView.separated(
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 8,
-                                        horizontal: 8,
-                                      ),
-                                      itemCount:
-                                          (state).transactions.length + 1,
-                                      separatorBuilder:
-                                          (context, index) =>
-                                              const SizedBox(height: 8),
-                                      itemBuilder: (context, index) {
-                                        final currentState = state;
-                                        if (index ==
-                                            currentState.transactions.length) {
-                                          if (currentState.hasReachedMax) {
-                                            return Center(
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                      vertical: 16,
-                                                    ),
-                                                child: Text(
-                                                  'Oops, that\'s all!',
-                                                  style: AppTextStyles.bodySmall
-                                                      .copyWith(
-                                                        color:
-                                                            AppColors
-                                                                .neutral600,
-                                                        fontFamily:
-                                                            GoogleFonts.spaceGrotesk()
-                                                                .fontFamily,
-                                                      ),
-                                                ),
-                                              ),
-                                            );
-                                          } else {
-                                            return const Center(
-                                              child: Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                  vertical: 16,
-                                                ),
-                                                child: SizedBox(
-                                                  width: 24,
-                                                  height: 24,
-                                                  child:
-                                                      CircularProgressIndicator(
-                                                        strokeWidth: 2,
-                                                      ),
-                                                ),
-                                              ),
-                                            );
-                                          }
-                                        }
-                                        final transaction =
-                                            currentState.transactions[index];
-                                        return ActivityCard(
-                                          icon: _getIconForSource(
-                                            transaction.source,
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 8,
+                                  horizontal: 8,
+                                ),
+                                itemCount: state.transactions.length + 1,
+                                itemBuilder: (context, index) {
+                                  if (index == state.transactions.length) {
+                                    if (state.hasReachedMax) {
+                                      return Center(
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 16,
                                           ),
-                                          title:
-                                              '${transaction.source}: ${transaction.description}',
-                                          subtitle:
-                                              '${transaction.date} • ${transaction.time}',
-                                          amount: transaction.amount,
-                                          isIncome: true,
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                )
-                                : const SizedBox(),
-                      ),
+                                          child: Text(
+                                            'Oops, that\'s all!',
+                                            style: AppTextStyles.bodySmall.copyWith(
+                                              color: AppColors.neutral600,
+                                              fontFamily:
+                                                  GoogleFonts.spaceGrotesk().fontFamily,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    } else {
+                                      return const Center(
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                            vertical: 16,
+                                          ),
+                                          child: SizedBox(
+                                            width: 24,
+                                            height: 24,
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: 2,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  }
+                            
+                                  final transaction = state.transactions[index];
+                                  return TweenAnimationBuilder<double>(
+                                    tween: Tween(begin: 0.0, end: 1.0),
+                                    duration: const Duration(milliseconds: 300),
+                                    curve: Curves.easeOut,
+                                    builder: (context, value, child) {
+                                      return Transform.translate(
+                                        offset: Offset(0, 20 * (1 - value)),
+                                        child: Opacity(
+                                          opacity: value,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                              bottom: 8,
+                                            ),
+                                            child: ActivityCard(
+                                              icon: _getIconForSource(
+                                                transaction.source,
+                                              ),
+                                              title:transaction.description,
+                                              subtitle:
+                                                  '${transaction.source} • ${transaction.date}',
+                                              amount: transaction.amount,
+                                              isIncome: true,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+
+                              ),
+                            ),
+                          ),
+                        ),
                     ],
                   ),
                 ),
@@ -312,36 +327,35 @@ class IncomeScreen extends StatelessWidget {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children:
-            entries.map((entry) {
-              return Expanded(
-                child: Column(
-                  children: [
-                    Text(
-                      entry.key,
-                      style: AppTextStyles.bodySmall.copyWith(
-                        color: AppColors.neutral700,
-                        fontSize: 12,
-                        fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: -0.25,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      '\$${entry.value.toStringAsFixed(0)}',
-                      style: AppTextStyles.bodyMedium.copyWith(
-                        color: AppColors.textPrimaryLight,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 22,
-                        letterSpacing: -0.25,
-                        fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
-                      ),
-                    ),
-                  ],
+        children: entries.map((entry) {
+          return Expanded(
+            child: Column(
+              children: [
+                Text(
+                  entry.key,
+                  style: AppTextStyles.bodySmall.copyWith(
+                    color: AppColors.neutral700,
+                    fontSize: 12,
+                    fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: -0.25,
+                  ),
                 ),
-              );
-            }).toList(),
+                const SizedBox(height: 4),
+                Text(
+                  '\$${entry.value.toStringAsFixed(0)}',
+                  style: AppTextStyles.bodyMedium.copyWith(
+                    color: AppColors.textPrimaryLight,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 22,
+                    letterSpacing: -0.25,
+                    fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                  ),
+                ),
+              ],
+            ),
+          );
+        }).toList(),
       ),
     );
   }
