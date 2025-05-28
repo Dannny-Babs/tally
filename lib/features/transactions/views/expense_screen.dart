@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:heroicons/heroicons.dart';
+import 'package:hugeicons_pro/hugeicons.dart';
 import 'package:tally/features/transactions/views/add_expense_screen.dart';
+import 'package:tally/features/transactions/views/income_screen_refactored.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../bloc/transaction_bloc.dart';
@@ -11,11 +13,28 @@ import '../bloc/category_state.dart';
 import '../bloc/category_event.dart';
 import '../bloc/transaction_event.dart';
 import '../bloc/transaction_state.dart';
+import '../bloc/transaction_model.dart';
 import '../widgets/activity_card.dart';
 import '../widgets/empty_state_placeholder.dart';
 import '../widgets/error_screen.dart';
 import '../widgets/top_categories_widget.dart';
 import '../widgets/category_card.dart';
+import '../widgets/date_filter_widget.dart';
+
+class SmoothScrollPhysics extends BouncingScrollPhysics {
+  const SmoothScrollPhysics({super.parent});
+
+  @override
+  double applyBoundaryConditions(ScrollMetrics position, double value) {
+    // Reduce overscroll distance for a gentler return
+    final overscroll = super.applyBoundaryConditions(position, value);
+    return overscroll * 0.3; // dampen bounce to 30%
+  }
+
+  @override
+  SmoothScrollPhysics applyTo(ScrollPhysics? ancestor) =>
+      SmoothScrollPhysics(parent: buildParent(ancestor));
+}
 
 class ExpenseScreen extends StatelessWidget {
   const ExpenseScreen({super.key});
@@ -53,7 +72,6 @@ class ExpenseScreen extends StatelessWidget {
                     bottomLeft: Radius.circular(24),
                   ),
                 ),
-
                 child: NotificationListener<ScrollNotification>(
                   onNotification: (ScrollNotification scrollInfo) {
                     if (scrollInfo is ScrollEndNotification &&
@@ -68,7 +86,7 @@ class ExpenseScreen extends StatelessWidget {
                     return true;
                   },
                   child: CustomScrollView(
-                    physics: const BouncingScrollPhysics(
+                    physics: const SmoothScrollPhysics(
                       parent: AlwaysScrollableScrollPhysics(),
                     ),
                     slivers: [
@@ -117,13 +135,13 @@ class ExpenseScreen extends StatelessWidget {
                                   ),
                                   IconButton(
                                     onPressed: () {
-                                      showModalBottomSheet(
-                                        context: context,
-                                        isScrollControlled: true,
-                                        backgroundColor: Colors.transparent,
-                                        builder:
-                                            (context) =>
-                                                const AddExpenseModal(),
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder:
+                                              (context) =>
+                                                  const IncomeScreenRefactored(),
+                                        ),
                                       );
                                     },
                                     icon: HeroIcon(
@@ -135,6 +153,75 @@ class ExpenseScreen extends StatelessWidget {
                               ),
                             ),
                           ),
+                          minHeight: 75,
+                          maxHeight: 75,
+                        ),
+                      ),
+
+                      // Date Filter
+                      SliverToBoxAdapter(
+                        child: StatefulBuilder(
+                          builder: (context, setState) {
+                            return DateFilterWidget(
+                              selectedRange: DateRange.thisMonth,
+                              onRangeSelected: (range) {
+                                setState(() {
+                                  final now = DateTime.now();
+                                  DateTime startDate;
+                                  DateTime endDate;
+
+                                  switch (range) {
+                                    case DateRange.thisMonth:
+                                      startDate = DateTime(
+                                        now.year,
+                                        now.month,
+                                        1,
+                                      );
+                                      endDate = DateTime(
+                                        now.year,
+                                        now.month + 1,
+                                        0,
+                                      );
+                                      break;
+                                    case DateRange.lastMonth:
+                                      startDate = DateTime(
+                                        now.year,
+                                        now.month - 1,
+                                        1,
+                                      );
+                                      endDate = DateTime(
+                                        now.year,
+                                        now.month,
+                                        0,
+                                      );
+                                      break;
+                                    case DateRange.thisYear:
+                                      startDate = DateTime(now.year, 1, 1);
+                                      endDate = DateTime(now.year, 12, 31);
+                                      break;
+                                    case DateRange.custom:
+                                      // TODO: Implement custom date picker
+                                      return;
+                                    case DateRange.all:
+                                      startDate = DateTime(1900, 1, 1);
+                                      endDate = DateTime(
+                                        now.year,
+                                        now.month,
+                                        now.day,
+                                      );
+                                      break;
+                                  }
+
+                                  context.read<TransactionBloc>().add(
+                                    DateFilterChanged(
+                                      startDate: startDate,
+                                      endDate: endDate,
+                                    ),
+                                  );
+                                });
+                              },
+                            );
+                          },
                         ),
                       ),
 
@@ -165,7 +252,7 @@ class ExpenseScreen extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  '\$${state.totalAmount.toStringAsFixed(2)}',
+                                  '\$${state.totalAmount.toStringAsFixed(2).replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}',
                                   style: AppTextStyles.displaySmall.copyWith(
                                     color: AppColors.primary900,
                                     fontWeight: FontWeight.w600,
@@ -209,7 +296,7 @@ class ExpenseScreen extends StatelessWidget {
                                       backgroundColor: AppColors.neutral900,
                                       foregroundColor: AppColors.surfaceLight,
                                       padding: const EdgeInsets.symmetric(
-                                        vertical: 16,
+                                        vertical: 12,
                                       ),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(8),
@@ -264,7 +351,12 @@ class ExpenseScreen extends StatelessWidget {
                         builder: (context, categoryState) {
                           if (categoryState is CategoryLoading) {
                             return const SliverToBoxAdapter(
-                              child: Center(child: CircularProgressIndicator()),
+                              child: Padding(
+                                padding: EdgeInsets.all(80.0),
+                                child: Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              ),
                             );
                           }
 
@@ -340,111 +432,58 @@ class ExpenseScreen extends StatelessWidget {
                         },
                       ),
 
-                      // Recent Expenses Section
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: Text(
-                            'Recent Expenses',
-                            style: AppTextStyles.bodyMedium.copyWith(
-                              color: AppColors.textPrimaryLight,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
-                              fontSize: 14,
-                              letterSpacing: -0.15,
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      // Recent Expenses List
+                      // Transaction Groups
                       if (state is TransactionLoading)
                         const SliverToBoxAdapter(
-                          child: Center(child: CircularProgressIndicator()),
+                          child: Center(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(vertical: 50),
+                              child: CircularProgressIndicator(),
+                            ),
+                          ),
                         )
                       else if (state is TransactionEmpty)
-                        const SliverToBoxAdapter(
-                          child: EmptyStatePlaceholder(
-                            title: 'No Expenses Recorded',
-                            message:
-                                'You haven\'t recorded any expenses yet. Tap + Add to log your first expense.',
+                        SliverToBoxAdapter(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  bottom: 8,
+                                  top: 16,
+                                  left: 12,
+                                ),
+                                child: Text(
+                                  'Expenses',
+                                  style: AppTextStyles.bodyMedium.copyWith(
+                                    color: AppColors.textPrimaryLight,
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily:
+                                        GoogleFonts.spaceGrotesk().fontFamily,
+                                    fontSize: 14,
+                                    letterSpacing: -0.15,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                height: MediaQuery.of(context).size.height * 0.5,
+                                margin: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 4,
+                                ),
+                                child: const EmptyStatePlaceholder(
+                                  title: 'No Expenses Recorded',
+                                  message:
+                                      'You haven\'t recorded any expenses yet. Tap + Add to log your first expense.',
+                                ),
+                              ),
+                            ],
                           ),
                         )
                       else if (state is TransactionLoaded)
-                        SliverPadding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          sliver: SliverToBoxAdapter(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(16),
-                                border: Border.all(
-                                  color: AppColors.borderLight,
-                                ),
-                              ),
-                              child: ListView.builder(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 8,
-                                  horizontal: 8,
-                                ),
-                                itemCount: state.transactions.length + 1,
-                                itemBuilder: (context, index) {
-                                  if (index == state.transactions.length) {
-                                    if (!state.hasReachedMax) {
-                                      return const Padding(
-                                        padding: EdgeInsets.symmetric(
-                                          vertical: 16,
-                                        ),
-                                        child: Center(
-                                          child: SizedBox(
-                                            width: 24,
-                                            height: 24,
-                                            child: CircularProgressIndicator(
-                                              strokeWidth: 2,
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    }
-                                    return const SizedBox();
-                                  }
-
-                                  final transaction = state.transactions[index];
-                                  return TweenAnimationBuilder<double>(
-                                    tween: Tween(begin: 0.0, end: 1.0),
-                                    duration: const Duration(milliseconds: 300),
-                                    curve: Curves.easeOut,
-                                    builder: (context, value, child) {
-                                      return Transform.translate(
-                                        offset: Offset(0, 20 * (1 - value)),
-                                        child: Opacity(
-                                          opacity: value,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                              bottom: 8,
-                                            ),
-                                            child: ActivityCard(
-                                              icon: _getIconForCategory(
-                                                transaction.source,
-                                              ),
-                                              title:
-                                                  '${transaction.source}: ${transaction.description}',
-                                              subtitle:
-                                                  '${transaction.date} • ${transaction.time}',
-                                              amount: transaction.amount,
-                                              isIncome: false,
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
+                        ..._buildTransactionGroups(
+                          state.transactions,
+                          state.hasReachedMax,
                         ),
                     ],
                   ),
@@ -457,28 +496,332 @@ class ExpenseScreen extends StatelessWidget {
     );
   }
 
-  HeroIcons _getIconForCategory(String category) {
-    switch (category.toLowerCase()) {
-      case 'food & dining':
-        return HeroIcons.cake;
-      case 'transportation':
-        return HeroIcons.truck;
-      case 'housing':
-        return HeroIcons.home;
-      case 'entertainment':
-        return HeroIcons.tv;
-      case 'shopping':
-        return HeroIcons.shoppingBag;
+  List<Widget> _buildTransactionGroups(
+    List<Transaction> transactions,
+    bool hasReachedMax,
+  ) {
+    final groups = _groupTransactions(transactions);
+    final entries = groups.entries.toList();
+    final widgets = <Widget>[];
+
+    for (var i = 0; i < entries.length; i++) {
+      final group = entries[i];
+
+      // Add header
+      widgets.add(
+        SliverPersistentHeader(
+          pinned: true,
+          delegate: _SliverHeaderDelegate(
+            child: Container(
+              color: AppColors.backgroundLight,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+              child: Text(
+                group.key,
+                style: AppTextStyles.bodyMedium.copyWith(
+                  color: AppColors.textPrimaryLight,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                  fontSize: 14,
+                  letterSpacing: -0.15,
+                ),
+              ),
+            ),
+            minHeight: 50,
+            maxHeight: 50,
+          ),
+        ),
+      );
+
+      // Add transactions
+      widgets.add(
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          sliver: SliverToBoxAdapter(
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: AppColors.borderLight),
+              ),
+              child: ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                itemCount: group.value.length,
+                separatorBuilder: (context, index) => const SizedBox(height: 8),
+                itemBuilder: (context, index) {
+                  final transaction = group.value[index];
+                  return TweenAnimationBuilder<double>(
+                    tween: Tween(begin: 0.0, end: 1.0),
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeOut,
+                    builder: (context, value, child) {
+                      return Transform.translate(
+                        offset: Offset(0, 20 * (1 - value)),
+                        child: Opacity(
+                          opacity: value,
+                          child: ActivityCard(
+                            icon: _getIconForCategory(transaction.source),
+                            title:
+                                '${transaction.source}: ${transaction.description}',
+                            subtitle:
+                                '${transaction.date} • ${transaction.time}',
+                            amount: transaction.amount,
+                            isIncome: false,
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    // Add end message or loading indicator
+    widgets.add(
+      SliverToBoxAdapter(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child:
+                hasReachedMax
+                    ? Text(
+                      'Oops, that\'s all!',
+                      style: AppTextStyles.bodySmall.copyWith(
+                        color: AppColors.neutral700,
+                        fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                      ),
+                    )
+                    : const SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    ),
+          ),
+        ),
+      ),
+    );
+
+    return widgets;
+  }
+
+  Map<String, List<Transaction>> _groupTransactions(
+    List<Transaction> transactions,
+  ) {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final thisWeek = today.subtract(Duration(days: today.weekday - 1));
+    final lastWeek = thisWeek.subtract(const Duration(days: 7));
+    final thisMonth = DateTime(now.year, now.month, 1);
+    final lastMonth = DateTime(now.year, now.month - 1, 1);
+
+    final groups = <String, List<Transaction>>{};
+
+    for (final transaction in transactions) {
+      final date = DateTime.parse(transaction.date);
+      String group;
+
+      if (date.isAtSameMomentAs(today)) {
+        group = 'Today';
+      } else if (date.isAfter(thisWeek.subtract(const Duration(days: 1)))) {
+        group = 'This Week';
+      } else if (date.isAfter(lastWeek.subtract(const Duration(days: 1)))) {
+        group = 'Last Week';
+      } else if (date.isAfter(thisMonth.subtract(const Duration(days: 1)))) {
+        group = 'This Month';
+      } else if (date.isAfter(lastMonth.subtract(const Duration(days: 1)))) {
+        group = 'Last Month';
+      } else {
+        group = 'Older';
+      }
+
+      groups.putIfAbsent(group, () => []).add(transaction);
+    }
+
+    return Map.fromEntries(
+      groups.entries.where((e) => e.value.isNotEmpty).toList()..sort(
+        (a, b) => _getGroupOrder(a.key).compareTo(_getGroupOrder(b.key)),
+      ),
+    );
+  }
+
+  int _getGroupOrder(String group) {
+    switch (group) {
+      case 'Today':
+        return 0;
+      case 'This Week':
+        return 1;
+      case 'Last Week':
+        return 2;
+      case 'This Month':
+        return 3;
+      case 'Last Month':
+        return 4;
+      case 'Older':
+        return 5;
       default:
-        return HeroIcons.tag;
+        return 6;
+    }
+  }
+
+  _getIconForCategory(String category) {
+    switch (category.toLowerCase()) {
+      // Food & Dining
+      case 'food':
+        return HugeIconsSolid.bread04;
+      case 'dining':
+        return HugeIconsSolid.restaurant02;
+
+      case 'restaurants':
+        return HugeIconsSolid.restaurant02;
+      case 'groceries':
+        return HugeIconsSolid.store03;
+
+      // Shopping & Personal
+      case 'shopping':
+        return HugeIconsSolid.shoppingCart01;
+      case 'clothing':
+        return HugeIconsSolid.shirt01;
+      case 'school':
+        return HugeIconsSolid.school;
+      case 'education':
+        return HugeIconsSolid.book01;
+      case 'toys':
+        return HugeIconsSolid.gift;
+      case 'personal care':
+        return HugeIconsSolid.userLock01;
+      case 'hair':
+        return HugeIconsSolid.userLock01;
+      case 'beauty':
+        return HugeIconsSolid.userLock01;
+      case 'skincare':
+        return HugeIconsSolid.userLock01;
+
+      // Bills & Payments
+      case 'credit cards':
+        return HugeIconsSolid.creditCard;
+      case 'taxes':
+        return HugeIconsSolid.taxes;
+      case 'phone':
+        return HugeIconsSolid.smartPhone01;
+
+      // Education
+      case 'tuition':
+        return HugeIconsSolid.school;
+      case 'books':
+        return HugeIconsSolid.book01;
+      case 'music lessons':
+        return HugeIconsSolid.musicNote01;
+
+      // Entertainment & Hobbies
+      case 'concerts/shows':
+        return HugeIconsSolid.musicNote01;
+      case 'games':
+        return HugeIconsSolid.gameController01;
+      case 'hobbies':
+        return HugeIconsSolid.canvas;
+      case 'movies':
+        return HugeIconsSolid.tv01;
+      case 'music':
+        return HugeIconsSolid.musicNote01;
+      case 'sports':
+        return HugeIconsSolid.footballPitch;
+      case 'tv':
+        return HugeIconsSolid.tv01;
+
+      // Personal Care & Subscriptions
+      case 'laundry/dry cleaning':
+      case 'laundry':
+        return HugeIconsSolid.home01;
+      case 'subscriptions':
+        return HugeIconsSolid.creditCard;
+
+      // Technology
+      case 'domains & hosting':
+        return HugeIconsSolid.developer;
+      case 'online services':
+        return HugeIconsSolid.developer;
+      case 'hardware':
+        return HugeIconsSolid.developer;
+      case 'software':
+        return HugeIconsSolid.developer;
+
+      // Transportation
+      case 'public transit':
+        return HugeIconsSolid.metro;
+      case 'ride hailing':
+        return HugeIconsSolid.taxi;
+
+      // Travel
+      case 'airfare':
+        return HugeIconsSolid.airplane01;
+      case 'hotels':
+        return HugeIconsSolid.home01;
+      case 'transportation':
+        return HugeIconsSolid.car01;
+
+      // Housing
+      case 'rent':
+        return HugeIconsSolid.home02;
+      case 'housing':
+        return HugeIconsSolid.home01;
+
+      // Income Categories
+      case 'investment':
+        return HugeIconsSolid.chart01;
+      case 'job payment':
+        return HugeIconsSolid.briefcase01;
+      case 'family':
+        return HugeIconsSolid.userGroup02;
+      case 'design':
+        return HugeIconsSolid.canvas;
+      case 'development':
+        return HugeIconsSolid.developer;
+      case 'marketing':
+        return HugeIconsSolid.megaphone01;
+
+      // Other Categories
+      case 'utilities':
+        return HugeIconsSolid.invoice;
+      case 'health & fitness':
+        return HugeIconsSolid.health;
+      case 'entertainment':
+        return HugeIconsSolid.tv01;
+      case 'travel':
+        return HugeIconsSolid.airplane01;
+      case 'insurance':
+        return HugeIconsSolid.shield01;
+      case 'gifts & donations':
+        return HugeIconsSolid.gift;
+      case 'investments':
+        return HugeIconsSolid.chart01;
+      case 'kids':
+        return HugeIconsSolid.baby01;
+      case 'alcohol & bars':
+        return HugeIconsSolid.drink;
+      case 'miscellaneous':
+        return HugeIconsSolid.tag02;
+
+      default:
+        return HugeIconsSolid.tag01;
     }
   }
 }
 
 class _SliverHeaderDelegate extends SliverPersistentHeaderDelegate {
   final Widget child;
+  final double minHeight;
+  final double maxHeight;
 
-  _SliverHeaderDelegate({required this.child});
+  _SliverHeaderDelegate({
+    required this.child,
+    required this.minHeight,
+    required this.maxHeight,
+  });
 
   @override
   Widget build(
@@ -486,17 +829,21 @@ class _SliverHeaderDelegate extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) {
-    return child;
+    return SizedBox.expand(
+      child: Container(color: AppColors.backgroundLight, child: child),
+    );
   }
 
   @override
-  double get maxExtent => 75;
+  double get maxExtent => maxHeight;
 
   @override
-  double get minExtent => 73;
+  double get minExtent => minHeight;
 
   @override
   bool shouldRebuild(covariant _SliverHeaderDelegate oldDelegate) {
-    return child != oldDelegate.child;
+    return child != oldDelegate.child ||
+        maxHeight != oldDelegate.maxHeight ||
+        minHeight != oldDelegate.minHeight;
   }
 }

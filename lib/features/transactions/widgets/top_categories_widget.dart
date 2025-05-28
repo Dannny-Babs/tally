@@ -107,13 +107,13 @@ class TopCategoriesWidget extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '\$${entry.value.toStringAsFixed(2)}',
+                  '\$${entry.value.toStringAsFixed(2).replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}',
                   style: AppTextStyles.bodyMedium.copyWith(
                     color: AppColors.primary700,
                     fontWeight: FontWeight.w600,
                     fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
                     fontSize: 14,
-                    letterSpacing: -0.15,
+                    letterSpacing: -0.1,
                   ),
                 ),
               ],

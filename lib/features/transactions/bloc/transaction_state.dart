@@ -16,33 +16,33 @@ class TransactionEmpty extends TransactionState {}
 
 class TransactionLoaded extends TransactionState {
   final List<Transaction> transactions;
-  final double totalAmount;
   final Map<String, double> categoryTotals;
+  final double totalAmount;
   final bool hasReachedMax;
 
   const TransactionLoaded({
     required this.transactions,
-    required this.totalAmount,
     required this.categoryTotals,
-    this.hasReachedMax = false,
+    required this.totalAmount,
+    required this.hasReachedMax,
   });
 
   TransactionLoaded copyWith({
     List<Transaction>? transactions,
-    double? totalAmount,
     Map<String, double>? categoryTotals,
+    double? totalAmount,
     bool? hasReachedMax,
   }) {
     return TransactionLoaded(
       transactions: transactions ?? this.transactions,
-      totalAmount: totalAmount ?? this.totalAmount,
       categoryTotals: categoryTotals ?? this.categoryTotals,
+      totalAmount: totalAmount ?? this.totalAmount,
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,
     );
   }
 
   @override
-  List<Object> get props => [transactions, totalAmount, categoryTotals, hasReachedMax];
+  List<Object> get props => [transactions, categoryTotals, totalAmount, hasReachedMax];
 }
 
 class TransactionError extends TransactionState {

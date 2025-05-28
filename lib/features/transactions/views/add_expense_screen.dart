@@ -143,49 +143,6 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
     }
   }
 
-  Future<bool> _requestPermissions() async {
-    if (Platform.isAndroid) {
-      try {
-        // First check if we already have permissions
-        final photosStatus = await Permission.photos.status;
-        final storageStatus = await Permission.storage.status;
-        
-        if (photosStatus.isGranted || storageStatus.isGranted) {
-          return true;
-        }
-
-        // If we don't have permissions, request them
-        if (photosStatus.isDenied) {
-          final photosResult = await Permission.photos.request();
-          if (photosResult.isGranted) {
-            return true;
-          }
-        }
-
-        if (storageStatus.isDenied) {
-          final storageResult = await Permission.storage.request();
-          if (storageResult.isGranted) {
-            return true;
-          }
-        }
-
-        // If we get here, permissions were denied
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Permission to access photos is required'),
-              backgroundColor: Colors.red,
-            ),
-          );
-        }
-        return false;
-      } catch (e) {
-        print('Error requesting permissions: $e');
-        return false;
-      }
-    }
-    return true;
-  }
 
   Future<void> _pickReceipt(ImageSource source) async {
     if (_isPickerActive) return;

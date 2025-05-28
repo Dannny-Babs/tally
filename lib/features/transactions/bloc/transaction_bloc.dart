@@ -22,6 +22,7 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
     on<TransactionLoadMore>(_onTransactionLoadMore);
     on<AddIncomeSubmitted>(_onAddIncomeSubmitted);
     on<AddExpenseSubmitted>(_onAddExpenseSubmitted);
+    on<DateFilterChanged>((event, emit) => _onDateFilterChanged(event, emit));
   }
 
   Future<void> _onIncomeLoaded(
@@ -220,6 +221,46 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
       } catch (e) {
         // Don't emit error state, just keep current state
       }
+    }
+  }
+
+  Future<void> _onDateFilterChanged(
+    DateFilterChanged event,
+    Emitter<TransactionState> emit,
+  ) async {
+    emit(TransactionLoading());
+
+    try {
+      // TODO: Replace with actual API call
+      await Future.delayed(const Duration(seconds: 1));
+
+      final transactions = _mockToTransactions(mockTransactions);
+      final filteredTransactions = transactions.where((t) {
+        final transactionDate = DateTime.parse(t.date);
+        return transactionDate.isAfter(event.startDate) && 
+               transactionDate.isBefore(event.endDate.add(const Duration(days: 1)));
+      }).toList();
+
+      final totalAmount = filteredTransactions.fold<double>(
+        0,
+        (sum, transaction) => sum + transaction.amount,
+      );
+      final categoryTotals = _calculateCategoryTotals(filteredTransactions);
+
+      if (filteredTransactions.isEmpty) {
+        emit(TransactionEmpty());
+      } else {
+        emit(
+          TransactionLoaded(
+            transactions: filteredTransactions,
+            totalAmount: totalAmount,
+            categoryTotals: categoryTotals,
+            hasReachedMax: true,
+          ),
+        );
+      }
+    } catch (e) {
+      emit(TransactionError('Failed to filter transactions'));
     }
   }
 

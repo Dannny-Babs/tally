@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:heroicons/heroicons.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 
 class ActivityCard extends StatelessWidget {
-  final HeroIcons icon;
+  final IconData icon;
   final String title;
   final String subtitle;
   final double amount;
@@ -39,9 +38,8 @@ class ActivityCard extends StatelessWidget {
               color: Colors.white,
               borderRadius: BorderRadius.circular(8),
             ),
-            child: HeroIcon(
+            child: Icon(
               icon,
-              style: HeroIconStyle.solid,
               color: AppColors.textPrimaryLight,
               size: 20,
             ),
