@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../bloc/dashboard_bloc.dart';
 import '../bloc/dashboard_state.dart';
-import '../models/transaction.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import 'package:heroicons/heroicons.dart';
@@ -23,11 +22,12 @@ class DashboardScreen extends StatelessWidget {
           body: SafeArea(
             child: Container(
               decoration: BoxDecoration(
-                color: AppColors.background,
+                color: AppColors.backgroundLight,
                 borderRadius: BorderRadius.only(
                   bottomRight: Radius.circular(24),
                   bottomLeft: Radius.circular(24),
                 ),
+                border: Border.all(color: AppColors.borderLight),
               ),
               height: MediaQuery.of(context).size.height,
               child: SingleChildScrollView(
@@ -41,10 +41,53 @@ class DashboardScreen extends StatelessWidget {
                         Text(
                           'Dashboard',
                           style: AppTextStyles.displaySmall.copyWith(
-                            color: AppColors.accent,
+                            color: AppColors.textPrimaryLight,
+                            fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
-                        _PeriodDropdown(),
+                        InkWell(
+                          onTap: () {
+                            showModalBottomSheet(
+                              context: context,
+                              backgroundColor: Colors.transparent,
+                              isScrollControlled: true,
+                              builder: (_) => const AddOptionsModal(),
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 6,
+                            ),
+                            decoration: BoxDecoration(
+                              color: AppColors.neutral800,
+                              borderRadius: BorderRadius.circular(10),
+                              
+                            ),
+                            child: Row(
+                              children: [
+                                HeroIcon(
+                                  HeroIcons.plus,
+                                  style: HeroIconStyle.solid,
+                                  color: AppColors.neutral100,
+                                  size: 16,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  'Add more',
+                                  style: AppTextStyles.bodyMedium.copyWith(
+                                    color: AppColors.neutral100,
+                                    fontSize: 14,
+                                    letterSpacing: -0.35,
+                                    fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 12),
@@ -101,9 +144,7 @@ class DashboardScreen extends StatelessWidget {
                     Card(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
-                        side: BorderSide(
-                          color: AppColors.primaryLight.withAlpha(150),
-                        ),
+                        side: BorderSide(color: AppColors.borderLight),
                       ),
                       color: Colors.white,
                       elevation: 0,
@@ -113,6 +154,7 @@ class DashboardScreen extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 12.0,
+                              vertical: 12.0,
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -120,30 +162,12 @@ class DashboardScreen extends StatelessWidget {
                                 Text(
                                   'Recent Activity',
                                   style: AppTextStyles.displaySmall.copyWith(
-                                    color: AppColors.accent,
+                                    color: AppColors.textPrimaryLight,
                                     letterSpacing: -0.5,
                                     fontSize: 16,
                                     fontFamily:
                                         GoogleFonts.spaceGrotesk().fontFamily,
                                     fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    showModalBottomSheet(
-                                      context: context,
-                                      backgroundColor: Colors.transparent,
-                                      isScrollControlled: true,
-                                      builder: (_) => const AddOptionsModal(),
-                                    );
-                                  },
-                                  child: Text(
-                                    'Add more',
-                                    style: AppTextStyles.bodyMedium.copyWith(
-                                      color: Colors.black54,
-                                      fontSize: 14,
-                                      letterSpacing: -0.35,
-                                    ),
                                   ),
                                 ),
                               ],
@@ -158,13 +182,13 @@ class DashboardScreen extends StatelessWidget {
                             itemBuilder:
                                 (context, index) => ActivityCard(
                                   icon: Icons.shopping_bag,
-                                  bgColor: AppColors.secondary,
-                                  strokeColor: AppColors.primaryLight,
+                                  bgColor: AppColors.neutral100,
+                                  strokeColor: AppColors.neutral300,
                                   title: 'Grocery Shopping',
                                   category: 'Food',
                                   time: index == 0 ? '12:30 PM' : 'Yesterday',
                                   amount: index.isEven ? '+\$120' : '-\$45',
-                                  amountColor: AppColors.accent,
+                                  amountColor: AppColors.neutral800,
                                 ),
                           ),
                           const SizedBox(height: 6),
@@ -182,38 +206,6 @@ class DashboardScreen extends StatelessWidget {
   }
 }
 
-class _PeriodDropdown extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.primaryLight),
-      ),
-      child: Row(
-        children: [
-          Text(
-            'Monthly',
-            style: AppTextStyles.bodyMedium.copyWith(
-              color: AppColors.accent,
-              fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-
-          const SizedBox(width: 4),
-          Icon(
-            Icons.keyboard_arrow_down_rounded,
-            color: AppColors.accent,
-            size: 20,
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 class _TotalIncomeCard extends StatelessWidget {
   final double total;
@@ -233,7 +225,7 @@ class _TotalIncomeCard extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: AppColors.primaryLight.withAlpha(150)),
+        side: BorderSide(color: AppColors.borderLight),
       ),
 
       color: Colors.white,
@@ -247,7 +239,7 @@ class _TotalIncomeCard extends StatelessWidget {
             Text(
               'Total income this month',
               style: AppTextStyles.bodyMedium.copyWith(
-                color: AppColors.primary,
+                color: AppColors.neutral600,
                 letterSpacing: -0.5,
               ),
             ),
@@ -259,7 +251,7 @@ class _TotalIncomeCard extends StatelessWidget {
                   currency,
                   style: AppTextStyles.bodyMedium.copyWith(
                     fontSize: 28,
-                    color: AppColors.primary,
+                    color: AppColors.neutral500,
                   ),
                 ),
                 const SizedBox(width: 4),
@@ -267,7 +259,7 @@ class _TotalIncomeCard extends StatelessWidget {
                   total.toStringAsFixed(2),
                   style: AppTextStyles.displayLarge.copyWith(
                     fontSize: 52,
-                    color: AppColors.accent,
+                    color: AppColors.textPrimaryLight,
                   ),
                 ),
               ],
@@ -291,9 +283,9 @@ class _TaxNetCard extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
-        side: BorderSide(color: AppColors.primaryLight.withAlpha(150)),
+        side: BorderSide(color: AppColors.neutral300),
       ),
-      color: AppColors.secondary.withAlpha(50),
+      color: AppColors.neutral50,
       elevation: 0,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
@@ -311,7 +303,10 @@ class _TaxNetCard extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text('\$', style: AppTextStyles.bodySmall.copyWith(fontSize: 20)),
+                    Text(
+                      '\$',
+                      style: AppTextStyles.bodySmall.copyWith(fontSize: 20),
+                    ),
                     const SizedBox(width: 2),
                     Text(
                       tax.toStringAsFixed(2),
@@ -321,11 +316,7 @@ class _TaxNetCard extends StatelessWidget {
                 ),
               ],
             ),
-            Container(
-              width: 1,
-              height: 48,
-              color: AppColors.primary.withAlpha(150),
-            ),
+            Container(width: 1, height: 48, color: AppColors.neutral300),
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -334,7 +325,10 @@ class _TaxNetCard extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text('\$', style: AppTextStyles.bodySmall.copyWith(fontSize: 20)),
+                    Text(
+                      '\$',
+                      style: AppTextStyles.bodySmall.copyWith(fontSize: 20),
+                    ),
                     const SizedBox(width: 2),
                     Text(
                       net.toStringAsFixed(2),
@@ -362,7 +356,7 @@ class _SavingsCard extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: AppColors.primaryLight.withAlpha(150)),
+        side: BorderSide(color: AppColors.borderLight),
       ),
       color: Colors.white,
       elevation: 0,
@@ -374,7 +368,7 @@ class _SavingsCard extends StatelessWidget {
             Text(
               'Savings This Month',
               style: AppTextStyles.bodyMedium.copyWith(
-                color: AppColors.accent,
+                color: AppColors.textPrimaryLight,
                 letterSpacing: -0.5,
                 fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
                 fontWeight: FontWeight.w600,
@@ -387,7 +381,7 @@ class _SavingsCard extends StatelessWidget {
                 Text(
                   '\$',
                   style: AppTextStyles.bodyMedium.copyWith(
-                    color: AppColors.primary,
+                    color: AppColors.textSecondaryLight,
                     fontSize: 20,
                   ),
                 ),
@@ -399,7 +393,7 @@ class _SavingsCard extends StatelessWidget {
                 Text(
                   ' /${target.toStringAsFixed(0)}',
                   style: AppTextStyles.bodyMedium.copyWith(
-                    color: AppColors.primary,
+                    color: AppColors.textPrimaryLight,
                   ),
                 ),
               ],
@@ -408,11 +402,19 @@ class _SavingsCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Progress', style: AppTextStyles.bodySmall),
+                Text(
+                  'Progress',
+                  style: AppTextStyles.bodySmall.copyWith(
+                    color: AppColors.neutral700,
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: -0.15,
+                    fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                  ),
+                ),
                 Text(
                   '${(percent * 100).round()}%',
                   style: AppTextStyles.bodySmall.copyWith(
-                    color: AppColors.accent,
+                    color: AppColors.textPrimaryLight,
                   ),
                 ),
               ],
@@ -421,9 +423,12 @@ class _SavingsCard extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(4),
               child: LinearProgressIndicator(
+                borderRadius: BorderRadius.circular(4),
                 value: percent.toDouble(),
-                backgroundColor: AppColors.primary.withOpacity(0.2),
-                valueColor: AlwaysStoppedAnimation<Color>(AppColors.accent),
+                backgroundColor: AppColors.neutral200,
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  AppColors.textPrimaryLight,
+                ),
                 minHeight: 8,
               ),
             ),
@@ -444,7 +449,7 @@ class _ExpensesCard extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: AppColors.primaryLight.withAlpha(150)),
+        side: BorderSide(color: AppColors.borderLight),
       ),
       color: Colors.white,
       elevation: 0,
@@ -456,7 +461,7 @@ class _ExpensesCard extends StatelessWidget {
             Text(
               'Total Expenses',
               style: AppTextStyles.bodyMedium.copyWith(
-                color: AppColors.accent,
+                color: AppColors.textPrimaryLight,
                 letterSpacing: -0.15,
                 fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
                 fontWeight: FontWeight.w600,
@@ -480,11 +485,9 @@ class _ExpensesCard extends StatelessWidget {
             Spacer(),
             Container(
               decoration: BoxDecoration(
-                color: AppColors.secondary.withOpacity(0.3),
+                color: AppColors.neutral100,
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: AppColors.primaryLight.withAlpha(150),
-                ),
+                border: Border.all(color: AppColors.neutral300),
               ),
               width: double.infinity,
               padding: const EdgeInsets.all(8),
@@ -501,7 +504,7 @@ class _ExpensesCard extends StatelessWidget {
                                 Text(
                                   e.key,
                                   style: AppTextStyles.bodySmall.copyWith(
-                                    color: AppColors.accentLight,
+                                    color: AppColors.neutral700,
                                     fontFamily:
                                         GoogleFonts.spaceGrotesk().fontFamily,
                                     letterSpacing: -0.25,
@@ -512,7 +515,7 @@ class _ExpensesCard extends StatelessWidget {
                                 Text(
                                   '\$${(e.value).toStringAsFixed(0)}',
                                   style: AppTextStyles.bodySmall.copyWith(
-                                    color: AppColors.accent,
+                                    color: AppColors.textPrimaryLight,
                                     letterSpacing: -0.15,
                                     fontFamily:
                                         GoogleFonts.spaceGrotesk().fontFamily,
@@ -544,7 +547,7 @@ class _IncomeBreakdownCard extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: AppColors.primaryLight.withAlpha(150)),
+        side: BorderSide(color: AppColors.borderLight),
       ),
       color: Colors.white,
       elevation: 0,
@@ -556,7 +559,7 @@ class _IncomeBreakdownCard extends StatelessWidget {
             Text(
               'Total freelance income',
               style: AppTextStyles.bodyMedium.copyWith(
-                color: AppColors.accent,
+                color: AppColors.textPrimaryLight,
                 letterSpacing: -0.5,
                 fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
                 fontWeight: FontWeight.w600,
@@ -571,6 +574,7 @@ class _IncomeBreakdownCard extends StatelessWidget {
                   style: AppTextStyles.bodySmall.copyWith(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
+                    color: AppColors.neutral500,
                     letterSpacing: -0.5,
                     fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
                   ),
@@ -578,7 +582,10 @@ class _IncomeBreakdownCard extends StatelessWidget {
                 const SizedBox(width: 2),
                 Text(
                   freelance.toStringAsFixed(2),
-                  style: AppTextStyles.displaySmall.copyWith(fontSize: 36),
+                  style: AppTextStyles.displaySmall.copyWith(
+                    fontSize: 36,
+                    color: AppColors.textPrimaryLight,
+                  ),
                 ),
               ],
             ),
@@ -586,7 +593,7 @@ class _IncomeBreakdownCard extends StatelessWidget {
             Text(
               'Total job income',
               style: AppTextStyles.bodyMedium.copyWith(
-                color: AppColors.accent,
+                color: AppColors.textPrimaryLight,
                 letterSpacing: -0.5,
                 fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
                 fontWeight: FontWeight.w600,
@@ -602,12 +609,16 @@ class _IncomeBreakdownCard extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                     letterSpacing: -0.5,
                     fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                    color: AppColors.neutral500,
                   ),
                 ),
                 const SizedBox(width: 2),
                 Text(
                   job.toStringAsFixed(2),
-                  style: AppTextStyles.displaySmall.copyWith(fontSize: 36),
+                  style: AppTextStyles.displaySmall.copyWith(
+                    fontSize: 36,
+                    color: AppColors.textPrimaryLight,
+                  ),
                 ),
               ],
             ),
@@ -627,7 +638,7 @@ class _AIInsightsCard extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: AppColors.primaryLight.withAlpha(150)),
+        side: BorderSide(color: AppColors.borderLight),
       ),
       color: Colors.white,
       elevation: 0,
@@ -641,14 +652,14 @@ class _AIInsightsCard extends StatelessWidget {
                 HeroIcon(
                   HeroIcons.sparkles,
                   style: HeroIconStyle.solid,
-                  color: AppColors.accent,
+                  color: AppColors.textPrimaryLight,
                   size: 20,
                 ),
                 const SizedBox(width: 4),
                 Text(
                   'AI Insights',
                   style: AppTextStyles.bodyMedium.copyWith(
-                    color: AppColors.accent,
+                    color: AppColors.textPrimaryLight,
                     fontSize: 16,
                     letterSpacing: -0.15,
                     fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
@@ -661,7 +672,7 @@ class _AIInsightsCard extends StatelessWidget {
             Text(
               message,
               style: AppTextStyles.bodyMedium.copyWith(
-                color: AppColors.accent,
+                color: AppColors.textPrimaryLight,
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
                 letterSpacing: -0.2,
@@ -671,11 +682,9 @@ class _AIInsightsCard extends StatelessWidget {
             const SizedBox(height: 12),
             Container(
               decoration: BoxDecoration(
-                color: AppColors.secondary.withOpacity(0.3),
+                color: AppColors.neutral100,
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: AppColors.primaryLight.withAlpha(150),
-                ),
+                border: Border.all(color: AppColors.neutral300),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               child: Row(
@@ -684,7 +693,7 @@ class _AIInsightsCard extends StatelessWidget {
                   Text(
                     'View more',
                     style: AppTextStyles.bodyMedium.copyWith(
-                      color: AppColors.accent,
+                      color: AppColors.textPrimaryLight,
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                       letterSpacing: -0.2,
@@ -693,7 +702,7 @@ class _AIInsightsCard extends StatelessWidget {
                   ),
                   HeroIcon(
                     HeroIcons.chevronRight,
-                    color: AppColors.accent,
+                    color: AppColors.textPrimaryLight,
                     size: 20,
                     style: HeroIconStyle.solid,
                   ),
@@ -742,7 +751,7 @@ class ActivityCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
               border: Border.all(color: strokeColor),
             ),
-            child: Icon(icon, color: AppColors.accent, size: 24),
+            child: Icon(icon, color: AppColors.textPrimaryLight, size: 24),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -753,7 +762,7 @@ class ActivityCard extends StatelessWidget {
                   title,
                   style: AppTextStyles.bodyMedium.copyWith(
                     fontWeight: FontWeight.w600,
-                    color: AppColors.accent,
+                    color: AppColors.textPrimaryLight,
                     letterSpacing: -0.25,
                     fontSize: 16,
                     fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
@@ -765,8 +774,9 @@ class ActivityCard extends StatelessWidget {
                     Text(
                       category,
                       style: AppTextStyles.bodySmall.copyWith(
-                        color: AppColors.primary,
+                        color: AppColors.primary700,
                         letterSpacing: -0.25,
+                        fontWeight: FontWeight.w600,
                         fontSize: 12,
                         fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
                       ),
@@ -776,7 +786,7 @@ class ActivityCard extends StatelessWidget {
                       width: 3,
                       height: 3,
                       decoration: BoxDecoration(
-                        color: AppColors.primaryLight,
+                        color: AppColors.primary500,
                         shape: BoxShape.circle,
                       ),
                     ),
@@ -784,7 +794,7 @@ class ActivityCard extends StatelessWidget {
                     Text(
                       time,
                       style: AppTextStyles.bodySmall.copyWith(
-                        color: AppColors.primary,
+                        color: AppColors.primary600,
                         letterSpacing: -0.25,
                         fontSize: 12,
                         fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
@@ -817,7 +827,7 @@ class InsightCard extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: AppColors.primaryLight.withAlpha(150)),
+        side: BorderSide(color: AppColors.borderLight),
       ),
       color: Colors.white,
       elevation: 0,
@@ -825,17 +835,21 @@ class InsightCard extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 18),
         child: Row(
           children: [
-            Icon(Icons.insights, color: AppColors.accent, size: 28),
+            Icon(Icons.insights, color: AppColors.textPrimaryLight, size: 28),
             const SizedBox(width: 12),
             Expanded(
               child: Text(
                 message,
                 style: AppTextStyles.bodyMedium.copyWith(
-                  color: AppColors.accent,
+                  color: AppColors.textPrimaryLight,
                 ),
               ),
             ),
-            Icon(Icons.chevron_right, color: AppColors.primaryLight, size: 28),
+            Icon(
+              Icons.chevron_right,
+              color: AppColors.textPrimaryLight,
+              size: 28,
+            ),
           ],
         ),
       ),

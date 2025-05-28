@@ -4,11 +4,13 @@ import 'core/theme/app_theme.dart';
 import 'core/app_shell.dart';
 import 'features/dashboard/bloc/dashboard_bloc.dart';
 import 'features/dashboard/bloc/dashboard_event.dart';
+import 'features/transactions/bloc/category_bloc.dart';
 import 'features/transactions/bloc/transaction_bloc.dart';
 import 'features/settings/bloc/settings_bloc.dart';
 import 'core/widgets/not_found_screen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -19,15 +21,25 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) => DashboardBloc()..add(DashboardLoaded()),
+        BlocProvider<DashboardBloc>(
+          create: (context) {
+            final bloc = DashboardBloc();
+            // Use compute for heavy initialization
+            Future.microtask(() {
+              bloc.add(DashboardLoaded());
+            });
+            return bloc;
+          },
         ),
-        BlocProvider(
+        BlocProvider<TransactionBloc>(
           create: (context) => TransactionBloc(),
         ),
-        BlocProvider(
+        BlocProvider<SettingsBloc>(
           create: (context) => SettingsBloc(),
         ),
+        BlocProvider<CategoryBloc>(
+          create: (context) => CategoryBloc(),
+        ),  
       ],
       child: MaterialApp(
         title: 'Tally',

@@ -30,6 +30,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  dropdown_button2: ^2.3.9
+  flutter_screenutil: ^5.9.0
+  image_picker: ^1.0.7
+  permission_handler: ^11.3.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -39,6 +43,8 @@ dependencies:
   equatable: ^2.0.5
   fl_chart: ^0.66.2
   heroicons: ^0.11.0
+  hugeicons: ^0.0.11
+  hugeicons_pro: ^0.0.2
 
 dev_dependencies:
   flutter_test:
@@ -104,4 +110,5 @@ flutter:
     - android/app/src/main/res/mipmap-xxhdpi/
     - android/app/src/main/res/mipmap-xxxhdpi/
     - assets/icons/
+    - assets/images/
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:heroicons/heroicons.dart';
+import 'package:tally/features/transactions/views/add_income_screen.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 
@@ -38,7 +39,7 @@ class _AddOptionsModalState extends State<AddOptionsModal> {
                       Text(
                         'Add Something New',
                         style: AppTextStyles.displaySmall.copyWith(
-                          color: AppColors.accent,
+                          color: AppColors.textPrimaryLight,
                           fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
                           fontSize: 20,
                           letterSpacing: -0.5,
@@ -48,7 +49,7 @@ class _AddOptionsModalState extends State<AddOptionsModal> {
                       Text(
                         'What do you want to log right now?',
                         style: AppTextStyles.bodyMedium.copyWith(
-                          color: AppColors.primary,
+                          color: AppColors.neutral700,
                           letterSpacing: -0.15,
                           fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
 
@@ -60,7 +61,7 @@ class _AddOptionsModalState extends State<AddOptionsModal> {
                   IconButton(
                     onPressed: () => Navigator.pop(context),
                     icon: const Icon(Icons.close),
-                    color: AppColors.accent,
+                            color: AppColors.textPrimaryLight,
                   ),
                 ],
               ),
@@ -77,6 +78,8 @@ class _AddOptionsModalState extends State<AddOptionsModal> {
                       setState(() {
                         selectedOption = 'Income';
                       });
+
+                     
                     },
                   ),
                   const SizedBox(height: 8),
@@ -121,15 +124,19 @@ class _AddOptionsModalState extends State<AddOptionsModal> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed:
-                      selectedOption == null
-                          ? null
-                          : () {
-                            print('$selectedOption selected');
-                            Navigator.pop(context);
-                          },
+                  onPressed: () {
+                    if (selectedOption == 'Income') {
+                      Navigator.pop(context);
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        builder: (context) => const AddIncomeModal(),
+                      );
+                    }
+                  },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.accent,
+                    backgroundColor: AppColors.textPrimaryLight,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
@@ -139,7 +146,7 @@ class _AddOptionsModalState extends State<AddOptionsModal> {
                   child: Text(
                     'Continue',
                     style: AppTextStyles.bodyMedium.copyWith(
-                      color: Colors.white,
+                          color: Colors.white,
                       fontWeight: FontWeight.w600,
                       letterSpacing: -0.15,
                       fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
@@ -182,14 +189,14 @@ class _OptionCard extends StatelessWidget {
           decoration: BoxDecoration(
             color:
                 isSelected
-                    ? AppColors.accent.withOpacity(0.1)
-                    : AppColors.background,
+                    ? AppColors.textPrimaryLight.withAlpha((0.1 *255).round())
+                    : Colors.transparent,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color:
                   isSelected
-                      ? AppColors.accent
-                      : AppColors.primaryLight.withAlpha(150),
+                      ? AppColors.textPrimaryLight
+                      : AppColors.borderLight,
             ),
           ),
           child: Row(
@@ -199,14 +206,14 @@ class _OptionCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   color:
                       isSelected
-                          ? AppColors.accent.withOpacity(0.1)
-                          : Colors.white,
+                          ? AppColors.textPrimaryLight.withAlpha((0.1 *255).round())
+                          : AppColors.neutral100,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: HeroIcon(
                   icon,
                   style: HeroIconStyle.solid,
-                  color: isSelected ? AppColors.accent : AppColors.primary,
+                        color: isSelected ? AppColors.textPrimaryLight : AppColors.neutral600,
                   size: 24,
                 ),
               ),
@@ -218,7 +225,7 @@ class _OptionCard extends StatelessWidget {
                     Text(
                       label,
                       style: AppTextStyles.bodyMedium.copyWith(
-                        color: AppColors.accent,
+                        color: AppColors.textPrimaryLight,
                         fontWeight: FontWeight.w600,
                         fontSize: 16,
                         letterSpacing: -0.15,
@@ -229,7 +236,7 @@ class _OptionCard extends StatelessWidget {
                     Text(
                       description,
                       style: AppTextStyles.bodySmall.copyWith(
-                        color: AppColors.primary,
+                          color: AppColors.textPrimaryLight,
                         fontSize: 12,
                         letterSpacing: -0.08,
                         fontFamily: GoogleFonts.spaceGrotesk().fontFamily,

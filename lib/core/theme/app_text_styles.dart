@@ -7,34 +7,34 @@ class AppTextStyles {
   static final displayLarge = GoogleFonts.spaceGrotesk(
     fontSize: 32,
     fontWeight: FontWeight.w500,
-    color: AppColors.accent,
+    color: AppColors.textPrimaryLight,
   );
 
   static final displayMedium = GoogleFonts.spaceGrotesk(
     fontSize: 24,
     fontWeight: FontWeight.w500,
-    color: AppColors.accent,
+    color: AppColors.textPrimaryLight,
   );
 
   static final displaySmall = GoogleFonts.spaceGrotesk(
     fontSize: 20,
     fontWeight: FontWeight.w500,
-    color: AppColors.accent,
+    color: AppColors.textPrimaryLight,
   );
 
   // Space Mono for labels and body text
   static final bodyLarge = GoogleFonts.spaceMono(
     fontSize: 16,
-    color: AppColors.accent,
+    color: AppColors.textPrimaryLight,
   );
 
   static final bodyMedium = GoogleFonts.spaceMono(
     fontSize: 14,
-    color: AppColors.accent,
+    color: AppColors.textPrimaryLight,
   );
 
   static final bodySmall = GoogleFonts.spaceMono(
     fontSize: 12,
-    color: AppColors.accent.withOpacity(0.7),
+    color: AppColors.textPrimaryLight.withAlpha((0.7 * 255).round()),
   );
-} 
+}

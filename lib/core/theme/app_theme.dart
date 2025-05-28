@@ -5,13 +5,13 @@ import 'app_text_styles.dart';
 class AppTheme {
   static ThemeData get lightTheme {
     return ThemeData(
-      primaryColor: AppColors.primary,
-      scaffoldBackgroundColor: AppColors.background,
+      primaryColor: AppColors.neutral900,
+      scaffoldBackgroundColor: AppColors.backgroundLight,
       colorScheme: ColorScheme.light(
-        primary: AppColors.primary,
-        secondary: AppColors.secondary,
-        surface: AppColors.background,
-        error: Colors.red.shade300,
+        primary: AppColors.neutral900,
+        secondary: AppColors.primary500,
+        surface: AppColors.backgroundLight,
+        error: AppColors.error,
       ),
       textTheme: TextTheme(
         displayLarge: AppTextStyles.displayLarge,
@@ -22,35 +22,35 @@ class AppTheme {
         bodySmall: AppTextStyles.bodySmall,
       ),
       cardTheme: CardThemeData(
-        color: AppColors.background,
+        color: AppColors.backgroundLight,
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
           side: BorderSide(
-            color: AppColors.primary.withOpacity(0.2),
+            color: AppColors.borderLight,
             width: 1,
           ),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.background,
+        fillColor: AppColors.backgroundLight,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(
-            color: AppColors.primary.withOpacity(0.2),
+            color: AppColors.borderLight,
           ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(
-            color: AppColors.primary.withOpacity(0.2),
+            color: AppColors.neutral500,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(
-            color: AppColors.primary,
+            color: AppColors.neutral500,
           ),
         ),
       ),

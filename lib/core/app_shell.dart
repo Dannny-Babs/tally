@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../core/theme/app_colors.dart';
+import 'package:tally/features/transactions/views/expense_screen.dart';
 import '../features/dashboard/views/dashboard_screen.dart';
+import '../features/transactions/views/income_screen.dart';
 import 'widgets/custom_tab_bar.dart';
 
 class AppShell extends StatefulWidget {
@@ -15,8 +16,8 @@ class _AppShellState extends State<AppShell> {
 
   final List<Widget> _screens = [
     const DashboardScreen(),
-    const Placeholder(), // Income screen
-    const Placeholder(), // Expenses screen
+    const IncomeScreen(), // Income screen
+    const ExpenseScreen(), // Expenses screen
     const Placeholder(), // Settings screen
   ];
 
