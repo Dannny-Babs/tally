@@ -34,7 +34,6 @@ class TransactionList extends StatelessWidget {
       );
     }
 
-    
     if (state is TransactionLoaded) {
       final transactions = state.transactions;
       if (transactions.isEmpty) {
@@ -53,30 +52,12 @@ class TransactionList extends StatelessWidget {
         );
       }
 
-      print(transactions);
-
       final groups = _groupTransactions(transactions);
       final entries = groups.entries.toList();
-      if (entries.isEmpty) {
-        return SliverToBoxAdapter(
-          child: Container(
-            height: MediaQuery.of(context).size.height * 0.52,
-            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            child: const EmptyCardStatePlaceholder(
-              image: 'assets/images/no_expenses.png',
-              actionLabel: 'Add Expense',
-              title: 'No Expenses Recorded',
-              message:
-                  'You haven\'t recorded any expenses yet. Tap + Add to record your first expense.',
-            ),
-          ),
-        );
-      }
 
       return SliverList(
         delegate: SliverChildBuilderDelegate(
           (context, index) {
-            // Handle loading indicator at the end
             if (index >= entries.length) {
               if (!hasReachedMax) {
                 onLoadMore?.call();
@@ -87,38 +68,84 @@ class TransactionList extends StatelessWidget {
                   ),
                 );
               }
-              return const SizedBox.shrink();
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: Text(
+                    'Oops, that\'s all!',
+                    style: AppTextStyles.bodySmall.copyWith(
+                      color: AppColors.neutral700,
+                      fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                    ),
+                  ),
+                ),
+              );
             }
 
             final entry = entries[index];
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                // Header
+                Container(
+                  color: AppColors.backgroundLight,
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
                   child: Text(
-                    _formatDate(entry.key),
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AppColors.neutral600,
-                      fontWeight: FontWeight.w500,
+                    entry.key,
+                    style: AppTextStyles.bodyMedium.copyWith(
+                      color: AppColors.textPrimaryLight,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                      fontSize: 14,
+                      letterSpacing: -0.15,
                     ),
                   ),
                 ),
-                ...entry.value.map(
-                  (transaction) => ActivityCard(
-                    icon: transaction.isIncome 
-                        ? CategoryIcons.getIncomeIcon(transaction.source)
-                        : CategoryIcons.getExpenseIcon(transaction.source),
-                    title: transaction.description,
-                    subtitle: '${transaction.source} • ${transaction.date}',
-                    amount: transaction.amount,
-                    isIncome: transaction.isIncome,
+                // Transactions
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 12),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: AppColors.borderLight),
+                  ),
+                  child: ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                    itemCount: entry.value.length,
+                    separatorBuilder: (context, index) => const SizedBox(height: 8),
+                    itemBuilder: (context, index) {
+                      final transaction = entry.value[index];
+                      return TweenAnimationBuilder<double>(
+                        tween: Tween(begin: 0.0, end: 1.0),
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeOut,
+                        builder: (context, value, child) {
+                          return Transform.translate(
+                            offset: Offset(0, 20 * (1 - value)),
+                            child: Opacity(
+                              opacity: value,
+                              child: ActivityCard(
+                                icon: transaction.isIncome 
+                                    ? CategoryIcons.getIncomeIcon(transaction.source)
+                                    : CategoryIcons.getExpenseIcon(transaction.source),
+                                title: '${transaction.source}: ${transaction.description}',
+                                subtitle: '${transaction.date} • ${transaction.time}',
+                                amount: transaction.amount,
+                                isIncome: transaction.isIncome,
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
                   ),
                 ),
               ],
             );
           },
-          childCount: entries.isEmpty ? 0 : entries.length + (hasReachedMax ? 0 : 1),
+          childCount: entries.length + 1,
         ),
       );
     }
@@ -126,42 +153,104 @@ class TransactionList extends StatelessWidget {
     return const SliverToBoxAdapter(child: SizedBox.shrink());
   }
 
-  Map<DateTime, List<Transaction>> _groupTransactions(
+  Map<String, List<Transaction>> _groupTransactions(
     List<Transaction> transactions,
   ) {
-    final groups = <DateTime, List<Transaction>>{};
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final thisWeek = today.subtract(Duration(days: today.weekday - 1));
+    final lastWeek = thisWeek.subtract(const Duration(days: 7));
+    final thisMonth = DateTime(now.year, now.month, 1);
+    final lastMonth = DateTime(now.year, now.month - 1, 1);
+
+    final groups = <String, List<Transaction>>{};
+
     for (final transaction in transactions) {
       try {
-        final dateParts = transaction.date.split('/');
-        if (dateParts.length != 3) continue;
+        // Parse date in format "YYYY-MM-DD"
+        final date = DateTime.parse(transaction.date);
+        
+        String group;
+        if (date.isAtSameMomentAs(today)) {
+          group = 'Today';
+        } else if (date.isAfter(thisWeek.subtract(const Duration(days: 1)))) {
+          group = 'This Week';
+        } else if (date.isAfter(lastWeek.subtract(const Duration(days: 1)))) {
+          group = 'Last Week';
+        } else if (date.isAfter(thisMonth.subtract(const Duration(days: 1)))) {
+          group = 'This Month';
+        } else if (date.isAfter(lastMonth.subtract(const Duration(days: 1)))) {
+          group = 'Last Month';
+        } else {
+          group = 'Older';
+        }
 
-        final date = DateTime(
-          int.parse(dateParts[2]), // year
-          int.parse(dateParts[1]), // month
-          int.parse(dateParts[0]), // day
-        );
-        groups.putIfAbsent(date, () => []).add(transaction);
+        groups.putIfAbsent(group, () => []).add(transaction);
       } catch (e) {
-        // Skip invalid dates
+        print('Error parsing date for transaction: ${transaction.date}');
         continue;
       }
     }
+
     return Map.fromEntries(
-      groups.entries.toList()..sort((a, b) => b.key.compareTo(a.key)),
+      groups.entries.where((e) => e.value.isNotEmpty).toList()..sort(
+        (a, b) => _getGroupOrder(a.key).compareTo(_getGroupOrder(b.key)),
+      ),
     );
   }
 
-  String _formatDate(DateTime date) {
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-    final yesterday = today.subtract(const Duration(days: 1));
-
-    if (date == today) {
-      return 'Today';
-    } else if (date == yesterday) {
-      return 'Yesterday';
-    } else {
-      return '${date.day}/${date.month}/${date.year}';
+  int _getGroupOrder(String group) {
+    switch (group) {
+      case 'Today':
+        return 0;
+      case 'This Week':
+        return 1;
+      case 'Last Week':
+        return 2;
+      case 'This Month':
+        return 3;
+      case 'Last Month':
+        return 4;
+      case 'Older':
+        return 5;
+      default:
+        return 6;
     }
+  }
+}
+
+class _SliverHeaderDelegate extends SliverPersistentHeaderDelegate {
+  final Widget child;
+  final double minHeight;
+  final double maxHeight;
+
+  _SliverHeaderDelegate({
+    required this.child,
+    required this.minHeight,
+    required this.maxHeight,
+  });
+
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    return SizedBox.expand(
+      child: Container(color: AppColors.backgroundLight, child: child),
+    );
+  }
+
+  @override
+  double get maxExtent => maxHeight;
+
+  @override
+  double get minExtent => minHeight;
+
+  @override
+  bool shouldRebuild(covariant _SliverHeaderDelegate oldDelegate) {
+    return child != oldDelegate.child ||
+        maxHeight != oldDelegate.maxHeight ||
+        minHeight != oldDelegate.minHeight;
   }
 }

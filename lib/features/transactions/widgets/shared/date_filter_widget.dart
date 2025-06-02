@@ -62,13 +62,13 @@ class _DateFilterWidgetState extends State<DateFilterWidget> {
       decoration: BoxDecoration(
         color: AppColors.neutral200,
         borderRadius: BorderRadius.circular(8),    
-        border: Border.all(color: AppColors.borderLight),
+        border: Border.all(color: AppColors.neutral300),
       ),
       height: 40,
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 3),
           child: Row(
             children: DateRange.values.map((range) {
               final isSelected = range == _selectedRange;
@@ -83,7 +83,7 @@ class _DateFilterWidgetState extends State<DateFilterWidget> {
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
                     color: isSelected ? Colors.white : Colors.transparent,
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(5),
                     boxShadow: isSelected ? [
                       BoxShadow(
                         color: AppColors.primary500.withAlpha(105),

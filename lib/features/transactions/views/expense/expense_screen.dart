@@ -6,6 +6,7 @@ import '../../../../utils/utils.dart';
 import '../../widgets/exports.dart';
 import '../../widgets/expense/expense_header.dart';
 import '../../widgets/expense/expense_summary.dart';
+import '../../widgets/common/empty_state_placeholder.dart';
 
 class SmoothScrollPhysics extends BouncingScrollPhysics {
   const SmoothScrollPhysics({super.parent});
@@ -27,8 +28,15 @@ class ExpenseScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Initialize the bloc to load expenses
+    // Initialize the bloc to load expenses with This Month as default
     context.read<TransactionBloc>().add(ExpensesLoaded());
+    final now = DateTime.now();
+    final startDate = DateTime(now.year, now.month, 1);
+    final endDate = DateTime(now.year, now.month + 1, 0);
+    context.read<TransactionBloc>().add(DateFilterChanged(
+      startDate: startDate,
+      endDate: endDate,
+    ));
 
     return BlocBuilder<TransactionBloc, TransactionState>(
       builder: (context, state) {
@@ -51,6 +59,7 @@ class ExpenseScreen extends StatelessWidget {
                   bottomRight: Radius.circular(24),
                   bottomLeft: Radius.circular(24),
                 ),
+                border: Border.all(color: AppColors.borderLight),
               ),
               child: NotificationListener<ScrollNotification>(
                 onNotification: (ScrollNotification scrollInfo) {
@@ -143,17 +152,14 @@ class ExpenseScreen extends StatelessWidget {
                       ),
                     ),
 
-                    // Summary Card
-                    if (state is TransactionLoaded)
-                      SliverToBoxAdapter(child: ExpenseSummary(state: state))
-                    else if (state is TransactionLoading)
-                      const SliverToBoxAdapter(
-                        child: ShimmerCard(height: 300),
-                      )
-                    else if (state is TransactionEmpty)
-                      SliverToBoxAdapter(child: ExpenseSummary(state: state), )
-                    else
-                      const SliverToBoxAdapter(child: SizedBox.shrink()),
+                    // Summary Card - Always show, even when empty
+                    SliverToBoxAdapter(
+                      child: state is TransactionLoaded || state is TransactionEmpty
+                          ? ExpenseSummary(state: state)
+                          : const ShimmerCard(height: 300),
+                    ),
+
+                   
 
                     // Transaction List
                     if (state is TransactionLoaded)
@@ -167,7 +173,21 @@ class ExpenseScreen extends StatelessWidget {
                         },
                       )
                     else if (state is TransactionLoading)
-                      const SliverToBoxAdapter(child: ShimmerCard(height: 300))
+                      const SliverToBoxAdapter(child: ShimmerList())
+                    else if (state is TransactionEmpty)
+                      SliverToBoxAdapter(
+                        child: Container(
+                          height: MediaQuery.of(context).size.height * 0.52,
+                          margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                          child: const EmptyCardStatePlaceholder(
+                            image: 'assets/images/no_expenses.png',
+                            actionLabel: 'Add Expense',
+                            title: 'No Expenses Recorded',
+                            message:
+                                'You haven\'t recorded any expenses yet. Tap + Add to record your first expense.',
+                          ),
+                        ),
+                      )
                     else
                       const SliverToBoxAdapter(child: SizedBox.shrink()),
                   ],
@@ -177,51 +197,6 @@ class ExpenseScreen extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-
-  Widget _buildExpenseSplitCard({required Map<String, double> categories}) {
-    final entries = categories.entries.take(3).toList();
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: AppColors.backgroundLight,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AppColors.borderLight),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children:
-            entries.map((entry) {
-              return Expanded(
-                child: Column(
-                  children: [
-                    Text(
-                      entry.key,
-                      style: AppTextStyles.bodySmall.copyWith(
-                        color: AppColors.neutral700,
-                        fontSize: 12,
-                        fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: -0.25,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      '\$${entry.value.toStringAsFixed(0)}',
-                      style: AppTextStyles.bodyMedium.copyWith(
-                        color: AppColors.textPrimaryLight,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 22,
-                        letterSpacing: -0.25,
-                        fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }).toList(),
-      ),
     );
   }
 }
