@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_colors.dart';
 
-class EmptyStatePlaceholder extends StatelessWidget {
+class EmptyCardStatePlaceholder extends StatelessWidget {
   final String title;
   final String message;
   final VoidCallback? onAction;
   final String? actionLabel;
+  final String? image;
 
-  const EmptyStatePlaceholder({
+  const EmptyCardStatePlaceholder({
     required this.title,
     required this.message,
     this.onAction,
     this.actionLabel,
+    this.image,
     super.key,
   });
 
@@ -30,7 +32,7 @@ class EmptyStatePlaceholder extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('assets/images/no_income.png', width: 150, height: 150),
+            if (image != null) Image.asset(image!, width: 150, height: 150),
             const SizedBox(height: 16),
 
             Text(

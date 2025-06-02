@@ -1,8 +1,11 @@
 import 'package:equatable/equatable.dart';
-import 'transaction_model.dart';
+import 'package:tally/features/transactions/models/transaction_model.dart';
+
 
 abstract class TransactionState extends Equatable {
   const TransactionState();
+
+  List<Transaction> get transactions => [];
 
   @override
   List<Object> get props => [];
@@ -15,17 +18,20 @@ class TransactionLoading extends TransactionState {}
 class TransactionEmpty extends TransactionState {}
 
 class TransactionLoaded extends TransactionState {
-  final List<Transaction> transactions;
+  final List<Transaction> _transactions;
   final Map<String, double> categoryTotals;
   final double totalAmount;
   final bool hasReachedMax;
 
   const TransactionLoaded({
-    required this.transactions,
+    required List<Transaction> transactions,
     required this.categoryTotals,
     required this.totalAmount,
     required this.hasReachedMax,
-  });
+  }) : _transactions = transactions;
+
+  @override
+  List<Transaction> get transactions => _transactions;
 
   TransactionLoaded copyWith({
     List<Transaction>? transactions,
@@ -34,7 +40,7 @@ class TransactionLoaded extends TransactionState {
     bool? hasReachedMax,
   }) {
     return TransactionLoaded(
-      transactions: transactions ?? this.transactions,
+      transactions: transactions ?? _transactions,
       categoryTotals: categoryTotals ?? this.categoryTotals,
       totalAmount: totalAmount ?? this.totalAmount,
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,
@@ -42,7 +48,7 @@ class TransactionLoaded extends TransactionState {
   }
 
   @override
-  List<Object> get props => [transactions, categoryTotals, totalAmount, hasReachedMax];
+  List<Object> get props => [_transactions, categoryTotals, totalAmount, hasReachedMax, ];
 }
 
 class TransactionError extends TransactionState {

@@ -1,9 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter/material.dart';
 import 'transaction_event.dart';
 import 'transaction_state.dart';
-import 'mock_transactions.dart';
-import 'transaction_model.dart';
+import '../mock_transactions.dart';
+import '../../models/transaction_model.dart';
 
 // Helper to convert mock transactions to real Transaction objects with unique IDs
 List<Transaction> _mockToTransactions(List<MockTransaction> mocks) {
@@ -110,7 +109,14 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
         // TODO: Replace with actual API call
         await Future.delayed(const Duration(seconds: 1));
 
-        final newTransactions = _mockToTransactions(mockTransactions.skip(_currentPage * _pageSize).take(_pageSize).toList());
+        final isIncome = currentState.transactions.first.isIncome;
+        final newTransactions = _mockToTransactions(
+          mockTransactions
+              .where((t) => t.isIncome == isIncome)
+              .skip(_currentPage * _pageSize)
+              .take(_pageSize)
+              .toList()
+        );
 
         if (newTransactions.isEmpty) {
           emit(currentState.copyWith(hasReachedMax: true));
@@ -237,8 +243,13 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
       final transactions = _mockToTransactions(mockTransactions);
       final filteredTransactions = transactions.where((t) {
         final transactionDate = DateTime.parse(t.date);
-        return transactionDate.isAfter(event.startDate) && 
-               transactionDate.isBefore(event.endDate.add(const Duration(days: 1)));
+        final isInDateRange = transactionDate.isAfter(event.startDate) && 
+                            transactionDate.isBefore(event.endDate.add(const Duration(days: 1)));
+        // Keep the same transaction type (income/expense) as the current state
+        final isCorrectType = state is TransactionLoaded 
+            ? (state as TransactionLoaded).transactions.first.isIncome == t.isIncome
+            : true;
+        return isInDateRange && isCorrectType;
       }).toList();
 
       final totalAmount = filteredTransactions.fold<double>(
@@ -265,12 +276,17 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
   }
 
   Map<String, double> _calculateCategoryTotals(List<Transaction> transactions) {
-    final categoryTotals = <String, double>{};
+    final totals = <String, double>{};
+    
     for (final transaction in transactions) {
-      for (final category in transaction.categories) {
-        categoryTotals[category] = (categoryTotals[category] ?? 0) + transaction.amount;
-      }
+      final category = transaction.source;
+      totals[category] = (totals[category] ?? 0) + transaction.amount;
     }
-    return categoryTotals;
+    
+    // Sort by amount in descending order
+    final sortedEntries = totals.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+    
+    return Map.fromEntries(sortedEntries);
   }
 }

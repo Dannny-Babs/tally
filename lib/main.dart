@@ -1,12 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'core/theme/app_theme.dart';
+import '../../../../utils/utils.dart';
 import 'core/app_shell.dart';
-import 'features/dashboard/bloc/dashboard_bloc.dart';
-import 'features/dashboard/bloc/dashboard_event.dart';
-import 'features/transactions/bloc/category_bloc.dart';
-import 'features/transactions/bloc/transaction_bloc.dart';
-import 'features/settings/bloc/settings_bloc.dart';
+import 'core/theme/app_theme.dart';
 import 'core/widgets/not_found_screen.dart';
 
 void main() {
@@ -32,7 +26,14 @@ class MyApp extends StatelessWidget {
           },
         ),
         BlocProvider<TransactionBloc>(
-          create: (context) => TransactionBloc(),
+          create: (context) {
+            final bloc = TransactionBloc();
+            // Initialize with expenses data
+            Future.microtask(() {
+              bloc.add(ExpensesLoaded());
+            });
+            return bloc;
+          },
         ),
         BlocProvider<SettingsBloc>(
           create: (context) => SettingsBloc(),

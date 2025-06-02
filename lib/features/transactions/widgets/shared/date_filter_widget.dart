@@ -1,8 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_text_styles.dart';
-
+import '../../../../utils/utils.dart';
 enum DateRange {
   thisMonth,
   lastMonth,
@@ -65,7 +61,8 @@ class _DateFilterWidgetState extends State<DateFilterWidget> {
       margin: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
         color: AppColors.neutral200,
-        borderRadius: BorderRadius.circular(8),        
+        borderRadius: BorderRadius.circular(8),    
+        border: Border.all(color: AppColors.borderLight),
       ),
       height: 40,
       child: SingleChildScrollView(
@@ -89,7 +86,7 @@ class _DateFilterWidgetState extends State<DateFilterWidget> {
                     borderRadius: BorderRadius.circular(8),
                     boxShadow: isSelected ? [
                       BoxShadow(
-                        color: AppColors.primary500.withOpacity(0.1),
+                        color: AppColors.primary500.withAlpha(105),
                         blurRadius: 4,
                         offset: const Offset(0, 2),
                       ),

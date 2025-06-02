@@ -1,10 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_text_styles.dart';
-import 'segmented_bar.dart';
 
+import '../../../../../utils/utils.dart';
+import '../shared/segmented_bar.dart';
 
 class TopCategoriesWidget extends StatelessWidget {
   final Map<String, double> categoryTotals;
@@ -12,11 +9,12 @@ class TopCategoriesWidget extends StatelessWidget {
   final int showLabelsCount;
 
   const TopCategoriesWidget({
-    Key? key,
+
+    super.key,
     required this.categoryTotals,
     this.maxSegments = 9,
     this.showLabelsCount = 5,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

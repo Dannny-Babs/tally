@@ -1,8 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:heroicons/heroicons.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_text_styles.dart';
+import '../../../../utils/utils.dart';
 
 class ErrorScreen extends StatelessWidget {
   final String message;

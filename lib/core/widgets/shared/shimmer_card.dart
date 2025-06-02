@@ -18,21 +18,22 @@ class ShimmerCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ShimmerWrapper(
-      isLoading: true,
-      child: Container(
-        height: height,
-        width: width,
-        padding: padding,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: borderRadius ?? BorderRadius.circular(12),
-          border: Border.all(color: AppColors.borderLight),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
+    return Container(
+      margin: const EdgeInsets.all(12),
+      height: height,
+      width: width,
+      padding: padding,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: borderRadius ?? BorderRadius.circular(12),
+        border: Border.all(color: AppColors.borderLight),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ShimmerWrapper(
+            isLoading: true,
+            child: Container(
               height: 16,
               width: 120,
               decoration: BoxDecoration(
@@ -40,17 +41,23 @@ class ShimmerCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(4),
               ),
             ),
-            const SizedBox(height: 12),
-            Container(
-              height: 12,
+          ),
+          const SizedBox(height: 12),
+          ShimmerWrapper(
+            isLoading: true,
+            child: Container(
+              height: 24,
               width: double.infinity,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(4),
               ),
             ),
-            const SizedBox(height: 8),
-            Container(
+          ),
+          const Spacer(),
+          ShimmerWrapper(
+            isLoading: true,
+            child: Container(
               height: 12,
               width: 200,
               decoration: BoxDecoration(
@@ -58,9 +65,33 @@ class ShimmerCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(4),
               ),
             ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 8),
+          ShimmerWrapper(
+            isLoading: true,
+            child: Container(
+              height: 90,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          ShimmerWrapper(
+            isLoading: true,
+            child: Container(
+              height: 65,
+              width: double.infinity  ,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
-} 
+}

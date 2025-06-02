@@ -1,4 +1,4 @@
-import 'transaction_model.dart';
+import '../models/transaction_model.dart';
 
 // Mock transactions for testing
 class MockTransaction {

@@ -1,14 +1,11 @@
-import 'package:flutter/material.dart';
+// TODO (Phase C): Split this file into header, form, summary, filter, list widget files
+// TODO (Phase D): Move business logic (calculations, grouping, formatting) out of build() into Bloc or Utils
+// TODO (Phase E): Replace CircularProgressIndicator with ShimmerLoader in Phase B
+
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:tally/core/widgets/multi_selector.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_text_styles.dart';
-import '../bloc/transaction_bloc.dart';
-import '../bloc/transaction_event.dart';
-import '../widgets/labeled_input.dart';
+
+import '../../../../utils/utils.dart';
+import '../../widgets/exports.dart';
 
 class AddIncomeModal extends StatefulWidget {
   const AddIncomeModal({super.key});
@@ -45,7 +42,7 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
     'Monthly',
     'Yearly',
   ];
-  List<String> _selectedCategories = [];
+  final List<String> _selectedCategories = [];
   final List<String> _categories = [
     'Salary',
     'Freelance',
@@ -103,6 +100,7 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
 
   @override
   Widget build(BuildContext context) {
+    // TODO (Phase C): Extract this block into a shared widget
     return DraggableScrollableSheet(
       initialChildSize: 0.9,
       minChildSize: 0.5,
@@ -114,7 +112,7 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
             borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black54,
                 blurRadius: 10,
                 offset: const Offset(0, -2),
               ),
@@ -200,9 +198,8 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
                         ),
                       ),
                       const SizedBox(height: 4),
-                      Container(
+                      SizedBox(
                         height: 48,
-
                         child: TextFormField(
                           controller: _amountController,
                           keyboardType: const TextInputType.numberWithOptions(
@@ -429,11 +426,16 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
                       ),
                       const SizedBox(height: 4),
                       MultiSelector(
-                        items: _categories,
-                        selectedItems: _selectedCategories,
-                        onChanged: (List<String> selectedItems) {
+                        options: _categories,
+                        selectedOptions: _selectedCategories,
+                        onOptionSelected: (option) {
                           setState(() {
-                            _selectedCategories = selectedItems;
+                            _selectedCategories.add(option);
+                          });
+                        },
+                        onOptionDeselected: (option) {
+                          setState(() {
+                            _selectedCategories.remove(option);
                           });
                         },
                       ),
@@ -657,4 +659,21 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
     );
   }
 
+  Widget _buildForm() {
+    return Form(
+      key: _formKey,
+      child: ListView(
+        padding: EdgeInsets.fromLTRB(
+          16,
+          0,
+          16,
+          MediaQuery.of(context).viewInsets.bottom + 16,
+        ),
+        children: [
+          // Form fields will be moved here in Phase C
+          const SizedBox(height: 24),
+        ],
+      ),
+    );
+  }
 }

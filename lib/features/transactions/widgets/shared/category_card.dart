@@ -1,9 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:heroicons/heroicons.dart';
 
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_text_styles.dart';
+import '../../../../utils/utils.dart';
+
 
 class CategoryCard extends StatelessWidget {
   final String category;
@@ -11,11 +8,11 @@ class CategoryCard extends StatelessWidget {
   final Color color;
 
   const CategoryCard({
-    Key? key,
+    super.key,
     required this.category,
     required this.amount,
     required this.color,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +30,7 @@ class CategoryCard extends StatelessWidget {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
+              color: color.withAlpha(100),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Center(

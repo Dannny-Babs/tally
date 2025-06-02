@@ -9,3 +9,4 @@ export 'package:permission_handler/permission_handler.dart';
 export 'package:shimmer/shimmer.dart';
 export 'package:fl_chart/fl_chart.dart';
 export 'package:equatable/equatable.dart'; 
+export 'package:flutter_svg/flutter_svg.dart';

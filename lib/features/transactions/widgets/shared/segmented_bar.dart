@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
+import '../../../../utils/utils.dart';
 
-import '../../../core/theme/app_colors.dart';
 
 class Segment {
   final Color color;
@@ -14,11 +13,11 @@ class PercentageSegmentBar extends StatelessWidget {
   final Widget separator;
 
   const PercentageSegmentBar({
-    Key? key,
+    super.key,
     required this.segments,
     this.height = 20,
     this.separator = const SizedBox(width: 2),
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

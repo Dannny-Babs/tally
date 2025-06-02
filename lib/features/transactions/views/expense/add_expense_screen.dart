@@ -1,20 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:hugeicons_pro/hugeicons.dart';
-import 'package:image_picker/image_picker.dart';
+// TODO (Phase C): Split this file into header, form, summary, filter, list widget files
+// TODO (Phase D): Move business logic (calculations, grouping, formatting) out of build() into Bloc or Utils
+// TODO (Phase E): Replace CircularProgressIndicator with ShimmerLoader in Phase B
+
+
+
 import 'dart:io';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:tally/core/widgets/labeled_input.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_text_styles.dart';
-import '../bloc/transaction_bloc.dart';
-import '../bloc/transaction_event.dart';
-import '../bloc/category_bloc.dart';
-import '../bloc/category_event.dart';
-import '../bloc/category_state.dart';
+import 'package:flutter/services.dart';
+import '../../../../utils/utils.dart';
+
+
+
 
 class AddExpenseModal extends StatefulWidget {
   const AddExpenseModal({super.key});
@@ -220,6 +215,7 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
 
   @override
   Widget build(BuildContext context) {
+    // TODO (Phase C): Extract this block into a shared widget
     return DraggableScrollableSheet(
       initialChildSize: 0.9,
       minChildSize: 0.5,
@@ -231,7 +227,7 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
             borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black54,
                 blurRadius: 10,
                 offset: const Offset(0, -2),
               ),
@@ -570,7 +566,7 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
                                 if (_isPickerActive)
                                   Container(
                                     decoration: BoxDecoration(
-                                      color: Colors.black.withOpacity(0.5),
+                                      color: Colors.black54,
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                     child: const Center(
@@ -814,6 +810,25 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
           ),
         );
       },
+    );
+  }
+
+  // TODO (Phase C): Extract this block into a shared widget
+  Widget _buildForm() {
+    return Form(
+      key: _formKey,
+      child: ListView(
+        padding: EdgeInsets.fromLTRB(
+          16,
+          0,
+          16,
+          MediaQuery.of(context).viewInsets.bottom + 16,
+        ),
+        children: [
+          // Form fields will be moved here in Phase C
+          const SizedBox(height: 24),
+        ],
+      ),
     );
   }
 }
