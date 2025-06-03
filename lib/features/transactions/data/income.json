@@ -13,7 +13,11 @@
       "payeeName": "Med Melanin Inc.",
       "taxable": false,
       "recurring": false,
-      "frequency": null
+      "frequency": null,
+      "paymentMethod": "Bank Transfer",
+      "receiptImages": [],
+      "notes": "Design Retainer"
+      
     },
     {
       "id": "inc2",
@@ -29,7 +33,10 @@
       "payeeName": "Tech Solutions LLC",
       "taxable": false,
       "recurring": false,
-      "frequency": null
+      "frequency": null,
+      "paymentMethod": "Bank Transfer",
+      "receiptImages": [],
+      "notes": "App Development Fee"
     },
     {
       "id": "inc3",
@@ -45,7 +52,10 @@
       "payeeName": "Creative Studios",
       "taxable": false,
       "recurring": false,
-      "frequency": null
+      "frequency": null,
+      "paymentMethod": "Bank Transfer",
+      "receiptImages": [],
+      "notes": "Logo Commission"
     },
     {
       "id": "inc4",
@@ -61,7 +71,10 @@
       "payeeName": "Digital Marketing Co.",
       "taxable": false,
       "recurring": false,
-      "frequency": null
+      "frequency": null,
+      "paymentMethod": "Bank Transfer",
+      "receiptImages": [],
+      "notes": "Campaign Strategy Payment"
     },
     {
       "id": "inc5",
@@ -77,7 +90,10 @@
       "payeeName": "Web Solutions Inc.",
       "taxable": false,
       "recurring": false,
-      "frequency": null
+      "frequency": null,
+      "paymentMethod": "Bank Transfer",
+      "receiptImages": [],
+      "notes": "Maintenance Contract"
     },
     {
       "id": "inc6",
@@ -93,7 +109,10 @@
       "payeeName": "Brand Identity Co.",
       "taxable": false,
       "recurring": false,
-      "frequency": null
+      "frequency": null,
+      "paymentMethod": "Bank Transfer",
+      "receiptImages": [],
+      "notes": "Brand Guide Payment"
     },
     {
       "id": "inc7",
@@ -109,7 +128,10 @@
       "payeeName": "Mobile Apps Ltd.",
       "taxable": false,
       "recurring": false,
-      "frequency": null
+      "frequency": null,
+      "paymentMethod": "Bank Transfer",
+      "receiptImages": [],
+      "notes": "UI/UX Design Fee"
     },
     {
       "id": "inc8",
@@ -125,7 +147,10 @@
       "payeeName": "E-commerce Solutions",
       "taxable": false,
       "recurring": false,
-      "frequency": null
+      "frequency": null,
+      "paymentMethod": "Bank Transfer",
+      "receiptImages": [],
+      "notes": "Store Setup Payment"
     },
     {
       "id": "inc9",
@@ -141,7 +166,10 @@
       "payeeName": "Content Creators Inc.",
       "taxable": false,
       "recurring": false,
-      "frequency": null
+      "frequency": null,
+      "paymentMethod": "Bank Transfer",
+      "receiptImages": [],
+      "notes": "Content Strategy Fee"
     },
     {
       "id": "inc10",
@@ -157,7 +185,10 @@
       "payeeName": "UI/UX Collective",
       "taxable": false,
       "recurring": false,
-      "frequency": null
+      "frequency": null,
+      "paymentMethod": "Bank Transfer",
+      "receiptImages": [],
+      "notes": "App Design Payment"
     },
     {
       "id": "inc11",
@@ -173,7 +204,10 @@
       "payeeName": "Tech Innovators",
       "taxable": false,
       "recurring": false,
-      "frequency": null
+      "frequency": null,
+      "paymentMethod": "Bank Transfer",
+      "receiptImages": [],
+      "notes": "API Development Fee"
     },
     {
       "id": "inc12",
@@ -189,7 +223,10 @@
       "payeeName": "Design Masters",
       "taxable": false,
       "recurring": false,
-      "frequency": null
+      "frequency": null,
+      "paymentMethod": "Bank Transfer",
+      "receiptImages": [],
+      "notes": "Packaging Design Payment"
     },
     {
       "id": "inc13",
@@ -205,7 +242,10 @@
       "payeeName": "Digital Agency",
       "taxable": false,
       "recurring": false,
-      "frequency": null
+      "frequency": null,
+      "paymentMethod": "Bank Transfer",
+      "receiptImages": [],
+      "notes": "SEO Optimization Fee"
     },
     {
       "id": "inc14",
@@ -221,7 +261,10 @@
       "payeeName": "Web Developers Co.",
       "taxable": false,
       "recurring": false,
-      "frequency": null
+      "frequency": null,
+      "paymentMethod": "Cash",
+      "receiptImages": [],
+      "notes": "WordPress Development Payment"
     },
     {
       "id": "inc15",
@@ -237,7 +280,10 @@
       "payeeName": "Brand Designers",
       "taxable": false,
       "recurring": false,
-      "frequency": null
+      "frequency": null,
+      "paymentMethod": "Cash",
+      "receiptImages": [],
+      "notes": "Rebranding Project Fee"
     },
     {
       "id": "inc16",
@@ -253,7 +299,10 @@
       "payeeName": "Social Media Pro",
       "taxable": false,
       "recurring": false,
-      "frequency": null
+      "frequency": null,
+      "paymentMethod": "Cash",
+      "receiptImages": [],
+      "notes": "Instagram Campaign Fee"
     },
     {
       "id": "inc17",
@@ -269,7 +318,10 @@
       "payeeName": "App Developers Inc.",
       "taxable": false,
       "recurring": false,
-      "frequency": null
+      "frequency": null,
+      "paymentMethod": "Cash",
+      "receiptImages": [],
+      "notes": "Flutter Development Payment"
     },
     {
       "id": "inc18",
@@ -285,7 +337,10 @@
       "payeeName": "Design Studio",
       "taxable": false,
       "recurring": false,
-      "frequency": null
+      "frequency": null,
+      "paymentMethod": "Bank Transfer",
+      "receiptImages": [],
+      "notes": "Website Redesign Payment"
     },
     {
       "id": "inc19",
@@ -301,7 +356,10 @@
       "payeeName": "Digital Marketing Pro",
       "taxable": false,
       "recurring": false,
-      "frequency": null
+      "frequency": null,
+      "paymentMethod": "Bank Transfer",
+      "receiptImages": [],
+      "notes": "PPC Campaign Fee"
     },
     {
       "id": "inc20",
@@ -317,7 +375,10 @@
       "payeeName": "Employer",
       "taxable": false,
       "recurring": false,
-      "frequency": null
+      "frequency": null,
+      "paymentMethod": "Cash",
+      "receiptImages": [],
+      "notes": "February Salary"
     }
   ]
   
