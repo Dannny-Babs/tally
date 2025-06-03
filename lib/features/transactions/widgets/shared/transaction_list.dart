@@ -9,12 +9,14 @@ class TransactionList extends StatelessWidget {
   final TransactionState state;
   final bool hasReachedMax;
   final VoidCallback? onLoadMore;
+  final bool isIncome;
 
   const TransactionList({
     super.key,
     required this.state,
     required this.hasReachedMax,
     this.onLoadMore,
+    this.isIncome = false,
   });
 
   @override
@@ -35,18 +37,19 @@ class TransactionList extends StatelessWidget {
     }
 
     if (state is TransactionLoaded) {
-      final transactions = state.transactions;
+      final transactions = state.transactions.where((t) => t.isIncome == isIncome).toList();
       if (transactions.isEmpty) {
         return SliverToBoxAdapter(
           child: Container(
             height: MediaQuery.of(context).size.height * 0.52,
             margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            child: const EmptyCardStatePlaceholder(
-              image: 'assets/images/no_expenses.png',
-              actionLabel: 'Add Expense',
-              title: 'No Expenses Recorded',
-              message:
-                  'You haven\'t recorded any expenses yet. Tap + Add to record your first expense.',
+            child: EmptyCardStatePlaceholder(
+              image: isIncome ? 'assets/images/no_income.png' : 'assets/images/no_expenses.png',
+              actionLabel: isIncome ? 'Add Income' : 'Add Expense',
+              title: isIncome ? 'No Income Recorded' : 'No Expenses Recorded',
+              message: isIncome 
+                  ? 'You haven\'t recorded any income yet. Tap + Add to record your first payment.'
+                  : 'You haven\'t recorded any expenses yet. Tap + Add to record your first expense.',
             ),
           ),
         );

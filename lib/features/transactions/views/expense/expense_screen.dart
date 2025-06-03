@@ -166,6 +166,7 @@ class ExpenseScreen extends StatelessWidget {
                       TransactionList(
                         state: state,
                         hasReachedMax: state.hasReachedMax,
+                        isIncome: false,
                         onLoadMore: () {
                           context.read<TransactionBloc>().add(
                             TransactionLoadMore(),

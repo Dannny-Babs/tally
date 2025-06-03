@@ -132,7 +132,7 @@ class IncomeScreen extends StatelessWidget {
                               children: [
                                 const SizedBox(height: 12),
                                 Text(
-                                  'Total income ${_selectedRange.name}',
+                                  'Total income ${_selectedRange.name.replaceAll(RegExp(r'(?=[A-Z])'), ' ')}',
                                   style: AppTextStyles.bodyMedium.copyWith(
                                     color: AppColors.textPrimaryLight,
                                     letterSpacing: -0.5,
@@ -158,7 +158,7 @@ class IncomeScreen extends StatelessWidget {
                                             ).toStringAsFixed(2)
                                           : '0.00',
                                       style: AppTextStyles.displayLarge.copyWith(
-                                        fontSize: 52,
+                                        fontSize: 48,
                                         color: AppColors.textPrimaryLight,
                                       ),
                                     ),
@@ -216,14 +216,7 @@ class IncomeScreen extends StatelessWidget {
 
                     // Transaction Groups
                     if (state is TransactionLoading)
-                      const SliverToBoxAdapter(
-                        child: SizedBox(
-                          height: 200,
-                          child: Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                        ),
-                      )
+                      const SliverToBoxAdapter(child: ShimmerList())
                     else if (state is TransactionEmpty)
                       SliverToBoxAdapter(
                         child: Container(
@@ -243,7 +236,17 @@ class IncomeScreen extends StatelessWidget {
                         ),
                       )
                     else if (state is TransactionLoaded)
-                      _buildTransactionGroups(state.transactions, state.hasReachedMax),
+                      TransactionList(
+                        state: state,
+                        hasReachedMax: state.hasReachedMax,
+                        isIncome: true,
+                        onLoadMore: () {
+                          context.read<TransactionBloc>().add(
+                            TransactionLoadMore(),
+                          );
+                        },
+                      )
+
                   ],
                 ),
               ),
