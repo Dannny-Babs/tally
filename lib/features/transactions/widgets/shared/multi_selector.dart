@@ -3,14 +3,14 @@ import '../../../../utils/utils.dart';
 
 class MultiSelector extends StatelessWidget {
   final List<String> options;
-  final List<String> selectedOptions;
+  final String selectedOption;
   final ValueChanged<String> onOptionSelected;
   final ValueChanged<String> onOptionDeselected;
 
   const MultiSelector({
     super.key,
     required this.options,
-    required this.selectedOptions,
+    required this.selectedOption,
     required this.onOptionSelected,
     required this.onOptionDeselected,
   });
@@ -20,36 +20,38 @@ class MultiSelector extends StatelessWidget {
     return Wrap(
       spacing: 8,
       runSpacing: 8,
-      children: options.map((option) {
-        final isSelected = selectedOptions.contains(option);
-        return FilterChip(
-          label: Text(
-            option,
-            style: AppTextStyles.bodySmall.copyWith(
-              color: isSelected ? Colors.white : AppColors.neutral700,
-              fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
-              fontSize: 12,
-            ),
-          ),
-          selected: isSelected,
-          onSelected: (selected) {
-            if (selected) {
-              onOptionSelected(option);
+      children: options.map((item) {
+        final isSelected = selectedOption == item;
+        return InkWell(
+          onTap: () {
+            if (isSelected) {
+              onOptionDeselected(item);
             } else {
-              onOptionDeselected(option);
+              onOptionSelected(item);
             }
           },
-          backgroundColor: Colors.white,
-          selectedColor: AppColors.primary500,
-          checkmarkColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-            side: BorderSide(
-              color: isSelected ? AppColors.primary500 : AppColors.borderLight,
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            decoration: BoxDecoration(
+              color: isSelected ? AppColors.primary500 : AppColors.surfaceLight,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: isSelected ? AppColors.primary700 : AppColors.neutral700,
+              ),
+            ),
+            child: Text(
+              item,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: isSelected ? AppColors.textPrimaryLight : AppColors.neutral800,
+                    fontSize: 12.5,
+                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                    letterSpacing: -0.1,
+                    fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                  ),
             ),
           ),
         );
       }).toList(),
     );
   }
-} 
+}

@@ -46,6 +46,7 @@ class MyApp extends StatelessWidget {
         title: 'Tally',
         theme: AppTheme.lightTheme,
         debugShowCheckedModeBanner: false,
+        
         onUnknownRoute: (settings) => MaterialPageRoute(
           builder: (context) => const NotFoundScreen(),
         ),

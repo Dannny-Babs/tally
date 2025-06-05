@@ -10,7 +10,7 @@ class IncomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DateRange _selectedRange = DateRange.thisMonth;
+    DateRange selectedRange = DateRange.thisMonth;
 
     return BlocBuilder<TransactionBloc, TransactionState>(
       builder: (context, state) {
@@ -33,6 +33,7 @@ class IncomeScreen extends StatelessWidget {
                   bottomRight: Radius.circular(24),
                   bottomLeft: Radius.circular(24),
                 ),
+                border: Border.all(color: AppColors.borderLight),
               ),
               child: NotificationListener<ScrollNotification>(
                 onNotification: (ScrollNotification scrollInfo) {
@@ -72,9 +73,9 @@ class IncomeScreen extends StatelessWidget {
                     // Date Filter
                     SliverToBoxAdapter(
                       child: DateFilterWidget(
-                        selectedRange: _selectedRange,
+                        selectedRange: selectedRange,
                         onRangeSelected: (range) {
-                          _selectedRange = range;
+                          selectedRange = range;
                           final now = DateTime.now();
                           DateTime startDate;
                           DateTime endDate;
@@ -132,7 +133,7 @@ class IncomeScreen extends StatelessWidget {
                               children: [
                                 const SizedBox(height: 12),
                                 Text(
-                                  'Total income ${_selectedRange.name.replaceAll(RegExp(r'(?=[A-Z])'), ' ')}',
+                                  'Total income ${selectedRange.name.replaceAll(RegExp(r'(?=[A-Z])'), ' ')}',
                                   style: AppTextStyles.bodyMedium.copyWith(
                                     color: AppColors.textPrimaryLight,
                                     letterSpacing: -0.5,

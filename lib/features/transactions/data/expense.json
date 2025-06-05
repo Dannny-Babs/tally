@@ -8,9 +8,16 @@
       "amount": 18.50,
       "isIncome": false,
       "categories": ["Food & Dining"],
+      "tags": [
+        {
+          "name": "Dining",
+          "emoji": "🍽️"
+        }
+      ],
       "receiptImages": [],
       "notes": "",
-      "recurring": false
+      "recurring": false,
+      "mood": "happy"
     },
     {
       "id": "exp2",
@@ -21,9 +28,21 @@
       "amount": 102.00,
       "isIncome": false,
       "categories": ["Transportation"],
+      "tags": [
+        {
+          "name": "Transport",
+          "emoji": "🚗"
+        },
+        {
+          "name": "Subscriptions",
+          "emoji": "🔄"
+        }
+      ],
       "receiptImages": [],
       "notes": "",
-      "recurring": false
+      "recurring": true,
+      "frequency": "monthly",
+      "mood": "neutral"
     },
     {
       "id": "exp3",
@@ -34,9 +53,21 @@
       "amount": 1200.00,
       "isIncome": false,
       "categories": ["Housing"],
+      "tags": [
+        {
+          "name": "Bills",
+          "emoji": "📝"
+        },
+        {
+          "name": "Subscriptions",
+          "emoji": "🔄"
+        }
+      ],
       "receiptImages": [],
       "notes": "",
-      "recurring": false
+      "recurring": true,
+      "frequency": "monthly",
+      "mood": "stressed"
     },
     {
       "id": "exp4",
@@ -47,9 +78,17 @@
       "amount": 45.75,
       "isIncome": false,
       "categories": ["Utilities"],
+      "tags": [
+        {
+          "name": "Bills",
+          "emoji": "📝"
+        }
+      ],
       "receiptImages": [],
       "notes": "",
-      "recurring": false
+      "recurring": true,
+      "frequency": "monthly",
+      "mood": "neutral"
     },
     {
       "id": "exp5",
@@ -60,9 +99,16 @@
       "amount": 65.00,
       "isIncome": false,
       "categories": ["Shopping", "Clothing"],
+      "tags": [
+        {
+          "name": "Shopping",
+          "emoji": "🛍️"
+        }
+      ],
       "receiptImages": [],
       "notes": "",
-      "recurring": false
+      "recurring": false,
+      "mood": "happy"
     },
     {
       "id": "exp6",
@@ -73,9 +119,21 @@
       "amount": 50.00,
       "isIncome": false,
       "categories": ["Health & Fitness"],
+      "tags": [
+        {
+          "name": "Health",
+          "emoji": "💊"
+        },
+        {
+          "name": "Subscriptions",
+          "emoji": "🔄"
+        }
+      ],
       "receiptImages": [],
       "notes": "",
-      "recurring": false
+      "recurring": true,
+      "frequency": "monthly",
+      "mood": "excited"
     },
     {
       "id": "exp7",
@@ -86,9 +144,16 @@
       "amount": 120.00,
       "isIncome": false,
       "categories": ["Entertainment"],
+      "tags": [
+        {
+          "name": "Entertainment",
+          "emoji": "🎯"
+        }
+      ],
       "receiptImages": [],
       "notes": "",
-      "recurring": false
+      "recurring": false,
+      "mood": "excited"
     },
     {
       "id": "exp8",
@@ -99,9 +164,16 @@
       "amount": 75.00,
       "isIncome": false,
       "categories": ["Travel"],
+      "tags": [
+        {
+          "name": "Travel",
+          "emoji": "✈️"
+        }
+      ],
       "receiptImages": [],
       "notes": "",
-      "recurring": false
+      "recurring": false,
+      "mood": "excited"
     },
     {
       "id": "exp9",
@@ -112,9 +184,16 @@
       "amount": 40.00,
       "isIncome": false,
       "categories": ["Education"],
+      "tags": [
+        {
+          "name": "Education",
+          "emoji": "📚"
+        }
+      ],
       "receiptImages": [],
       "notes": "",
-      "recurring": false
+      "recurring": false,
+      "mood": "excited"
     },
     {
       "id": "exp10",
@@ -125,9 +204,16 @@
       "amount": 25.00,
       "isIncome": false,
       "categories": ["Personal Care"],
+      "tags": [
+        {
+          "name": "Health",
+          "emoji": "💊"
+        }
+      ],
       "receiptImages": [],
       "notes": "",
-      "recurring": false
+      "recurring": false,
+      "mood": "happy"
     },
     {
       "id": "exp11",
@@ -138,9 +224,21 @@
       "amount": 150.00,
       "isIncome": false,
       "categories": ["Insurance"],
+      "tags": [
+        {
+          "name": "Bills",
+          "emoji": "📝"
+        },
+        {
+          "name": "Subscriptions",
+          "emoji": "🔄"
+        }
+      ],
       "receiptImages": [],
       "notes": "",
-      "recurring": false
+      "recurring": true,
+      "frequency": "monthly",
+      "mood": "neutral"
     },
     {
       "id": "exp12",
@@ -151,9 +249,16 @@
       "amount": 30.00,
       "isIncome": false,
       "categories": ["Gifts & Donations"],
+      "tags": [
+        {
+          "name": "Gifts",
+          "emoji": "🎁"
+        }
+      ],
       "receiptImages": [],
       "notes": "",
-      "recurring": false
+      "recurring": false,
+      "mood": "happy"
     },
     {
       "id": "exp13",
@@ -164,9 +269,17 @@
       "amount": 95.00,
       "isIncome": false,
       "categories": ["Groceries"],
+      "tags": [
+        {
+          "name": "Groceries",
+          "emoji": "🛒"
+        }
+      ],
       "receiptImages": [],
       "notes": "",
-      "recurring": false
+      "recurring": true,
+      "frequency": "weekly",
+      "mood": "neutral"
     },
     {
       "id": "exp14",
@@ -177,9 +290,21 @@
       "amount": 15.00,
       "isIncome": false,
       "categories": ["Subscriptions"],
+      "tags": [
+        {
+          "name": "Subscriptions",
+          "emoji": "🔄"
+        },
+        {
+          "name": "Entertainment",
+          "emoji": "🎯"
+        }
+      ],
       "receiptImages": [],
       "notes": "",
-      "recurring": false
+      "recurring": true,
+      "frequency": "monthly",
+      "mood": "happy"
     },
     {
       "id": "exp15",
@@ -190,9 +315,16 @@
       "amount": 45.00,
       "isIncome": false,
       "categories": ["Hardware"],
+      "tags": [
+        {
+          "name": "Shopping",
+          "emoji": "🛍️"
+        }
+      ],
       "receiptImages": [],
       "notes": "",
-      "recurring": false
+      "recurring": false,
+      "mood": "excited"
     },
     {
       "id": "exp16",

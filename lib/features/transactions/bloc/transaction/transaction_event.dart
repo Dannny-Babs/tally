@@ -58,24 +58,24 @@ class TransactionDeleted extends TransactionEvent {
 class AddIncomeSubmitted extends TransactionEvent {
   final double amount;
   final String source;
-  final String description;
+  final String payee;
   final DateTime date;
   final TimeOfDay time;
-  final List<String> categories;
+  final String category;
   final String? notes;
 
   const AddIncomeSubmitted({
     required this.amount,
     required this.source,
-    required this.description,
+    required this.payee,
     required this.date,
     required this.time,
-    required this.categories,
+    required this.category,
     this.notes,
   });
 
   @override
-  List<Object> get props => [amount, source, description, date, time, categories, notes ?? ''];
+  List<Object> get props => [amount, source, payee, date, time, category, notes ?? ''];
 }
 
 class AddExpenseSubmitted extends TransactionEvent {

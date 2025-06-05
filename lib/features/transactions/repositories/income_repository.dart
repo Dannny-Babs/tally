@@ -3,25 +3,26 @@ import 'package:flutter/services.dart';
 import '../models/transaction_model.dart';
 
 class IncomeRepository {
+  static const String _assetPath = 'lib/features/transactions/data/income.json';
+
   Future<List<Transaction>> fetchIncomes() async {
     try {
       // Load the JSON file from assets
-      final String jsonString = await rootBundle.loadString('assets/incomes.json');
+      final String jsonString = await rootBundle.loadString(_assetPath);
       final List<dynamic> jsonList = json.decode(jsonString);
       
-      // Convert JSON to Transaction objects
+      // Convert JSON to Transaction objects with proper mapping
       return jsonList.map((json) => Transaction.fromJson(json)).toList();
     } catch (e) {
-      // If there's an error loading the file, return an empty list
       print('Error loading incomes: $e');
-      return [];
+      rethrow;
     }
   }
 
   Future<void> addIncome(Transaction transaction) async {
     try {
       // Load existing incomes
-      final String jsonString = await rootBundle.loadString('assets/incomes.json');
+      final String jsonString = await rootBundle.loadString(_assetPath);
       final List<dynamic> jsonList = json.decode(jsonString);
       
       // Add new transaction

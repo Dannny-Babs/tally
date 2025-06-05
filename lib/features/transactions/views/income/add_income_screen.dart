@@ -42,7 +42,7 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
     'Monthly',
     'Yearly',
   ];
-  final List<String> _selectedCategories = [];
+  String _selectedCategories = '';
   final List<String> _categories = [
     'Salary',
     'Freelance',
@@ -415,7 +415,7 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        'Category / Tag',
+                        'Categories',
                         style: AppTextStyles.bodyMedium.copyWith(
                           color: AppColors.textPrimaryLight,
                           fontWeight: FontWeight.w600,
@@ -427,15 +427,15 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
                       const SizedBox(height: 4),
                       MultiSelector(
                         options: _categories,
-                        selectedOptions: _selectedCategories,
+                        selectedOption: _selectedCategories,
                         onOptionSelected: (option) {
                           setState(() {
-                            _selectedCategories.add(option);
+                            _selectedCategories = option;
                           });
                         },
                         onOptionDeselected: (option) {
                           setState(() {
-                            _selectedCategories.remove(option);
+                            _selectedCategories = '';
                           });
                         },
                       ),
@@ -619,10 +619,10 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
                                 AddIncomeSubmitted(
                                   amount: amount,
                                   source: _selectedSource!,
-                                  description: _selectedCategories.first,
+                                  payee: _selectedSource!,
                                   date: _selectedDate,
                                   time: _selectedTime,
-                                  categories: _selectedCategories,
+                                  category: _selectedCategories,
                                   notes:
                                       _notesController.text.isEmpty
                                           ? null

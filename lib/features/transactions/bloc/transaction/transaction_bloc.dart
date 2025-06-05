@@ -1,21 +1,22 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'transaction_event.dart';
 import 'transaction_state.dart';
-import '../mock_transactions.dart';
 import '../../models/transaction_model.dart';
+import '../../repositories/income_repository.dart';
+import '../../repositories/expense_repository.dart';
 
-// Helper to convert mock transactions to real Transaction objects with unique IDs
-List<Transaction> _mockToTransactions(List<MockTransaction> mocks) {
-  int idCounter = 1;
-  return mocks.map((m) => m.toTransaction('mock_${idCounter++}')).toList();
-}
-
-// Bloc
 class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
   static const int _pageSize = 10;
   int _currentPage = 1;
+  final IncomeRepository _incomeRepository;
+  final ExpenseRepository _expenseRepository;
 
-  TransactionBloc() : super(TransactionInitial()) {
+  TransactionBloc({
+    IncomeRepository? incomeRepository,
+    ExpenseRepository? expenseRepository,
+  }) : _incomeRepository = incomeRepository ?? IncomeRepository(),
+       _expenseRepository = expenseRepository ?? ExpenseRepository(),
+       super(TransactionInitial()) {
     on<IncomeLoaded>(_onIncomeLoaded);
     on<ExpensesLoaded>(_onExpensesLoaded);
     on<TransactionLoadMore>(_onTransactionLoadMore);
@@ -32,10 +33,7 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
     _currentPage = 1;
 
     try {
-      // TODO: Replace with actual API call
-      await Future.delayed(const Duration(seconds: 1));
-
-      final transactions = _mockToTransactions(mockTransactions.where((t) => t.isIncome).toList());
+      final transactions = await _incomeRepository.fetchIncomes();
       final totalAmount = transactions.fold<double>(
         0,
         (sum, transaction) => sum + transaction.amount,
@@ -55,7 +53,7 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
         );
       }
     } catch (e) {
-      emit(TransactionError('Failed to load income data'));
+      emit(TransactionError('Failed to load income data: ${e.toString()}'));
     }
   }
 
@@ -67,10 +65,7 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
     _currentPage = 1;
 
     try {
-      // TODO: Replace with actual API call
-      await Future.delayed(const Duration(seconds: 1));
-
-      final transactions = _mockToTransactions(mockTransactions.where((t) => !t.isIncome).toList());
+      final transactions = await _expenseRepository.fetchExpenses();
       final totalAmount = transactions.fold<double>(
         0,
         (sum, transaction) => sum + transaction.amount,
@@ -90,7 +85,7 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
         );
       }
     } catch (e) {
-      emit(TransactionError('Failed to load expenses data'));
+      emit(TransactionError('Failed to load expenses data: ${e.toString()}'));
     }
   }
 
@@ -106,17 +101,16 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
       }
 
       try {
-        // TODO: Replace with actual API call
-        await Future.delayed(const Duration(seconds: 1));
-
         final isIncome = currentState.transactions.first.isIncome;
-        final newTransactions = _mockToTransactions(
-          mockTransactions
-              .where((t) => t.isIncome == isIncome)
-              .skip(_currentPage * _pageSize)
-              .take(_pageSize)
-              .toList()
-        );
+        final repository = isIncome ? _incomeRepository : _expenseRepository;
+        final allTransactions = isIncome 
+            ? await _incomeRepository.fetchIncomes()
+            : await _expenseRepository.fetchExpenses();
+        
+        final newTransactions = allTransactions
+            .skip(_currentPage * _pageSize)
+            .take(_pageSize)
+            .toList();
 
         if (newTransactions.isEmpty) {
           emit(currentState.copyWith(hasReachedMax: true));
@@ -142,7 +136,7 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
           );
         }
       } catch (e) {
-        // Don't emit error state, just keep current state
+        emit(TransactionError('Failed to load more transactions: ${e.toString()}'));
       }
     }
   }
@@ -155,21 +149,20 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
       final currentState = state as TransactionLoaded;
 
       try {
-        // TODO: Replace with actual API call
-        await Future.delayed(const Duration(seconds: 1));
-
         final newTransaction = Transaction(
           id: DateTime.now().millisecondsSinceEpoch.toString(),
           source: event.source,
-          description: event.description,
+          description: event.category,
+          payeeName: event.payee,
           amount: event.amount,
           date: '${event.date.day}/${event.date.month}/${event.date.year}',
           time: '${event.time.hour.toString().padLeft(2, '0')}:${event.time.minute.toString().padLeft(2, '0')}',
           isIncome: true,
-          categories: event.categories,
+          category: event.category,
           notes: event.notes,
         );
 
+        await _incomeRepository.addIncome(newTransaction);
         final updatedTransactions = [newTransaction, ...currentState.transactions];
         final totalAmount = updatedTransactions.fold<double>(
           0,
@@ -183,7 +176,7 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
           categoryTotals: categoryTotals,
         ));
       } catch (e) {
-        // Don't emit error state, just keep current state
+        emit(TransactionError('Failed to add income: ${e.toString()}'));
       }
     }
   }
@@ -196,9 +189,6 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
       final currentState = state as TransactionLoaded;
 
       try {
-        // TODO: Replace with actual API call
-        await Future.delayed(const Duration(seconds: 1));
-
         final newTransaction = Transaction(
           id: DateTime.now().millisecondsSinceEpoch.toString(),
           source: event.category,
@@ -207,11 +197,13 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
           date: '${event.date.day}/${event.date.month}/${event.date.year}',
           time: '${event.time.hour.toString().padLeft(2, '0')}:${event.time.minute.toString().padLeft(2, '0')}',
           isIncome: false,
-          categories: event.tags,
+          category: event.category,
+          mood: Mood.neutral,
           notes: event.notes,
           paymentMethod: event.paymentMethod,
         );
 
+        await _expenseRepository.addExpense(newTransaction);
         final updatedTransactions = [newTransaction, ...currentState.transactions];
         final totalAmount = updatedTransactions.fold<double>(
           0,
@@ -225,7 +217,7 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
           categoryTotals: categoryTotals,
         ));
       } catch (e) {
-        // Don't emit error state, just keep current state
+        emit(TransactionError('Failed to add expense: ${e.toString()}'));
       }
     }
   }
@@ -237,19 +229,19 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
     emit(TransactionLoading());
 
     try {
-      // TODO: Replace with actual API call
-      await Future.delayed(const Duration(seconds: 1));
-
-      final transactions = _mockToTransactions(mockTransactions);
+      final isIncome = state is TransactionLoaded 
+          ? (state as TransactionLoaded).transactions.first.isIncome
+          : true;
+      
+      final repository = isIncome ? _incomeRepository : _expenseRepository;
+      final transactions = isIncome 
+          ? await _incomeRepository.fetchIncomes()
+          : await _expenseRepository.fetchExpenses();
+      
       final filteredTransactions = transactions.where((t) {
         final transactionDate = DateTime.parse(t.date);
-        final isInDateRange = transactionDate.isAfter(event.startDate) && 
-                            transactionDate.isBefore(event.endDate.add(const Duration(days: 1)));
-        // Keep the same transaction type (income/expense) as the current state
-        final isCorrectType = state is TransactionLoaded 
-            ? (state as TransactionLoaded).transactions.first.isIncome == t.isIncome
-            : true;
-        return isInDateRange && isCorrectType;
+        return transactionDate.isAfter(event.startDate) && 
+               transactionDate.isBefore(event.endDate.add(const Duration(days: 1)));
       }).toList();
 
       final totalAmount = filteredTransactions.fold<double>(
@@ -271,22 +263,15 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
         );
       }
     } catch (e) {
-      emit(TransactionError('Failed to filter transactions'));
+      emit(TransactionError('Failed to filter transactions: ${e.toString()}'));
     }
   }
 
   Map<String, double> _calculateCategoryTotals(List<Transaction> transactions) {
-    final totals = <String, double>{};
-    
+    final Map<String, double> totals = {};
     for (final transaction in transactions) {
-      final category = transaction.source;
-      totals[category] = (totals[category] ?? 0) + transaction.amount;
+      totals[transaction.category] = (totals[transaction.category] ?? 0) + transaction.amount;
     }
-    
-    // Sort by amount in descending order
-    final sortedEntries = totals.entries.toList()
-      ..sort((a, b) => b.value.compareTo(a.value));
-    
-    return Map.fromEntries(sortedEntries);
+    return totals;
   }
 }

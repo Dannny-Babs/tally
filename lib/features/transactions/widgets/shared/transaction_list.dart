@@ -2,6 +2,7 @@ import 'package:tally/features/transactions/widgets/shared/activity_card.dart';
 
 import '../../../../core/utils/category_icons.dart';
 import '../../../../utils/utils.dart';
+import '../../views/transaction_detail_screen.dart';
 import '../common/empty_state_placeholder.dart';
 
 /// List widget for displaying transactions with grouping by date
@@ -129,14 +130,28 @@ class TransactionList extends StatelessWidget {
                             offset: Offset(0, 20 * (1 - value)),
                             child: Opacity(
                               opacity: value,
-                              child: ActivityCard(
-                                icon: transaction.isIncome 
-                                    ? CategoryIcons.getIncomeIcon(transaction.source)
-                                    : CategoryIcons.getExpenseIcon(transaction.source),
-                                title: '${transaction.source}: ${transaction.description}',
-                                subtitle: '${transaction.date} • ${transaction.time}',
-                                amount: transaction.amount,
-                                isIncome: transaction.isIncome,
+                              child: GestureDetector(
+                                onTap: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    backgroundColor: Colors.transparent,
+                                    isScrollControlled: true,
+                                    builder: (_) => TransactionDetailScreen(transaction: transaction),
+                                  );
+                                },
+                                child: ActivityCard(
+                                  icon: transaction.isIncome 
+                                      ? CategoryIcons.getIncomeIcon(transaction.source)
+                                      : CategoryIcons.getExpenseIcon(transaction.source),
+                                  title: transaction.isIncome 
+                                      ? ' ${transaction.description}'
+                                      : '${transaction.source}: ${transaction.description}',
+                                  subtitle: transaction.isIncome 
+                                      ? '${transaction.payeeName} • ${transaction.date} • ${transaction.time}'
+                                      : '${transaction.date} • ${transaction.time}',
+                                  amount: transaction.amount,
+                                  isIncome: transaction.isIncome,
+                                ),
                               ),
                             ),
                           );
