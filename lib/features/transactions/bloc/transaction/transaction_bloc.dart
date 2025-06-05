@@ -152,7 +152,7 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
         final newTransaction = Transaction(
           id: DateTime.now().millisecondsSinceEpoch.toString(),
           source: event.source,
-          description: event.category,
+          description: event.source,
           payeeName: event.payee,
           amount: event.amount,
           date: '${event.date.day}/${event.date.month}/${event.date.year}',

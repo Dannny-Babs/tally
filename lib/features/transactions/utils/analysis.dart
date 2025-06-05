@@ -5,7 +5,6 @@ import '../models/transaction_model.dart';
 Map<String, double> totalByCategory(List<Transaction> txs) {
   final Map<String, double> result = {};
   for (final tx in txs) {
-    if (tx.category.isEmpty) continue;
     result[tx.category] = (result[tx.category] ?? 0) + tx.amount;
   }
   return result;

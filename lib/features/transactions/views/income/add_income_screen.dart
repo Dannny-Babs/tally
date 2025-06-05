@@ -617,6 +617,7 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
 
                               context.read<TransactionBloc>().add(
                                 AddIncomeSubmitted(
+                                  
                                   amount: amount,
                                   source: _selectedSource!,
                                   payee: _selectedSource!,

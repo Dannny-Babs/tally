@@ -134,14 +134,20 @@
     "isIncome": true,
     "categories": ["Design"],
     "incomeType": "Freelance",
-    "tags": ["Design"],
+    "tags": [
+      {
+        "name": "Design",
+        "emoji": "🎨"
+      }
+    ],
     "payeeName": "Brand Identity Co.",
     "taxable": false,
     "recurring": false,
     "frequency": null,
     "paymentMethod": "Bank Transfer",
     "receiptImages": [],
-    "notes": "Brand Guide Payment"
+    "notes": "Brand Guide Payment",
+    "mood": "happy"
   },
   {
     "id": "inc7",
@@ -153,14 +159,20 @@
     "isIncome": true,
     "categories": ["Design"],
     "incomeType": "Freelance",
-    "tags": ["Design"],
+    "tags": [
+      {
+        "name": "Design",
+        "emoji": "🎨"
+      }
+    ],
     "payeeName": "Mobile Apps Ltd.",
     "taxable": false,
     "recurring": false,
     "frequency": null,
     "paymentMethod": "Bank Transfer",
     "receiptImages": [],
-    "notes": "UI/UX Design Fee"
+    "notes": "UI/UX Design Fee",
+    "mood": "happy"
   },
   {
     "id": "inc8",
@@ -172,14 +184,20 @@
     "isIncome": true,
     "categories": ["Development"],
     "incomeType": "Salary",
-    "tags": ["Development"],
+    "tags": [
+      {
+        "name": "Development",
+        "emoji": "💻"
+      }
+    ],
     "payeeName": "E-commerce Solutions",
     "taxable": false,
     "recurring": false,
     "frequency": null,
     "paymentMethod": "Bank Transfer",
     "receiptImages": [],
-    "notes": "Store Setup Payment"
+    "notes": "Store Setup Payment",
+    "mood": "neutral"
   },
   {
     "id": "inc9",
@@ -191,14 +209,20 @@
     "isIncome": true,
     "categories": ["Marketing"],
     "incomeType": "Freelance",
-    "tags": ["Marketing"],
+    "tags": [
+      {
+        "name": "Marketing",
+        "emoji": "📢"
+      }
+    ],
     "payeeName": "Content Creators Inc.",
     "taxable": false,
     "recurring": false,
     "frequency": null,
     "paymentMethod": "Bank Transfer",
     "receiptImages": [],
-    "notes": "Content Strategy Fee"
+    "notes": "Content Strategy Fee",
+    "mood": "happy"
   },
   {
     "id": "inc10",
