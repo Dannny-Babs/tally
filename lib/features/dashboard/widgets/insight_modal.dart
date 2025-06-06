@@ -287,7 +287,7 @@ class InsightModal extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: isIncrease ? Colors.red.withOpacity(0.1) : Colors.green.withOpacity(0.1),
+                      color: isIncrease ? Colors.red.withAlpha(100) : Colors.green.withAlpha(100),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
@@ -437,7 +437,7 @@ class InsightModal extends StatelessWidget {
                     dotData: const FlDotData(show: false),
                     belowBarData: BarAreaData(
                       show: true,
-                      color: AppColors.textPrimaryLight.withOpacity(0.1),
+                      color: AppColors.textPrimaryLight.withAlpha(100),
                     ),
                   ),
                 ],

@@ -180,7 +180,7 @@ class DashboardScreen extends StatelessWidget {
                             itemCount: 5,
                             separatorBuilder: (_, __) => SizedBox(height: 1),
                             itemBuilder:
-                                (context, index) => ActivityCard(
+                                (context, index) => ActivitiesCard(
                                   icon: Icons.shopping_bag,
                                   bgColor: AppColors.neutral100,
                                   strokeColor: AppColors.neutral300,
@@ -716,7 +716,7 @@ class _AIInsightsCard extends StatelessWidget {
   }
 }
 
-class ActivityCard extends StatelessWidget {
+class ActivitiesCard extends StatelessWidget {
   final IconData icon;
   final Color bgColor;
   final Color strokeColor;
@@ -726,7 +726,7 @@ class ActivityCard extends StatelessWidget {
   final String amount;
   final Color amountColor;
 
-  const ActivityCard({
+  const ActivitiesCard({
     super.key,
     required this.icon,
     required this.bgColor,

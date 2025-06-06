@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Defines the app’s semantic color system using your warm-brown palette.
+/// Defines the app's semantic color system using your warm-brown palette.
 /// Organized for light/dark theming and clear visual hierarchy.
 class AppColors {
   // Primary Brown Scale
@@ -54,4 +54,8 @@ class AppColors {
   static const Color overlayDark  = Color(0x0AFFFFFF); // 4% white
   static const Color shadowLight  = Color(0x1A000000); // 10% black
   static const Color shadowDark   = Color(0x1A000000); // 10% black
+
+  // Shimmer Colors
+  static const Color shimmerBase = Color(0xFFE0E0E0);
+  static const Color shimmerHighlight = Color(0xFFF5F5F5);
 }

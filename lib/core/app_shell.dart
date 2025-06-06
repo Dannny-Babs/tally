@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:tally/features/transactions/views/expense_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../features/dashboard/views/dashboard_screen.dart';
-import '../features/transactions/views/income_screen.dart';
+import '../features/transactions/views/income/income_screen.dart';
+import '../features/transactions/views/expense/expense_screen.dart';
 import 'widgets/custom_tab_bar.dart';
+import '../features/transactions/bloc/transaction/transaction_bloc.dart';
+import '../features/transactions/bloc/transaction/transaction_event.dart';
+import '../features/transactions/bloc/transaction/transaction_state.dart';
 
 class AppShell extends StatefulWidget {
   const AppShell({super.key});
@@ -13,6 +17,7 @@ class AppShell extends StatefulWidget {
 
 class _AppShellState extends State<AppShell> {
   int _selectedIndex = 0;
+  final _stackKey = GlobalKey();
 
   final List<Widget> _screens = [
     const DashboardScreen(),
@@ -30,16 +35,29 @@ class _AppShellState extends State<AppShell> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: _screens,
-      ),
-      bottomNavigationBar: CustomTabBar(
-        iconPaths: _iconPaths,
-        currentIndex: _selectedIndex,
-        onTabSelected: (index) => setState(() => _selectedIndex = index),
-      ),
+    return BlocBuilder<TransactionBloc, TransactionState>(
+      builder: (context, state) {
+        return Scaffold(
+          body: IndexedStack(
+            key: _stackKey,
+            index: _selectedIndex,
+            children: _screens,
+          ),
+          bottomNavigationBar: CustomTabBar(
+            iconPaths: _iconPaths,
+            currentIndex: _selectedIndex,
+            onTabSelected: (index) {
+              setState(() => _selectedIndex = index);
+              // Load appropriate data when switching tabs
+              if (index == 1) { // Income tab
+                context.read<TransactionBloc>().add(IncomeLoaded());
+              } else if (index == 2) { // Expense tab
+                context.read<TransactionBloc>().add(ExpensesLoaded());
+              }
+            },
+          ),
+        );
+      },
     );
   }
 } 

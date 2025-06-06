@@ -1,0 +1,394 @@
+[
+    {
+      "id": "exp1",
+      "source": "Food & Dining",
+      "description": "Lunch at Bistro",
+      "date": "2024-06-05",
+      "time": "12:45",
+      "amount": 18.50,
+      "isIncome": false,
+      "category": "Food & Dining",
+      "tags": [
+        {
+          "name": "Dining",
+          "emoji": "🍽️"
+        }
+      ],
+      "receiptImages": [],
+      "notes": "",
+      "recurring": false,
+      "mood": "happy"
+    },
+    {
+      "id": "exp2",
+      "source": "Transportation",
+      "description": "Monthly Subway Pass",
+      "date": "2024-06-10",
+      "time": "08:00",
+      "amount": 102.00,
+      "isIncome": false,
+      "category": "Transportation",
+      "tags": [
+        {
+          "name": "Transport",
+          "emoji": "🚗"
+        },
+        {
+          "name": "Subscriptions",
+          "emoji": "🔄"
+        }
+      ],
+      "receiptImages": [],
+      "notes": "",
+      "recurring": true,
+      "frequency": "monthly",
+      "mood": "neutral"
+    },
+    {
+      "id": "exp3",
+      "source": "Housing",
+      "description": "July Rent",
+      "date": "2024-07-01",
+      "time": "09:00",
+      "amount": 1200.00,
+      "isIncome": false,
+      "category": "Housing",
+      "tags": [
+        {
+          "name": "Bills",
+          "emoji": "📝"
+        },
+        {
+          "name": "Subscriptions",
+          "emoji": "🔄"
+        }
+      ],
+      "receiptImages": [],
+      "notes": "",
+      "recurring": true,
+      "frequency": "monthly",
+      "mood": "stressed"
+    },
+    {
+      "id": "exp4",
+      "source": "Utilities",
+      "description": "Water Bill",
+      "date": "2024-07-15",
+      "time": "10:30",
+      "amount": 45.75,
+      "isIncome": false,
+      "category": "Utilities",
+      "tags": [
+        {
+          "name": "Bills",
+          "emoji": "📝"
+        }
+      ],
+      "receiptImages": [],
+      "notes": "",
+      "recurring": true,
+      "frequency": "monthly",
+      "mood": "neutral"
+    },
+    {
+      "id": "exp5",
+      "source": "Shopping",
+      "description": "Summer T-Shirts",
+      "date": "2024-07-20",
+      "time": "14:15",
+      "amount": 65.00,
+      "isIncome": false,
+      "category": "Shopping",
+      "tags": [
+        {
+          "name": "Shopping",
+          "emoji": "🛍️"
+        }
+      ],
+      "receiptImages": [],
+      "notes": "",
+      "recurring": false,
+      "mood": "happy"
+    },
+    {
+      "id": "exp6",
+      "source": "Health & Fitness",
+      "description": "Yoga Class Subscription",
+      "date": "2024-08-02",
+      "time": "18:00",
+      "amount": 50.00,
+      "isIncome": false,
+      "category": "Health & Fitness",
+      "tags": [
+        {
+          "name": "Health",
+          "emoji": "💊"
+        },
+        {
+          "name": "Subscriptions",
+          "emoji": "🔄"
+        }
+      ],
+      "receiptImages": [],
+      "notes": "",
+      "recurring": true,
+      "frequency": "monthly",
+      "mood": "excited"
+    },
+    {
+      "id": "exp7",
+      "source": "Entertainment",
+      "description": "Concert Tickets",
+      "date": "2024-08-18",
+      "time": "20:00",
+      "amount": 120.00,
+      "isIncome": false,
+      "category": "Entertainment",
+      "tags": [
+        {
+          "name": "Entertainment",
+          "emoji": "🎯"
+        }
+      ],
+      "receiptImages": [],
+      "notes": "",
+      "recurring": false,
+      "mood": "excited"
+    },
+    {
+      "id": "exp8",
+      "source": "Travel",
+      "description": "Train to Montreal",
+      "date": "2024-09-01",
+      "time": "07:30",
+      "amount": 75.00,
+      "isIncome": false,
+      "category": "Travel",
+      "tags": [
+        {
+          "name": "Travel",
+          "emoji": "✈️"
+        }
+      ],
+      "receiptImages": [],
+      "notes": "",
+      "recurring": false,
+      "mood": "excited"
+    },
+    {
+      "id": "exp9",
+      "source": "Education",
+      "description": "Online Course Fee",
+      "date": "2024-09-10",
+      "time": "21:00",
+      "amount": 40.00,
+      "isIncome": false,
+      "category": "Education",
+      "tags": [
+        {
+          "name": "Education",
+          "emoji": "📚"
+        }
+      ],
+      "receiptImages": [],
+      "notes": "",
+      "recurring": false,
+      "mood": "excited"
+    },
+    {
+      "id": "exp10",
+      "source": "Personal Care",
+      "description": "Haircut",
+      "date": "2024-09-15",
+      "time": "16:00",
+      "amount": 25.00,
+      "isIncome": false,
+      "category": "Personal Care",
+      "tags": [
+        {
+          "name": "Health",
+          "emoji": "💊"
+        }
+      ],
+      "receiptImages": [],
+      "notes": "",
+      "recurring": false,
+      "mood": "happy"
+    },
+    {
+      "id": "exp11",
+      "source": "Insurance",
+      "description": "Car Insurance Premium",
+      "date": "2024-10-01",
+      "time": "11:00",
+      "amount": 150.00,
+      "isIncome": false,
+        "category": "Insurance",
+      "tags": [
+        {
+          "name": "Bills",
+          "emoji": "📝"
+        },
+        {
+          "name": "Subscriptions",
+          "emoji": "🔄"
+        }
+      ],
+      "receiptImages": [],
+      "notes": "",
+      "recurring": true,
+      "frequency": "monthly",
+      "mood": "neutral"
+    },
+    {
+      "id": "exp12",
+      "source": "Gifts & Donations",
+      "description": "Charity Donation",
+      "date": "2024-10-20",
+      "time": "14:30",
+      "amount": 30.00,
+      "isIncome": false,
+      "category": "Gifts & Donations",
+      "tags": [
+        {
+          "name": "Gifts",
+          "emoji": "🎁"
+        }
+      ],
+      "receiptImages": [],
+      "notes": "",
+      "recurring": false,
+      "mood": "happy"
+    },
+    {
+      "id": "exp13",
+      "source": "Groceries",
+      "description": "Weekly Supermarket Trip",
+      "date": "2024-11-05",
+      "time": "11:00",
+      "amount": 95.00,
+      "isIncome": false,
+      "category": "Groceries",
+      "tags": [
+        {
+          "name": "Groceries",
+          "emoji": "🛒"
+        }
+      ],
+      "receiptImages": [],
+      "notes": "",
+      "recurring": true,
+      "frequency": "weekly",
+      "mood": "neutral"
+    },
+    {
+      "id": "exp14",
+      "source": "Subscriptions",
+      "description": "Streaming Service Monthly",
+      "date": "2024-11-10",
+      "time": "00:00",
+      "amount": 15.00,
+      "isIncome": false,
+      "category": "Subscriptions",
+      "tags": [
+        {
+          "name": "Subscriptions",
+          "emoji": "🔄"
+        },
+        {
+          "name": "Entertainment",
+          "emoji": "🎯"
+        }
+      ],
+      "receiptImages": [],
+      "notes": "",
+      "recurring": true,
+      "frequency": "monthly",
+      "mood": "happy"
+    },
+    {
+      "id": "exp15",
+      "source": "Technology",
+      "description": "New Wireless Mouse",
+      "date": "2024-12-01",
+      "time": "15:00",
+      "amount": 45.00,
+      "isIncome": false,
+      "category": "Hardware",
+      "tags": [
+        {
+          "name": "Shopping",
+          "emoji": "🛍️"
+        }
+      ],
+      "receiptImages": [],
+      "notes": "",
+      "recurring": false,
+      "mood": "excited"
+    },
+    {
+      "id": "exp16",
+      "source": "Transportation",
+      "description": "Ride Share to Airport",
+      "date": "2024-12-20",
+      "time": "06:00",
+      "amount": 35.00,
+      "isIncome": false,
+      "category": "Ride Hailing",
+      "receiptImages": [],
+      "notes": "",
+      "recurring": false
+    },
+    {
+      "id": "exp17",
+      "source": "Travel",
+      "description": "Weekend Hotel Stay",
+      "date": "2025-01-15",
+      "time": "15:00",
+      "amount": 220.00,
+      "isIncome": false,
+      "category": "Hotels",
+      "receiptImages": [],
+      "notes": "",
+      "recurring": false
+    },
+    {
+      "id": "exp18",
+      "source": "School Supplies",
+      "description": "Textbooks Purchase",
+      "date": "2025-01-20",
+      "time": "10:00",
+      "amount": 85.00,
+      "isIncome": false,
+      "category": "School",
+      "receiptImages": [],
+      "notes": "",
+      "recurring": false
+    },
+    {
+      "id": "exp19",
+      "source": "Entertainment",
+      "description": "Movie Night Tickets",
+      "date": "2025-02-05",
+      "time": "20:00",
+      "amount": 28.00,
+      "isIncome": false,
+      "category": "Entertainment",
+      "receiptImages": [],
+      "notes": "",
+      "recurring": false
+    },
+    {
+      "id": "exp20",
+      "source": "Utilities",
+      "description": "Gas Bill",
+      "date": "2025-02-18",
+      "time": "10:00",
+      "amount": 55.00,
+      "isIncome": false,
+      "category": "Utilities",
+      "receiptImages": [],
+      "notes": "",
+      "recurring": false
+    }
+]

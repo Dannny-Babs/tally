@@ -1,9 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:heroicons/heroicons.dart';
-import 'package:tally/features/transactions/views/add_income_screen.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_text_styles.dart';
+import '../../../utils/utils.dart';
 
 class AddOptionsModal extends StatefulWidget {
   const AddOptionsModal({super.key});

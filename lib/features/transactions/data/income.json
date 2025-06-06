@@ -1,0 +1,540 @@
+[
+  {
+    "id": "inc1",
+    "source": "Med Melanin Inc.",
+    "description": "Design Retainer",
+    "date": "2024-06-02",
+    "time": "14:00",
+    "amount": 1500.00,
+    "isIncome": true,
+    "category": "Design",
+    "incomeType": "Salary",
+    "tags": [
+      {
+        "name": "Design",
+        "emoji": "🎨"
+      }
+    ],
+    "payeeName": "Med Melanin Inc.",
+    "taxable": false,
+    "recurring": false,
+    "frequency": null,
+    "paymentMethod": "Bank Transfer",
+    "receiptImages": [],
+    "notes": "Design Retainer",
+    "mood": "happy"
+  },
+  {
+    "id": "inc2",
+    "source": "Tech Solutions LLC",
+    "description": "App Development Fee",
+    "date": "2024-06-10",
+    "time": "09:30",
+    "amount": 2800.00,
+    "isIncome": true,
+    "category": "Development",
+    "incomeType": "Freelance",
+    "tags": [
+      {
+        "name": "Development",
+        "emoji": "💻"
+      }
+    ],
+    "payeeName": "Tech Solutions LLC",
+    "taxable": false,
+    "recurring": false,
+    "frequency": null,
+    "paymentMethod": "Bank Transfer",
+    "receiptImages": [],
+    "notes": "App Development Fee",
+    "mood": "excited"
+  },
+  {
+    "id": "inc3",
+    "source": "Creative Studios",
+    "description": "Logo Commission",
+    "date": "2024-07-01",
+    "time": "14:45",
+    "amount": 950.00,
+    "isIncome": true,
+    "category": "Design",
+    "incomeType": "Freelance",
+    "tags": [
+      {
+        "name": "Design",
+        "emoji": "🎨"
+      }
+    ],
+    "payeeName": "Creative Studios",
+    "taxable": false,
+    "recurring": false,
+    "frequency": null,
+    "paymentMethod": "Bank Transfer",
+    "receiptImages": [],
+    "notes": "Logo Commission",
+    "mood": "happy"
+  },
+  {
+    "id": "inc4",
+    "source": "Digital Marketing Co.",
+    "description": "Campaign Strategy Payment",
+    "date": "2024-07-05",
+    "time": "11:20",
+    "amount": 1200.00,
+    "isIncome": true,
+    "category": "Marketing",
+    "incomeType": "Freelance",
+    "tags": [
+      {
+        "name": "Marketing",
+        "emoji": "📢"
+      }
+    ],
+    "payeeName": "Digital Marketing Co.",
+    "taxable": false,
+    "recurring": false,
+    "frequency": null,
+    "paymentMethod": "Bank Transfer",
+    "receiptImages": [],
+    "notes": "Campaign Strategy Payment",
+    "mood": "excited"
+  },
+  {
+    "id": "inc5",
+    "source": "Web Solutions Inc.",
+    "description": "Maintenance Contract",
+    "date": "2024-08-15",
+    "time": "16:30",
+    "amount": 750.00,
+    "isIncome": true,
+    "category": "Development",
+    "incomeType": "Salary",
+    "tags": [
+      {
+        "name": "Development",
+        "emoji": "💻"
+      }
+    ],
+    "payeeName": "Web Solutions Inc.",
+    "taxable": false,
+    "recurring": false,
+    "frequency": null,
+    "paymentMethod": "Bank Transfer",
+    "receiptImages": [],
+    "notes": "Maintenance Contract",
+    "mood": "neutral"
+  },
+  {
+    "id": "inc6",
+    "source": "Brand Identity Co.",
+    "description": "Brand Guide Payment",
+    "date": "2024-08-20",
+    "time": "13:15",
+    "amount": 1800.00,
+    "isIncome": true,
+    "category": "Design",
+    "incomeType": "Freelance",
+    "tags": [
+      {
+        "name": "Design",
+        "emoji": "🎨"
+      }
+    ],
+    "payeeName": "Brand Identity Co.",
+    "taxable": false,
+    "recurring": false,
+    "frequency": null,
+    "paymentMethod": "Bank Transfer",
+    "receiptImages": [],
+    "notes": "Brand Guide Payment",
+    "mood": "happy"
+  },
+  {
+    "id": "inc7",
+    "source": "Mobile Apps Ltd.",
+    "description": "UI/UX Design Fee",
+    "date": "2024-09-07",
+    "time": "10:45",
+    "amount": 2200.00,
+    "isIncome": true,
+    "category": "Design",
+    "incomeType": "Freelance",
+    "tags": [
+      {
+        "name": "Design",
+        "emoji": "🎨"
+      }
+    ],
+    "payeeName": "Mobile Apps Ltd.",
+    "taxable": false,
+    "recurring": false,
+    "frequency": null,
+    "paymentMethod": "Bank Transfer",
+    "receiptImages": [],
+    "notes": "UI/UX Design Fee",
+    "mood": "happy"
+  },
+  {
+    "id": "inc8",
+    "source": "E-commerce Solutions",
+    "description": "Store Setup Payment",
+    "date": "2024-09-10",
+    "time": "15:30",
+    "amount": 1600.00,
+    "isIncome": true,
+    "category": "Development",
+    "incomeType": "Salary",
+    "tags": [
+      {
+        "name": "Development",
+        "emoji": "💻"
+      }
+    ],
+    "payeeName": "E-commerce Solutions",
+    "taxable": false,
+    "recurring": false,
+    "frequency": null,
+    "paymentMethod": "Bank Transfer",
+    "receiptImages": [],
+    "notes": "Store Setup Payment",
+    "mood": "neutral"
+  },
+  {
+    "id": "inc9",
+    "source": "Content Creators Inc.",
+    "description": "Content Strategy Fee",
+    "date": "2024-09-15",
+    "time": "14:00",
+    "amount": 1100.00,
+    "isIncome": true,
+    "category": "Marketing",
+    "incomeType": "Freelance",
+    "tags": [
+      {
+        "name": "Marketing",
+        "emoji": "📢"
+      }
+    ],
+    "payeeName": "Content Creators Inc.",
+    "taxable": false,
+    "recurring": false,
+    "frequency": null,
+    "paymentMethod": "Bank Transfer",
+    "receiptImages": [],
+    "notes": "Content Strategy Fee",
+    "mood": "happy"
+  },
+  {
+    "id": "inc10",
+    "source": "UI/UX Collective",
+    "description": "App Design Payment",
+    "date": "2024-10-01",
+    "time": "11:45",
+    "amount": 2500.00,
+    "isIncome": true,
+    "category": "Design",
+    "incomeType": "Freelance",
+    "tags": [
+      {
+        "name": "Design",
+        "emoji": "🎨"
+      }
+    ],
+    "payeeName": "UI/UX Collective",
+    "taxable": false,
+    "recurring": false,
+    "frequency": null,
+    "paymentMethod": "Bank Transfer",
+    "receiptImages": [],
+    "notes": "App Design Payment"
+  },
+  {
+    "id": "inc11",
+    "source": "Tech Innovators",
+    "description": "API Development Fee",
+    "date": "2024-10-10",
+    "time": "09:30",
+    "amount": 3200.00,
+    "isIncome": true,
+    "category": "Development",
+    "incomeType": "Salary",
+    "tags": [
+      {
+        "name": "Development",
+        "emoji": "💻"
+      }
+    ],
+    "payeeName": "Tech Innovators",
+    "taxable": false,
+    "recurring": false,
+    "frequency": null,
+    "paymentMethod": "Bank Transfer",
+    "receiptImages": [],
+    "notes": "API Development Fee"
+  },
+  {
+    "id": "inc12",
+    "source": "Design Masters",
+    "description": "Packaging Design Payment",
+    "date": "2024-10-15",
+    "time": "13:45",
+    "amount": 1400.00,
+    "isIncome": true,
+    "category": "Design",
+    "incomeType": "Freelance",
+    "tags": [
+      {
+        "name": "Design",
+        "emoji": "🎨"
+      }
+    ],
+    "payeeName": "Design Masters",
+    "taxable": false,
+    "recurring": false,
+    "frequency": null,
+    "paymentMethod": "Bank Transfer",
+    "receiptImages": [],
+    "notes": "Packaging Design Payment"
+  },
+  {
+    "id": "inc13",
+    "source": "Digital Agency",
+    "description": "SEO Optimization Fee",
+    "date": "2024-11-01",
+    "time": "10:15",
+    "amount": 900.00,
+    "isIncome": true,
+    "category": "Marketing",
+    "incomeType": "Freelance",
+    "tags": [
+      {
+        "name": "Marketing",
+        "emoji": "📢"
+      }
+    ],
+    "payeeName": "Digital Agency",
+    "taxable": false,
+    "recurring": false,
+    "frequency": null,
+    "paymentMethod": "Bank Transfer",
+    "receiptImages": [],
+    "notes": "SEO Optimization Fee"
+  },
+  {
+    "id": "inc14",
+    "source": "Web Developers Co.",
+    "description": "WordPress Development Payment",
+    "date": "2024-11-10",
+    "time": "15:45",
+    "amount": 1800.00,
+    "isIncome": true,
+    "category": "Development",
+    "incomeType": "Salary",
+    "tags": [
+      {
+        "name": "Development",
+        "emoji": "💻"
+      }
+    ],
+    "payeeName": "Web Developers Co.",
+    "taxable": false,
+    "recurring": false,
+    "frequency": null,
+    "paymentMethod": "Cash",
+    "receiptImages": [],
+    "notes": "WordPress Development Payment"
+  },
+  {
+    "id": "inc15",
+    "source": "Brand Designers",
+    "description": "Rebranding Project Fee",
+    "date": "2024-12-01",
+    "time": "14:30",
+    "amount": 3000.00,
+    "isIncome": true,
+    "category": "Design",
+    "incomeType": "Freelance",
+    "tags": [
+      {
+        "name": "Design",
+        "emoji": "🎨"
+      }
+    ],
+    "payeeName": "Brand Designers",
+    "taxable": false,
+    "recurring": false,
+    "frequency": null,
+    "paymentMethod": "Cash",
+    "receiptImages": [],
+    "notes": "Rebranding Project Fee"
+  },
+  {
+    "id": "inc16",
+    "source": "Social Media Pro",
+    "description": "Instagram Campaign Fee",
+    "date": "2024-12-05",
+    "time": "11:00",
+    "amount": 850.00,
+    "isIncome": true,
+    "category": "Marketing",
+    "incomeType": "Freelance",
+    "tags": [
+      {
+        "name": "Marketing",
+        "emoji": "📢"
+      }
+    ],
+    "payeeName": "Social Media Pro",
+    "taxable": false,
+    "recurring": false,
+    "frequency": null,
+    "paymentMethod": "Cash",
+    "receiptImages": [],
+    "notes": "Instagram Campaign Fee"
+  },
+  {
+    "id": "inc17",
+    "source": "App Developers Inc.",
+    "description": "Flutter Development Payment",
+    "date": "2025-01-17",
+    "time": "16:15",
+    "amount": 3500.00,
+    "isIncome": true,
+    "category": "Development",
+    "incomeType": "Salary",
+    "tags": [
+      {
+        "name": "Development",
+        "emoji": "💻"
+      }
+    ],
+    "payeeName": "App Developers Inc.",
+    "taxable": false,
+    "recurring": false,
+    "frequency": null,
+    "paymentMethod": "Cash",
+    "receiptImages": [],
+    "notes": "Flutter Development Payment"
+  },
+  {
+    "id": "inc18",
+    "source": "Design Studio",
+    "description": "Website Redesign Payment",
+    "date": "2025-01-22",
+    "time": "13:30",
+    "amount": 2000.00,
+    "isIncome": true,
+    "category": "Design",
+    "incomeType": "Freelance",
+    "tags": [
+      {
+        "name": "Design",
+        "emoji": "🎨"
+      }
+    ],
+    "payeeName": "Design Studio",
+    "taxable": false,
+    "recurring": false,
+    "frequency": null,
+    "paymentMethod": "Bank Transfer",
+    "receiptImages": [],
+    "notes": "Website Redesign Payment"
+  },
+  {
+    "id": "inc19",
+    "source": "Digital Marketing Pro",
+    "description": "PPC Campaign Fee",
+    "date": "2025-02-10",
+    "time": "10:45",
+    "amount": 1200.00,
+    "isIncome": true,
+    "category": "Marketing",
+    "incomeType": "Freelance",
+    "tags": [
+      {
+        "name": "Marketing",
+        "emoji": "📢"
+      }
+    ],
+    "payeeName": "Digital Marketing Pro",
+    "taxable": false,
+    "recurring": false,
+    "frequency": null,
+    "paymentMethod": "Bank Transfer",
+    "receiptImages": [],
+    "notes": "PPC Campaign Fee"
+  },
+  {
+    "id": "inc20",
+    "source": "Employer",
+    "description": "February Salary",
+    "date": "2025-02-28",
+    "time": "09:00",
+    "amount": 3500.00,
+    "isIncome": true,
+    "category": "Job Payment",
+    "incomeType": "Salary",
+          "tags": [
+      {
+        "name": "Job Payment",
+        "emoji": "💰"
+      }
+    ],
+    "payeeName": "Employer",
+    "taxable": false,
+    "recurring": false,
+    "frequency": null,
+    "paymentMethod": "Cash",
+    "receiptImages": [],
+    "notes": "February Salary"
+  },
+  {
+    "id": "inc21",
+    "source": "Employer",
+    "description": "March Salary",
+    "date": "2025-06-01",
+    "time": "09:00",
+    "amount": 3500.00,
+    "isIncome": true,
+    "category": "Job Payment",
+    "incomeType": "Salary",
+    "tags": [
+      {
+        "name": "Job Payment",
+        "emoji": "💰"
+      }
+    ],
+    "payeeName": "Employer",
+    "taxable": true,
+    "recurring": false,
+    "frequency": null,
+    "paymentMethod": "Cash",
+    "receiptImages": [],
+    "notes": "March Salary for 2025, working 10 hours a week and 40 hours a month"
+  },
+  {
+    "id": "inc22",
+    "source": "Freelance",
+    "description": "Freelance Work",
+    "date": "2025-06-03",
+    "time": "09:00",
+    "amount": 1000.00,
+    "isIncome": true,
+    "category": "Freelance",
+    "incomeType": "Freelance",
+      "tags": [
+      {
+        "name": "Freelance",
+        "emoji": "💰"
+      }
+    ],
+    "payeeName": "Strategic Counsel",
+    "taxable": true,
+    "recurring": false,
+    "frequency": null,
+    "paymentMethod": "Bank Transfer",
+    "receiptImages": [],
+    "notes": "Freelance Work for Strategic Counsel, for the Dec and Jan months. Total amount of time spent was 20 hours a week."
+  }
+]
+  
