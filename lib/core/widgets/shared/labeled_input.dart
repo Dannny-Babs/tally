@@ -28,54 +28,39 @@ class LabeledInput extends StatelessWidget {
             Text(
               label,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: AppColors.textPrimaryLight,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14,
-                    height: 1.5,
-                    letterSpacing: 0.5,
-                    fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
-                  ),
+                color: AppColors.neutral900,
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+                letterSpacing: -0.15,
+                fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+              ),
             ),
             if (isRequired)
               Text(
                 ' *',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: AppColors.error.withAlpha(76),
-                      fontSize: 14,
-                      height: 1.5,
-                      letterSpacing: 0.5,
-                      fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
-                    ),
+                  color: AppColors.error.withAlpha(76),
+                  fontSize: 14,
+                  height: 1.5,
+                  letterSpacing: 0.5,
+                  fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                ),
               ),
           ],
         ),
-        const SizedBox(height: 8),
-        Container(
-          decoration: BoxDecoration(
-            color: errorText != null
-                ? AppColors.error.withAlpha(127)
-                : AppColors.backgroundLight,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              color: AppColors.borderLight,
-              width: 1,
-            ),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          child: child,
-        ),
+        const SizedBox(height: 4),
+        child,
         if (errorText != null) ...[
           const SizedBox(height: 4),
           Text(
             errorText!,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: AppColors.error,
-                  fontSize: 14,
-                  height: 1.5,
-                  letterSpacing: 0.5,
-                  fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
-
-                ),
+              color: AppColors.error,
+              fontSize: 14,
+              height: 1.5,
+              letterSpacing: 0.5,
+              fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+            ),
           ),
         ],
       ],

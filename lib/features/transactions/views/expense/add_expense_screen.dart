@@ -604,31 +604,56 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
                       ),
 
                       const SizedBox(height: 16),
-                      SwitchListTile(
-                        title: Text(
-                          'Repeat this expense',
-                          style: AppTextStyles.bodyMedium.copyWith(
-                            color: AppColors.textPrimaryLight,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 14,
-                            letterSpacing: -0.15,
-                          ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Repeat this expense',
+                                    style: AppTextStyles.bodyMedium.copyWith(
+                                      color: AppColors.textPrimaryLight,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14,
+                                      letterSpacing: -0.15,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    'Set up recurring expense',
+                                    style: AppTextStyles.bodyMedium.copyWith(
+                                      color: AppColors.neutral700,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 12,
+                                      letterSpacing: -0.15,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Transform.scale(
+                              scale: 0.8, // Makes the switch smaller
+                              child: Switch(
+                                
+                                value: _isRecurring,
+                                onChanged: (bool value) {
+                                  setState(() {
+                                    _isRecurring = value;
+                                  });
+                                },
+                                trackOutlineColor: MaterialStateProperty.all(AppColors.neutral200),
+                                activeColor: AppColors.primary800,
+                                inactiveThumbColor: AppColors.neutral400,
+                                inactiveTrackColor: AppColors.neutral200,
+                                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              ),
+                            ),
+                          ],
                         ),
-                        subtitle: Text(
-                          'Set up recurring expense',
-                          style: AppTextStyles.bodyMedium.copyWith(
-                            color: AppColors.neutral700,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 12,
-                            letterSpacing: -0.15,
-                          ),
-                        ),
-                        value: _isRecurring,
-                        onChanged: (bool value) {
-                          setState(() {
-                            _isRecurring = value;
-                          });
-                        },
                       ),
 
                       if (_isRecurring) ...[
