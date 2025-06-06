@@ -59,63 +59,66 @@ class SettingsScreen extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
-          child: Container(
-            decoration: BoxDecoration(
-              color: AppColors.backgroundLight,
-              borderRadius: BorderRadius.only(
-                bottomRight: Radius.circular(24),
-                bottomLeft: Radius.circular(24),
-              ),
-              border: Border.all(color: AppColors.borderLight),
-            ),
-
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start, 
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Text(
-                    'Profile',
-                    style: AppTextStyles.displaySmall.copyWith(
-                      color: AppColors.textPrimaryLight,
-                      fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
-                      fontSize: 22,
-                      letterSpacing: -0.5,
-                      fontWeight: FontWeight.w600,
+          child: CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.backgroundLight,
+                    borderRadius: const BorderRadius.only(
+                      bottomRight: Radius.circular(24),
+                      bottomLeft: Radius.circular(24),
                     ),
+                    border: Border.all(color: AppColors.borderLight),
                   ),
-                ),
-               
-
-                Center(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 400),
-                    child: SingleChildScrollView(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 24,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          _ProfileHeader(
-                            name: 'Daniel Baker',
-                            email: 'daniel.baker@gmail.com',
-                            onEditProfile: () {
-                              // Dispatch your ProfileBloc event here
-                            },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Text(
+                          'Profile',
+                          style: AppTextStyles.displaySmall.copyWith(
+                            color: AppColors.textPrimaryLight,
+                            fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                            fontSize: 22,
+                            letterSpacing: -0.5,
+                            fontWeight: FontWeight.w600,
                           ),
-                          const SizedBox(height: 32),
-                          _AccountsCard(),
-                          const SizedBox(height: 32),
-                          _PreferencesCard(),
-                        ],
+                        ),
                       ),
-                    ),
+                      Center(
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 400),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 24,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                _ProfileHeader(
+                                  name: 'Daniel Baker',
+                                  email: 'daniel.baker@gmail.com',
+                                  onEditProfile: () {
+                                    // Dispatch your ProfileBloc event here
+                                  },
+                                ),
+                                const SizedBox(height: 32),
+                                _AccountsCard(),
+                                const SizedBox(height: 32),
+                                _PreferencesCard(),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

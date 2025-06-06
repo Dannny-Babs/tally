@@ -19,4 +19,13 @@ class FaceIdToggled extends PreferencesEvent {
   List<Object?> get props => [value];
 }
 
-class PinCodeTapped extends PreferencesEvent {} 
+class PinCodeTapped extends PreferencesEvent {}
+class SavePinRequested extends PreferencesEvent {
+  final String pin;
+  final String confirmPin;
+  SavePinRequested(this.pin, this.confirmPin);
+  @override
+  List<Object?> get props => [pin, confirmPin];
+}
+class PinModalClosed extends PreferencesEvent {}
+class LogoutRequested extends PreferencesEvent {} 
