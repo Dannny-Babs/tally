@@ -13,13 +13,15 @@
 //
 // To use: Copy this file into your project, wire up the BLoC providers, and the UI will match the mockup using your app's look-and-feel.
 
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tally/utils/packages.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import 'bloc/accounts_bloc.dart';
+import 'bloc/accounts_state.dart';
+import 'bloc/accounts_event.dart';
 import 'bloc/preferences_bloc.dart';
+import 'bloc/preferences_state.dart';
+import 'bloc/preferences_event.dart';
 
 // --- BLoC Event/State Definitions ---
 // Minimal event/state classes for demonstration. Replace with your actual implementations as needed.
