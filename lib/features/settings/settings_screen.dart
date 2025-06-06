@@ -69,32 +69,52 @@ class SettingsScreen extends StatelessWidget {
               border: Border.all(color: AppColors.borderLight),
             ),
 
-            child: Center(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 400),
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 24,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      _ProfileHeader(
-                        name: 'Daniel Baker',
-                        email: 'daniel.baker@gmail.com',
-                        onEditProfile: () {
-                          // Dispatch your ProfileBloc event here
-                        },
-                      ),
-                      const SizedBox(height: 32),
-                      _AccountsCard(),
-                      const SizedBox(height: 32),
-                      _PreferencesCard(),
-                    ],
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start, 
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Text(
+                    'Profile',
+                    style: AppTextStyles.displaySmall.copyWith(
+                      color: AppColors.textPrimaryLight,
+                      fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                      fontSize: 22,
+                      letterSpacing: -0.5,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
-              ),
+               
+
+                Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 400),
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 24,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          _ProfileHeader(
+                            name: 'Daniel Baker',
+                            email: 'daniel.baker@gmail.com',
+                            onEditProfile: () {
+                              // Dispatch your ProfileBloc event here
+                            },
+                          ),
+                          const SizedBox(height: 32),
+                          _AccountsCard(),
+                          const SizedBox(height: 32),
+                          _PreferencesCard(),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
