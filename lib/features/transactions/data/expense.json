@@ -7,7 +7,7 @@
       "time": "12:45",
       "amount": 18.50,
       "isIncome": false,
-      "categories": ["Food & Dining"],
+      "category": "Food & Dining",
       "tags": [
         {
           "name": "Dining",
@@ -27,7 +27,7 @@
       "time": "08:00",
       "amount": 102.00,
       "isIncome": false,
-      "categories": ["Transportation"],
+      "category": "Transportation",
       "tags": [
         {
           "name": "Transport",
@@ -52,7 +52,7 @@
       "time": "09:00",
       "amount": 1200.00,
       "isIncome": false,
-      "categories": ["Housing"],
+      "category": "Housing",
       "tags": [
         {
           "name": "Bills",
@@ -77,7 +77,7 @@
       "time": "10:30",
       "amount": 45.75,
       "isIncome": false,
-      "categories": ["Utilities"],
+      "category": "Utilities",
       "tags": [
         {
           "name": "Bills",
@@ -98,7 +98,7 @@
       "time": "14:15",
       "amount": 65.00,
       "isIncome": false,
-      "categories": ["Shopping", "Clothing"],
+      "category": "Shopping",
       "tags": [
         {
           "name": "Shopping",
@@ -118,7 +118,7 @@
       "time": "18:00",
       "amount": 50.00,
       "isIncome": false,
-      "categories": ["Health & Fitness"],
+      "category": "Health & Fitness",
       "tags": [
         {
           "name": "Health",
@@ -143,7 +143,7 @@
       "time": "20:00",
       "amount": 120.00,
       "isIncome": false,
-      "categories": ["Entertainment"],
+      "category": "Entertainment",
       "tags": [
         {
           "name": "Entertainment",
@@ -163,7 +163,7 @@
       "time": "07:30",
       "amount": 75.00,
       "isIncome": false,
-      "categories": ["Travel"],
+      "category": "Travel",
       "tags": [
         {
           "name": "Travel",
@@ -183,7 +183,7 @@
       "time": "21:00",
       "amount": 40.00,
       "isIncome": false,
-      "categories": ["Education"],
+      "category": "Education",
       "tags": [
         {
           "name": "Education",
@@ -203,7 +203,7 @@
       "time": "16:00",
       "amount": 25.00,
       "isIncome": false,
-      "categories": ["Personal Care"],
+      "category": "Personal Care",
       "tags": [
         {
           "name": "Health",
@@ -223,7 +223,7 @@
       "time": "11:00",
       "amount": 150.00,
       "isIncome": false,
-      "categories": ["Insurance"],
+        "category": "Insurance",
       "tags": [
         {
           "name": "Bills",
@@ -248,7 +248,7 @@
       "time": "14:30",
       "amount": 30.00,
       "isIncome": false,
-      "categories": ["Gifts & Donations"],
+      "category": "Gifts & Donations",
       "tags": [
         {
           "name": "Gifts",
@@ -268,7 +268,7 @@
       "time": "11:00",
       "amount": 95.00,
       "isIncome": false,
-      "categories": ["Groceries"],
+      "category": "Groceries",
       "tags": [
         {
           "name": "Groceries",
@@ -289,7 +289,7 @@
       "time": "00:00",
       "amount": 15.00,
       "isIncome": false,
-      "categories": ["Subscriptions"],
+      "category": "Subscriptions",
       "tags": [
         {
           "name": "Subscriptions",
@@ -314,7 +314,7 @@
       "time": "15:00",
       "amount": 45.00,
       "isIncome": false,
-      "categories": ["Hardware"],
+      "category": "Hardware",
       "tags": [
         {
           "name": "Shopping",
@@ -334,7 +334,7 @@
       "time": "06:00",
       "amount": 35.00,
       "isIncome": false,
-      "categories": ["Ride Hailing"],
+      "category": "Ride Hailing",
       "receiptImages": [],
       "notes": "",
       "recurring": false
@@ -347,7 +347,7 @@
       "time": "15:00",
       "amount": 220.00,
       "isIncome": false,
-      "categories": ["Hotels"],
+      "category": "Hotels",
       "receiptImages": [],
       "notes": "",
       "recurring": false
@@ -360,7 +360,7 @@
       "time": "10:00",
       "amount": 85.00,
       "isIncome": false,
-      "categories": ["School"],
+      "category": "School",
       "receiptImages": [],
       "notes": "",
       "recurring": false
@@ -373,7 +373,7 @@
       "time": "20:00",
       "amount": 28.00,
       "isIncome": false,
-      "categories": ["Entertainment"],
+      "category": "Entertainment",
       "receiptImages": [],
       "notes": "",
       "recurring": false
@@ -386,7 +386,7 @@
       "time": "10:00",
       "amount": 55.00,
       "isIncome": false,
-      "categories": ["Utilities"],
+      "category": "Utilities",
       "receiptImages": [],
       "notes": "",
       "recurring": false

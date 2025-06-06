@@ -7,7 +7,7 @@
     "time": "14:00",
     "amount": 1500.00,
     "isIncome": true,
-    "categories": ["Design"],
+    "category": "Design",
     "incomeType": "Salary",
     "tags": [
       {
@@ -32,7 +32,7 @@
     "time": "09:30",
     "amount": 2800.00,
     "isIncome": true,
-    "categories": ["Development"],
+    "category": "Development",
     "incomeType": "Freelance",
     "tags": [
       {
@@ -57,7 +57,7 @@
     "time": "14:45",
     "amount": 950.00,
     "isIncome": true,
-    "categories": ["Design"],
+    "category": "Design",
     "incomeType": "Freelance",
     "tags": [
       {
@@ -82,7 +82,7 @@
     "time": "11:20",
     "amount": 1200.00,
     "isIncome": true,
-    "categories": ["Marketing"],
+    "category": "Marketing",
     "incomeType": "Freelance",
     "tags": [
       {
@@ -107,7 +107,7 @@
     "time": "16:30",
     "amount": 750.00,
     "isIncome": true,
-    "categories": ["Development"],
+    "category": "Development",
     "incomeType": "Salary",
     "tags": [
       {
@@ -132,7 +132,7 @@
     "time": "13:15",
     "amount": 1800.00,
     "isIncome": true,
-    "categories": ["Design"],
+    "category": "Design",
     "incomeType": "Freelance",
     "tags": [
       {
@@ -157,7 +157,7 @@
     "time": "10:45",
     "amount": 2200.00,
     "isIncome": true,
-    "categories": ["Design"],
+    "category": "Design",
     "incomeType": "Freelance",
     "tags": [
       {
@@ -182,7 +182,7 @@
     "time": "15:30",
     "amount": 1600.00,
     "isIncome": true,
-    "categories": ["Development"],
+    "category": "Development",
     "incomeType": "Salary",
     "tags": [
       {
@@ -207,7 +207,7 @@
     "time": "14:00",
     "amount": 1100.00,
     "isIncome": true,
-    "categories": ["Marketing"],
+    "category": "Marketing",
     "incomeType": "Freelance",
     "tags": [
       {
@@ -232,9 +232,14 @@
     "time": "11:45",
     "amount": 2500.00,
     "isIncome": true,
-    "categories": ["Design"],
+    "category": "Design",
     "incomeType": "Freelance",
-    "tags": ["Design"],
+    "tags": [
+      {
+        "name": "Design",
+        "emoji": "🎨"
+      }
+    ],
     "payeeName": "UI/UX Collective",
     "taxable": false,
     "recurring": false,
@@ -251,9 +256,14 @@
     "time": "09:30",
     "amount": 3200.00,
     "isIncome": true,
-    "categories": ["Development"],
+    "category": "Development",
     "incomeType": "Salary",
-    "tags": ["Development"],
+    "tags": [
+      {
+        "name": "Development",
+        "emoji": "💻"
+      }
+    ],
     "payeeName": "Tech Innovators",
     "taxable": false,
     "recurring": false,
@@ -270,9 +280,14 @@
     "time": "13:45",
     "amount": 1400.00,
     "isIncome": true,
-    "categories": ["Design"],
+    "category": "Design",
     "incomeType": "Freelance",
-    "tags": ["Design"],
+    "tags": [
+      {
+        "name": "Design",
+        "emoji": "🎨"
+      }
+    ],
     "payeeName": "Design Masters",
     "taxable": false,
     "recurring": false,
@@ -289,9 +304,14 @@
     "time": "10:15",
     "amount": 900.00,
     "isIncome": true,
-    "categories": ["Marketing"],
+    "category": "Marketing",
     "incomeType": "Freelance",
-    "tags": ["Marketing"],
+    "tags": [
+      {
+        "name": "Marketing",
+        "emoji": "📢"
+      }
+    ],
     "payeeName": "Digital Agency",
     "taxable": false,
     "recurring": false,
@@ -308,9 +328,14 @@
     "time": "15:45",
     "amount": 1800.00,
     "isIncome": true,
-    "categories": ["Development"],
+    "category": "Development",
     "incomeType": "Salary",
-    "tags": ["Development"],
+    "tags": [
+      {
+        "name": "Development",
+        "emoji": "💻"
+      }
+    ],
     "payeeName": "Web Developers Co.",
     "taxable": false,
     "recurring": false,
@@ -327,9 +352,14 @@
     "time": "14:30",
     "amount": 3000.00,
     "isIncome": true,
-    "categories": ["Design"],
+    "category": "Design",
     "incomeType": "Freelance",
-    "tags": ["Design"],
+    "tags": [
+      {
+        "name": "Design",
+        "emoji": "🎨"
+      }
+    ],
     "payeeName": "Brand Designers",
     "taxable": false,
     "recurring": false,
@@ -346,9 +376,14 @@
     "time": "11:00",
     "amount": 850.00,
     "isIncome": true,
-    "categories": ["Marketing"],
+    "category": "Marketing",
     "incomeType": "Freelance",
-    "tags": ["Marketing"],
+    "tags": [
+      {
+        "name": "Marketing",
+        "emoji": "📢"
+      }
+    ],
     "payeeName": "Social Media Pro",
     "taxable": false,
     "recurring": false,
@@ -365,9 +400,14 @@
     "time": "16:15",
     "amount": 3500.00,
     "isIncome": true,
-    "categories": ["Development"],
+    "category": "Development",
     "incomeType": "Salary",
-    "tags": ["Development"],
+    "tags": [
+      {
+        "name": "Development",
+        "emoji": "💻"
+      }
+    ],
     "payeeName": "App Developers Inc.",
     "taxable": false,
     "recurring": false,
@@ -384,9 +424,14 @@
     "time": "13:30",
     "amount": 2000.00,
     "isIncome": true,
-    "categories": ["Design"],
+    "category": "Design",
     "incomeType": "Freelance",
-    "tags": ["Design"],
+    "tags": [
+      {
+        "name": "Design",
+        "emoji": "🎨"
+      }
+    ],
     "payeeName": "Design Studio",
     "taxable": false,
     "recurring": false,
@@ -403,9 +448,14 @@
     "time": "10:45",
     "amount": 1200.00,
     "isIncome": true,
-    "categories": ["Marketing"],
+    "category": "Marketing",
     "incomeType": "Freelance",
-    "tags": ["Marketing"],
+    "tags": [
+      {
+        "name": "Marketing",
+        "emoji": "📢"
+      }
+    ],
     "payeeName": "Digital Marketing Pro",
     "taxable": false,
     "recurring": false,
@@ -422,9 +472,14 @@
     "time": "09:00",
     "amount": 3500.00,
     "isIncome": true,
-    "categories": ["Job Payment"],
+    "category": "Job Payment",
     "incomeType": "Salary",
-    "tags": ["Job Payment"],
+          "tags": [
+      {
+        "name": "Job Payment",
+        "emoji": "💰"
+      }
+    ],
     "payeeName": "Employer",
     "taxable": false,
     "recurring": false,
@@ -441,9 +496,14 @@
     "time": "09:00",
     "amount": 3500.00,
     "isIncome": true,
-    "categories": ["Job Payment"],
+    "category": "Job Payment",
     "incomeType": "Salary",
-    "tags": ["Job Payment"],
+    "tags": [
+      {
+        "name": "Job Payment",
+        "emoji": "💰"
+      }
+    ],
     "payeeName": "Employer",
     "taxable": true,
     "recurring": false,
@@ -460,9 +520,14 @@
     "time": "09:00",
     "amount": 1000.00,
     "isIncome": true,
-    "categories": ["Freelance"],
+    "category": "Freelance",
     "incomeType": "Freelance",
-    "tags": ["Freelance"],
+      "tags": [
+      {
+        "name": "Freelance",
+        "emoji": "💰"
+      }
+    ],
     "payeeName": "Strategic Counsel",
     "taxable": true,
     "recurring": false,

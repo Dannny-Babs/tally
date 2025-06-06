@@ -3,23 +3,30 @@ import 'package:equatable/equatable.dart';
 /// A small helper class that holds a single "tag" (name + emoji).
 class Tag extends Equatable {
   final String name;   // e.g. "Movies"
-  final String emoji;  // e.g. "🎬"
+  final String emoji;
+  final String? color;  // Made optional
 
-  const Tag({required this.name, required this.emoji});
+  const Tag({
+    required this.name, 
+    required this.emoji, 
+    this.color,  // Made optional
+  });
 
   @override
-  List<Object?> get props => [name, emoji];
+  List<Object?> get props => [name, emoji, color];
 
   factory Tag.fromJson(Map<String, dynamic> json) {
     return Tag(
       name: json['name'] as String,
       emoji: json['emoji'] as String,
+      color: json['color'] as String?,  // Made optional
     );
   }
 
   Map<String, dynamic> toJson() => {
         'name': name,
         'emoji': emoji,
+        if (color != null) 'color': color,  // Only include if not null
       };
 }
 
@@ -97,7 +104,7 @@ class Transaction extends Equatable {
       time: json['time'] as String,
       amount: (json['amount'] as num).toDouble(),
       isIncome: json['isIncome'] as bool,
-      category: json['category'] as String,
+      category: json['category'] as String? ?? '',  // Handle null case
       tags: (json['tags'] as List?)
               ?.map((t) => Tag.fromJson(t as Map<String, dynamic>))
               .toList() ??

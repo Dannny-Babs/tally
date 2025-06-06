@@ -1,9 +1,7 @@
-import '../../../../core/utils/category_icons.dart';
 import '../../../../utils/utils.dart';
 import '../../../../utils/widgets.dart' hide ActivityCard;
 import '../../widgets/common/empty_state_placeholder.dart';
 import '../../widgets/exports.dart' hide ActivityCard;
-import '../../widgets/shared/activity_card.dart';
 
 class IncomeScreen extends StatelessWidget {
   const IncomeScreen({super.key});
@@ -258,160 +256,6 @@ class IncomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTransactionGroups(List<Transaction> transactions, bool hasReachedMax) {
-    final groups = _groupTransactions(transactions);
-    final entries = groups.entries.toList();
-
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          if (index >= entries.length * 2) {
-            if (hasReachedMax) {
-              return Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: Text(
-                    'Oops, that\'s all!',
-                    style: AppTextStyles.bodySmall.copyWith(
-                      color: AppColors.neutral600,
-                      fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
-                    ),
-                  ),
-                ),
-              );
-            } else {
-              return Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  ),
-                ),
-              );
-            }
-          }
-
-          final groupIndex = index ~/ 2;
-          final isHeader = index.isEven;
-          final group = entries[groupIndex];
-
-          if (isHeader) {
-            return Container(
-              color: AppColors.backgroundLight,
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              child: Text(
-                group.key,
-                style: AppTextStyles.bodyMedium.copyWith(
-                  color: AppColors.textPrimaryLight,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
-                  fontSize: 14,
-                  letterSpacing: -0.15,
-                ),
-              ),
-            );
-          } else {
-            return Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: AppColors.borderLight),
-              ),
-              padding: const EdgeInsets.all(8),
-              margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-              child: Column(
-                children: group.value.map((transaction) {
-                  return TweenAnimationBuilder<double>(
-                    tween: Tween(begin: 0.0, end: 1.0),
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeOut,
-                    builder: (context, value, child) {
-                      return Transform.translate(
-                        offset: Offset(0, 20 * (1 - value)),
-                        child: Opacity(
-                          opacity: value,
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 8),
-                            child: ActivityCard(
-                              icon: CategoryIcons.getIncomeIcon(transaction.source),
-                              title: transaction.description,
-                              subtitle: '${transaction.source} • ${transaction.date}',
-                              amount: transaction.amount,
-                              isIncome: true,
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                }).toList(),
-              ),
-            );
-          }
-        },
-        childCount: entries.length * 2 + 1,
-      ),
-    );
-  }
-
-  Map<String, List<Transaction>> _groupTransactions(List<Transaction> transactions) {
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-    final thisWeek = today.subtract(Duration(days: today.weekday - 1));
-    final lastWeek = thisWeek.subtract(const Duration(days: 7));
-    final thisMonth = DateTime(now.year, now.month, 1);
-    final lastMonth = DateTime(now.year, now.month - 1, 1);
-
-    final groups = <String, List<Transaction>>{};
-    
-    for (final transaction in transactions) {
-      final date = DateTime.parse(transaction.date);
-      String group;
-
-      if (date.isAtSameMomentAs(today)) {
-        group = 'Today';
-      } else if (date.isAfter(thisWeek.subtract(const Duration(days: 1)))) {
-        group = 'This Week';
-      } else if (date.isAfter(lastWeek.subtract(const Duration(days: 1)))) {
-        group = 'Last Week';
-      } else if (date.isAfter(thisMonth.subtract(const Duration(days: 1)))) {
-        group = 'This Month';
-      } else if (date.isAfter(lastMonth.subtract(const Duration(days: 1)))) {
-        group = 'Last Month';
-      } else {
-        group = 'Older';
-      }
-
-      groups.putIfAbsent(group, () => []).add(transaction);
-    }
-
-    return Map.fromEntries(
-      groups.entries.where((e) => e.value.isNotEmpty).toList()
-        ..sort((a, b) => _getGroupOrder(a.key).compareTo(_getGroupOrder(b.key))),
-    );
-  }
-
-  int _getGroupOrder(String group) {
-    switch (group) {
-      case 'Today':
-        return 0;
-      case 'This Week':
-        return 1;
-      case 'Last Week':
-        return 2;
-      case 'This Month':
-        return 3;
-      case 'Last Month':
-        return 4;
-      case 'Older':
-        return 5;
-      default:
-        return 6;
-    }
-  }
-
   Widget _buildIncomeSplitCard({required Map<String, double> sources}) {
     final entries = sources.entries.take(3).toList();
     return Container(
@@ -478,28 +322,4 @@ class IncomeScreen extends StatelessWidget {
     return totals;
   }
 
-  _getIconForSource(String source) {
-    switch (source.toLowerCase()) {
-      case 'freelance':
-        return HugeIconsSolid.briefcase01;
-      case 'job':
-        return HugeIconsSolid.briefcase02;
-      case 'design':
-        return HugeIconsSolid.canvas;
-      case 'development':
-        return HugeIconsSolid.developer;
-      case 'marketing':
-        return HugeIconsSolid.megaphone01;
-      case 'investment':
-        return HugeIconsSolid.chart01;
-      case 'family':
-        return HugeIconsSolid.userGroup02;
-      case 'refund':
-        return HugeIconsSolid.cash02;
-      case 'bonus':
-        return HugeIconsSolid.tips;
-      default:
-        return HugeIconsSolid.money03;
-    }
-  }
 } 

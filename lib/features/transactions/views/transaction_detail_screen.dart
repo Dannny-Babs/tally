@@ -1,324 +1,336 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hugeicons_pro/hugeicons.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../models/transaction_model.dart';
-import 'dart:math' as math;
 
 class TransactionDetailScreen extends StatelessWidget {
-  const TransactionDetailScreen({super.key, required this.transaction});
-
   final Transaction transaction;
+  final VoidCallback? onEdit;
+  final VoidCallback? onDelete;
+  final VoidCallback? onClose;
 
-  Color _getRandomColor(double alpha) {
-    final random = math.Random();
-    final baseColor = Color.fromRGBO(
-      random.nextInt(256),
-      random.nextInt(256),
-      random.nextInt(256),
-      1,
-    );
-    return baseColor.withOpacity(alpha);
-  }
+  const TransactionDetailScreen({
+    super.key,
+    required this.transaction,
+    this.onEdit,
+    this.onDelete,
+    this.onClose,
+  });
 
   @override
   Widget build(BuildContext context) {
     final isIncome = transaction.isIncome;
-    final randomColor = _getRandomColor(1);
+    final amountColor = isIncome ? AppColors.success : AppColors.error;
+    final tag = transaction.tags.isNotEmpty ? transaction.tags.first : null;
 
-    return DraggableScrollableSheet(
-      initialChildSize: 0.9,
-      minChildSize: 0.5,
-      maxChildSize: 0.95,
-      builder: (context, scrollController) {
-        return TweenAnimationBuilder<double>(
-          tween: Tween(begin: 0.0, end: 1.0),
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeOut,
-          builder: (context, value, child) {
-            return Transform.translate(
-              offset: Offset(0, 20 * (1 - value)),
-              child: child,
-            );
-          },
-          child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 20),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(24),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 20,
-                  offset: const Offset(0, -4),
-                ),
-              ],
-            ),
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 20),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 400),
+        child: Material(
+          color: AppColors.surfaceLight,
+          borderRadius: BorderRadius.circular(16),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 250),
+            curve: Curves.easeOutCubic,
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
             child: Column(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Handle
-                Container(
-                  margin: const EdgeInsets.only(top: 12),
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: AppColors.neutral300,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
+                // HEADER
+                _HeaderSection(onClose: onClose),
+                const SizedBox(height: 16),
+                // AMOUNT, PAYEE, DATE, TAG
+                _AmountSection(
+                  transaction: transaction,
+                  amountColor: amountColor,
+                  tag: tag,
                 ),
-                const SizedBox(height: 12),
-
-                // Header
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Transaction Details',
-                      style: GoogleFonts.spaceGrotesk(
-                        fontSize: 14,
-                        color:
-                            AppColors.textPrimaryLight,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: -0.15,
-                      ),
-                    ),
-                   
-                    const SizedBox(height: 8),
-                    Text(
-                      '${isIncome ? '+ ' : '- '}\$${transaction.amount.toStringAsFixed(2)}',
-                      style: GoogleFonts.spaceGrotesk(
-                        fontSize: 36,
-                        color: isIncome ? AppColors.success : AppColors.error,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: -0.15,
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          transaction.payeeName ?? transaction.source,
-                          style: GoogleFonts.spaceGrotesk(
-                            fontSize: 14,
-                            color: AppColors.neutral700,
-                            fontWeight: FontWeight.normal,
-                            letterSpacing: -0.15,
-                          ),
-                        ),
-                        Container(
-                          width: 6,
-                          height: 6,
-                          decoration: BoxDecoration(
-                            color: AppColors.neutral400,
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          margin: const EdgeInsets.symmetric(horizontal: 8),
-                        ),
-                        if (transaction.tags.isNotEmpty)
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: randomColor.withAlpha(20),
-                              borderRadius: BorderRadius.circular(80),
-                            ),
-                            child: Text(
-                              '${transaction.tags.first.emoji} ${transaction.tags.first.name}',
-                              style: GoogleFonts.spaceGrotesk(
-                                fontSize: 14,
-                                color: randomColor,
-                                fontWeight: FontWeight.normal,
-                                letterSpacing: -0.15,
-                              ),
-                            ),
-                          ),
-                        if (transaction.mood != null) ...[
-                          Container(
-                            width: 6,
-                            height: 6,
-                            decoration: BoxDecoration(
-                              color: AppColors.neutral400,
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            margin: const EdgeInsets.symmetric(horizontal: 8),
-                          ),
-                          Text(
-                            transaction.mood!.emoji,
-                            style: GoogleFonts.spaceGrotesk(
-                              fontSize: 14,
-                              color: AppColors.neutral700,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
-                        ],
-                      ],
-                    ),
-                  ],
-                ),
-
-                // Content
-                Flexible(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.all(24),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Date and Time
-                        _buildInfoRow(
-                          icon: Icons.calendar_today,
-                          title: 'Date & Time',
-                          content: '${transaction.date} • ${transaction.time}',
-                        ),
-                        const SizedBox(height: 20),
-
-                        // Categories
-                        if (transaction.category.isNotEmpty) ...[
-                          _buildInfoRow(
-                            icon: Icons.category,
-                            title: 'Categories',
-                            content: transaction.category,
-                          ),
-                          const SizedBox(height: 20),
-                        ],
-
-                        // Payment Method
-                        if (transaction.paymentMethod != null) ...[
-                          _buildInfoRow(
-                            icon: Icons.payment,
-                            title: 'Payment Method',
-                            content: transaction.paymentMethod!,
-                          ),
-                          const SizedBox(height: 20),
-                        ],
-
-                        // Description
-                        if (transaction.description.isNotEmpty) ...[
-                          _buildInfoRow(
-                            icon: Icons.description,
-                            title: 'Description',
-                            content: transaction.description,
-                          ),
-                          const SizedBox(height: 20),
-                        ],
-
-                        // Notes
-                        if (transaction.notes != null &&
-                            transaction.notes!.isNotEmpty)
-                          _buildInfoRow(
-                            icon: Icons.note,
-                            title: 'Notes',
-                            content: transaction.notes!,
-                          ),
-                      ],
-                    ),
-                  ),
-                ),
-
-                // Actions
-                Container(
-                  padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border(
-                      top: BorderSide(color: AppColors.borderLight, width: 1),
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton.icon(
-                          onPressed: () {
-                            // TODO: Implement edit functionality
-                            Navigator.pop(context);
-                          },
-                          icon: const Icon(Icons.edit, size: 20),
-                          label: Text(
-                            'Edit',
-                            style: GoogleFonts.spaceGrotesk(
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          style: OutlinedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            side: BorderSide(color: AppColors.primary500),
-                            foregroundColor: AppColors.primary500,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: ElevatedButton.icon(
-                          onPressed: () {
-                            // TODO: Implement delete functionality
-                            Navigator.pop(context);
-                          },
-                          icon: const Icon(Icons.delete, size: 20),
-                          label: Text(
-                            'Delete',
-                            style: GoogleFonts.spaceGrotesk(
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            backgroundColor: AppColors.error,
-                            foregroundColor: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                const SizedBox(height: 16),
+                // DIVIDER
+                Divider(color: AppColors.borderLight, thickness: 1, height: 1),
+                // DETAILS
+                _DetailRowsSection(transaction: transaction),
+                // FOOTER
+                _FooterActions(onEdit: onEdit, onDelete: onDelete),
               ],
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
+}
 
-  Widget _buildInfoRow({
-    required IconData icon,
-    required String title,
-    required String content,
-  }) {
+class _HeaderSection extends StatelessWidget {
+  final VoidCallback? onClose;
+  const _HeaderSection({this.onClose});
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: AppColors.primary500.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(8),
+        Text(
+          'Transaction Details',
+          style: GoogleFonts.spaceGrotesk(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: AppColors.textPrimaryLight,
+            letterSpacing: -0.25,
           ),
-          child: Icon(icon, color: AppColors.primary500, size: 20),
         ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: GoogleFonts.spaceGrotesk(
-                  fontSize: 14,
-                  color: AppColors.textPrimaryLight,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                content,
-                style: GoogleFonts.spaceGrotesk(
-                  fontSize: 16,
-                  color: AppColors.textPrimaryDark,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-            ],
+        const Spacer(),
+        InkWell(
+          onTap: onClose ?? () => Navigator.of(context).maybePop(),
+          borderRadius: BorderRadius.circular(22),
+          child: Container(
+            padding: const EdgeInsets.all(4),
+            child: const Icon(
+              HugeIconsStroke.cancel01,
+              size: 20,
+              color: AppColors.neutral600,
+            ),
           ),
         ),
       ],
+    );
+  }
+}
+
+class _AmountSection extends StatelessWidget {
+  final Transaction transaction;
+  final Color amountColor;
+  final Tag? tag;
+  const _AmountSection({
+    required this.transaction,
+    required this.amountColor,
+    this.tag,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isIncome = transaction.isIncome;
+    final amountStr =
+        '${isIncome ? '+ ' : '- '}\$${transaction.amount.toStringAsFixed(2)}';
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              amountStr,
+              style: GoogleFonts.spaceGrotesk(
+                fontSize: 36,
+                fontWeight: FontWeight.bold,
+                color: amountColor,
+              ),
+            ),
+            if (transaction.mood != null) ...[
+              const SizedBox(width: 8),
+              Text(
+                transaction.mood!.emoji,
+                style: const TextStyle(fontSize: 24),
+              ),
+            ],
+          ],
+        ),
+        if (transaction.payeeName != null && transaction.payeeName!.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Text(
+              transaction.payeeName!,
+              style: GoogleFonts.spaceGrotesk(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: AppColors.textPrimaryLight,
+                letterSpacing: -0.25,
+              ),
+            ),
+          ),
+        Padding(
+          padding: const EdgeInsets.only(top: 4),
+          child: Text(
+            // You may want to format date/time for locale
+            '${transaction.date} at ${transaction.time}',
+            style: GoogleFonts.spaceGrotesk(
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+              color: AppColors.textSecondaryLight,
+              letterSpacing: -0.15,
+            ),
+          ),
+        ),
+        if (tag != null && !isIncome)
+          Padding(
+            padding: const EdgeInsets.only(top: 12),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: AppColors.neutral200,
+                borderRadius: BorderRadius.circular(999),
+              ),
+              child: Text(
+                '${tag!.emoji} ${tag!.name}',
+                style: GoogleFonts.spaceGrotesk(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.textPrimaryLight,
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+class _DetailRowsSection extends StatelessWidget {
+  final Transaction transaction;
+  const _DetailRowsSection({required this.transaction});
+
+  @override
+  Widget build(BuildContext context) {
+    final rows = <_DetailRow>[];
+    if (transaction.category.isNotEmpty) {
+      rows.add(_DetailRow(label: 'Category', value: transaction.category));
+    }
+    if (transaction.paymentMethod != null &&
+        transaction.paymentMethod!.isNotEmpty) {
+      rows.add(
+        _DetailRow(label: 'Payment Method', value: transaction.paymentMethod!),
+      );
+    }
+    if (transaction.description.isNotEmpty) {
+      rows.add(
+        _DetailRow(label: 'Description', value: transaction.description),
+      );
+    }
+    if (transaction.notes != null && transaction.notes!.isNotEmpty) {
+      rows.add(_DetailRow(label: 'Notes', value: transaction.notes!));
+    }
+    if (transaction.tags.isNotEmpty) {
+      rows.add(
+        _DetailRow(
+          label: 'Tags',
+          value: transaction.tags.map((tag) => tag.name).join(', '),
+        ),
+      );
+    }
+    if (transaction.taxable && transaction.isIncome) {
+      rows.add(_DetailRow(label: 'Taxable', value: transaction.taxable.toString()));
+    }
+    if (transaction.recurring) {
+      rows.add(_DetailRow(label: 'Recurring', value: transaction.frequency.toString()));
+    }
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: rows,
+      ),
+    );
+  }
+}
+
+class _DetailRow extends StatelessWidget {
+  final String label;
+  final String value;
+  const _DetailRow({required this.label, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: GoogleFonts.spaceGrotesk(
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+              color: AppColors.neutral700,
+              letterSpacing: -0.15,
+            ),
+          ),
+          Text(
+            value,
+            style: GoogleFonts.spaceGrotesk(
+              fontSize: 15,
+              fontWeight: FontWeight.normal,
+              color: AppColors.textPrimaryLight,
+              letterSpacing: -0.15,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _FooterActions extends StatelessWidget {
+  final VoidCallback? onEdit;
+  final VoidCallback? onDelete;
+  const _FooterActions({this.onEdit, this.onDelete});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(top: 16),
+      padding: const EdgeInsets.only(top: 16),
+      decoration: const BoxDecoration(
+        border: Border(top: BorderSide(color: AppColors.borderLight, width: 1)),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: SizedBox(
+              height: 48,
+              child: OutlinedButton(
+                onPressed: onEdit,
+                style: OutlinedButton.styleFrom(
+                  backgroundColor: AppColors.neutral200,
+                  foregroundColor: AppColors.textPrimaryLight,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  side: BorderSide.none,
+                  textStyle: GoogleFonts.spaceGrotesk(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14,
+                    color: AppColors.textPrimaryLight,
+                  ),
+                ),
+                child: Text('Edit Transaction'),
+              ),
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: SizedBox(
+              height: 48,
+              child: ElevatedButton(
+                onPressed: onDelete,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.error,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  textStyle: GoogleFonts.spaceGrotesk(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                  ),
+                ),
+                child: const Text('Delete'),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

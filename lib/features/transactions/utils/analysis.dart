@@ -5,6 +5,9 @@ import '../models/transaction_model.dart';
 Map<String, double> totalByCategory(List<Transaction> txs) {
   final Map<String, double> result = {};
   for (final tx in txs) {
+    if (tx.category == null || tx.category.isEmpty) {
+      continue;
+    }
     result[tx.category] = (result[tx.category] ?? 0) + tx.amount;
   }
   return result;
@@ -15,6 +18,9 @@ Map<String, double> totalByCategory(List<Transaction> txs) {
 Map<String, double> totalByTag(List<Transaction> txs) {
   final Map<String, double> result = {};
   for (final tx in txs) {
+    if (tx.tags.isEmpty) {
+      continue;
+    }
     for (final tag in tx.tags) {
       result[tag.name] = (result[tag.name] ?? 0) + tx.amount;
     }
@@ -38,6 +44,9 @@ Map<String, double> averageExpenseByCategory(List<Transaction> txs) {
   final Map<String, double> sumMap = {};
   final Map<String, int> countMap = {};
   for (final tx in txs.where((t) => !t.isIncome)) {
+    if (tx.category == null || tx.category.isEmpty) {
+      continue;
+    }
     sumMap[tx.category] = (sumMap[tx.category] ?? 0) + tx.amount;
     countMap[tx.category] = (countMap[tx.category] ?? 0) + 1;
   }
