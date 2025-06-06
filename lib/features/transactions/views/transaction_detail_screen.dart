@@ -118,6 +118,7 @@ class _AmountSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
@@ -130,9 +131,17 @@ class _AmountSection extends StatelessWidget {
             ),
             if (transaction.mood != null) ...[
               const SizedBox(width: 8),
-              Text(
-                transaction.mood!.emoji,
-                style: const TextStyle(fontSize: 24),
+              Container(
+                decoration: BoxDecoration(
+                  color: AppColors.neutral200,
+                  borderRadius: BorderRadius.circular(999),
+                  border: Border.all(color: AppColors.borderLight),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                child: Text(
+                  transaction.mood!.emoji,
+                  style: const TextStyle(fontSize: 24),
+                ),
               ),
             ],
           ],
@@ -323,6 +332,7 @@ class _FooterActions extends StatelessWidget {
                   textStyle: GoogleFonts.spaceGrotesk(
                     fontWeight: FontWeight.w500,
                     fontSize: 16,
+                    color: AppColors.neutral50,
                   ),
                 ),
                 child: const Text('Delete'),

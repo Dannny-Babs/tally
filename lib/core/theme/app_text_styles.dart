@@ -28,7 +28,7 @@ class AppTextStyles {
     color: AppColors.textPrimaryLight,
   );
 
-  static final bodyMedium = GoogleFonts.spaceMono(
+  static final bodyMedium = GoogleFonts.spaceGrotesk(
     fontSize: 14,
     color: AppColors.textPrimaryLight,
   );
