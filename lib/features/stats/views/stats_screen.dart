@@ -210,7 +210,7 @@ class StatsScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(4),
           child: LinearProgressIndicator(
             value: progress,
-            backgroundColor: AppColors.primary200.withOpacity(0.2),
+            backgroundColor: AppColors.primary200,
               valueColor: AlwaysStoppedAnimation<Color>(AppColors.textPrimaryLight),
             minHeight: 8,
           ),
