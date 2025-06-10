@@ -5,3 +5,6 @@ export '../features/transactions/views/expense/expense_screen.dart';
 export '../features/transactions/views/income/income_screen.dart';
 export '../features/stats/views/stats_screen.dart';
 export '../features/settings/settings_screen.dart';
+export '../features/settings/savings_screen.dart';
+export '../features/settings/gifts_screen.dart';
+export '../features/settings/edit_profile_screen.dart';

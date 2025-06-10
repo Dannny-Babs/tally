@@ -7,7 +7,7 @@ import '../settings/bloc/accounts_state.dart';
 import '../settings/bloc/accounts_event.dart';
 
 class GiftsScreen extends StatelessWidget {
-  const GiftsScreen({Key? key}) : super(key: key);
+  const GiftsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

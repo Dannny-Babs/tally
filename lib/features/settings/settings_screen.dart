@@ -22,6 +22,7 @@ import 'bloc/accounts_event.dart';
 import 'bloc/preferences_bloc.dart';
 import 'bloc/preferences_state.dart';
 import 'bloc/preferences_event.dart';
+import 'pin_code_modal.dart';
 
 // --- BLoC Event/State Definitions ---
 // Minimal event/state classes for demonstration. Replace with your actual implementations as needed.
@@ -102,7 +103,7 @@ class SettingsScreen extends StatelessWidget {
                                   name: 'Daniel Baker',
                                   email: 'daniel.baker@gmail.com',
                                   onEditProfile: () {
-                                    // Dispatch your ProfileBloc event here
+                                    Navigator.pushNamed(context, '/edit_profile');
                                   },
                                 ),
                                 const SizedBox(height: 32),
@@ -283,8 +284,7 @@ class _AccountsCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    onTap:
-                        () => context.read<AccountsBloc>().add(SavingsTapped()),
+                    onTap: () => Navigator.pushNamed(context, '/savings'),
                   );
                 },
               ),
@@ -305,7 +305,7 @@ class _AccountsCard extends StatelessWidget {
                   size: 16,
                   color: textSecondary,
                 ),
-                onTap: () => context.read<AccountsBloc>().add(GiftsTapped()),
+                onTap: () => Navigator.pushNamed(context, '/gifts'),
               ),
             ],
           ),
@@ -430,7 +430,7 @@ class _PreferencesCard extends StatelessWidget {
                   ),
                   _SettingsDivider(),
                   _SettingsListTile(
-                    leading: Icon(HugeIconsStroke.pin, color: textPrimary),
+                    leading: Icon(HugeIconsStroke.pinCode, color: textPrimary),
                     title: 'PIN Code',
                     titleStyle: AppTextStyles.bodyMedium.copyWith(
                       color: textPrimary,
@@ -443,10 +443,21 @@ class _PreferencesCard extends StatelessWidget {
                       size: 16,
                       color: textSecondary,
                     ),
-                    onTap:
-                        () => context.read<PreferencesBloc>().add(
-                          PinCodeTapped(),
+                    onTap: () async {
+                      await showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
                         ),
+                        builder: (context) => Padding(
+                          padding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).viewInsets.bottom,
+                          ),
+                          child: PinCodeModal(),
+                        ),
+                      );
+                    },
                   ),
                   const SizedBox(height: 8),
                   _SettingsDivider(),
@@ -467,8 +478,34 @@ class _PreferencesCard extends StatelessWidget {
                       HugeIconsStroke.arrowRight01,
                       color: AppColors.error,
                     ),
-                    onTap:
-                        () => context.read<AuthBloc>().add(LogoutRequested()),
+                    onTap: () async {
+                      final confirmed = await showDialog<bool>(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          backgroundColor: AppColors.backgroundLight,
+                          title: Text('Confirm Logout', style: AppTextStyles.bodyMedium.copyWith(fontWeight: FontWeight.w600)),
+                          content: Text('Are you sure you want to log out?', style: AppTextStyles.bodyMedium),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(false),
+                              child: Text('Cancel', style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondaryLight)),
+                            ),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.error,
+                                foregroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                              ),
+                              onPressed: () => Navigator.of(context).pop(true),
+                              child: Text('Logout', style: AppTextStyles.bodyMedium.copyWith(color: Colors.white)),
+                            ),
+                          ],
+                        ),
+                      );
+                      if (confirmed == true) {
+                        context.read<AuthBloc>().add(LogoutRequested());
+                      }
+                    },
                   ),
                   const SizedBox(height: 8),
                 ],

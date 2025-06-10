@@ -46,9 +46,27 @@ class MyApp extends StatelessWidget {
         title: 'Tally',
         theme: AppTheme.lightTheme,
         debugShowCheckedModeBanner: false,
-        
+        routes: {
+          '/savings': (context) => const SavingsScreen(),
+          '/gifts': (context) => const GiftsScreen(),
+          '/edit_profile': (context) => const EditProfileScreen(),
+        },
+        initialRoute: '/',
+        onGenerateRoute: (settings) {
+          switch (settings.name) {
+            case '/savings':
+              return MaterialPageRoute(builder: (context) => const SavingsScreen());
+            case '/gifts':
+              return MaterialPageRoute(builder: (context) => const GiftsScreen());
+            case '/edit_profile':
+              return MaterialPageRoute(builder: (context) => const EditProfileScreen());  
+            default:
+              return MaterialPageRoute(builder: (context) => const NotFoundScreen());
+          }
+        },
         onUnknownRoute: (settings) => MaterialPageRoute(
           builder: (context) => const NotFoundScreen(),
+
         ),
         home: const AppShell(),
       ),
