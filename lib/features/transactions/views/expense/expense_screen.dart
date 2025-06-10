@@ -55,7 +55,7 @@ class ExpenseScreen extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 color: AppColors.backgroundLight,
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   bottomRight: Radius.circular(24),
                   bottomLeft: Radius.circular(24),
                 ),

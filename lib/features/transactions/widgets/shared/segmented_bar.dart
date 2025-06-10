@@ -26,7 +26,7 @@ class PercentageSegmentBar extends StatelessWidget {
         borderRadius: BorderRadius.circular(height /4),
         child: Container(
           color: AppColors.neutral100,
-          padding: EdgeInsets.all(2),
+          padding: const EdgeInsets.all(2),
           child: Row(
             children: [
               for (var i = 0; i < segments.length; i++) ...[

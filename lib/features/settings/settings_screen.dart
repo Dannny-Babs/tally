@@ -11,18 +11,17 @@
 // - BottomNavigationBar at the bottom, using AppColors for background and icon colors.
 // - All tap targets are at least 44x44 px, and the layout is responsive (max width 400 on large screens).
 //
-// To use: Copy this file into your project, wire up the BLoC providers, and the UI will match the mockup using your app's look-and-feel.
 
-import 'package:tally/utils/packages.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:hugeicons_pro/hugeicons.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
-import 'bloc/accounts_bloc.dart';
-import 'bloc/accounts_state.dart';
-import 'bloc/accounts_event.dart';
-import 'bloc/preferences_bloc.dart';
-import 'bloc/preferences_state.dart';
-import 'bloc/preferences_event.dart';
-import 'pin_code_modal.dart';
+import 'bloc/accounts/accounts.dart';
+import 'bloc/preferences/preferences.dart';
+import 'repositories/repositories.dart';
+import 'widgets/pin_code_modal.dart';
 
 // --- BLoC Event/State Definitions ---
 // Minimal event/state classes for demonstration. Replace with your actual implementations as needed.
@@ -36,7 +35,6 @@ class AuthState {}
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc() : super(AuthState());
-  @override
   Stream<AuthState> mapEventToState(AuthEvent event) async* {
     // Implement logout logic
     yield state;
@@ -49,12 +47,19 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => AccountsBloc()),
-        BlocProvider(create: (_) => PreferencesBloc()),
+        BlocProvider(
+          create: (context) => AccountsBloc(
+            context.read<AccountsRepository>(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => PreferencesBloc(
+            context.read<PreferencesRepository>(),
+          ),
+        ),
         BlocProvider(create: (_) => AuthBloc()),
       ],
       child: Scaffold(
@@ -145,7 +150,7 @@ class _ProfileHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        CircleAvatar(
+        const CircleAvatar(
           radius: 40,
           backgroundColor: AppColors.primary200,
           child: Icon(Icons.person, size: 48, color: AppColors.primary700),
@@ -172,13 +177,13 @@ class _ProfileHeader extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             boxShadow: [
               BoxShadow(
                 color: AppColors.shadowLight,
                 blurRadius: 9,
                 spreadRadius: 1,
-                offset: const Offset(0, 0),
+                offset: Offset(0, 0),
               ),
             ],
           ),
@@ -189,7 +194,7 @@ class _ProfileHeader extends StatelessWidget {
 
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(24),
-                side: BorderSide(color: AppColors.neutral800),
+                side: const BorderSide(color: AppColors.neutral800),
               ),
               elevation: 0,
             ),
@@ -220,7 +225,7 @@ class _AccountsCard extends StatelessWidget {
     final textPrimary =
         isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight;
     final textSecondary =
-        isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight;
+        isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -295,8 +300,8 @@ class _AccountsCard extends StatelessWidget {
               _SettingsDivider(),
               const SizedBox(height: 8),
               _SettingsListTile(
-                leading: Icon(HugeIconsStroke.gift, color: textPrimary),
-                title: 'Gifts',
+                leading: Icon(HugeIconsStroke.creditCard, color: textPrimary),
+                title: 'Paybacks',
                 titleStyle: AppTextStyles.bodyMedium.copyWith(
                   color: textPrimary,
                   fontWeight: FontWeight.w600,
@@ -308,7 +313,7 @@ class _AccountsCard extends StatelessWidget {
                   size: 16,
                   color: textSecondary,
                 ),
-                onTap: () => Navigator.pushNamed(context, '/gifts'),
+                onTap: () => Navigator.pushNamed(context, '/paybacks'),
               ),
             ],
           ),
@@ -328,7 +333,7 @@ class _PreferencesCard extends StatelessWidget {
     final textPrimary =
         isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight;
     final textSecondary =
-        isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight;
+        isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -461,7 +466,7 @@ class _PreferencesCard extends StatelessWidget {
                                 bottom:
                                     MediaQuery.of(context).viewInsets.bottom,
                               ),
-                              child: PinCodeModal(),
+                              child: const PinCodeModal(),
                             ),
                       );
                     },
@@ -470,7 +475,7 @@ class _PreferencesCard extends StatelessWidget {
                   _SettingsDivider(),
                   const SizedBox(height: 8),
                   _SettingsListTile(
-                    leading: Icon(
+                    leading: const Icon(
                       HugeIconsStroke.logout03,
                       color: AppColors.error,
                     ),
@@ -481,7 +486,7 @@ class _PreferencesCard extends StatelessWidget {
                       fontSize: 15,
                       letterSpacing: -0.2,
                     ),
-                    trailing: Icon(
+                    trailing: const Icon(
                       HugeIconsStroke.arrowRight01,
                       color: AppColors.error,
                     ),
@@ -507,7 +512,7 @@ class _PreferencesCard extends StatelessWidget {
                                 'Are you sure you want to log out? You will be logged out of your account and will need to log in again to continue.',
                                 style: AppTextStyles.bodyMedium.copyWith(
                                   fontSize: 14,
-                                  color: AppColors.textSecondaryLight,
+                                  color: AppColors.neutral800,
                                 ),
                               ),
                               actions: [

@@ -20,11 +20,11 @@ class ErrorScreen extends StatelessWidget {
           children: [
             Container(
               padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: AppColors.error,
                 shape: BoxShape.circle,
               ),
-              child: HeroIcon(
+              child: const HeroIcon(
                 HeroIcons.exclamationTriangle,
                 style: HeroIconStyle.solid,
                 color: Colors.red,
@@ -45,7 +45,7 @@ class ErrorScreen extends StatelessWidget {
             const SizedBox(height: 24),
             ElevatedButton.icon(
               onPressed: onRetry,
-              icon: HeroIcon(
+              icon: const HeroIcon(
                 HeroIcons.arrowPath,
                 style: HeroIconStyle.solid,
                 color: Colors.white,

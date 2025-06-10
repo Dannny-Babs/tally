@@ -75,15 +75,15 @@ class StatsScreen extends StatelessWidget {
                         },
                       ),
                     ),
-                    rightTitles: AxisTitles(
+                    rightTitles: const AxisTitles(
                       sideTitles: SideTitles(showTitles: false),
                     ),
-                    topTitles: AxisTitles(
+                    topTitles: const AxisTitles(
                       sideTitles: SideTitles(showTitles: false),
                     ),
                   ),
                   borderData: FlBorderData(show: false),
-                  gridData: FlGridData(show: false),
+                  gridData: const FlGridData(show: false),
                   barGroups: [
                     BarChartGroupData(
                       x: 0,
@@ -211,7 +211,7 @@ class StatsScreen extends StatelessWidget {
           child: LinearProgressIndicator(
             value: progress,
             backgroundColor: AppColors.primary200,
-              valueColor: AlwaysStoppedAnimation<Color>(AppColors.textPrimaryLight),
+              valueColor: const AlwaysStoppedAnimation<Color>(AppColors.textPrimaryLight),
             minHeight: 8,
           ),
         ),

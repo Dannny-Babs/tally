@@ -27,7 +27,7 @@ class IncomeScreen extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 color: AppColors.backgroundLight,
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   bottomRight: Radius.circular(24),
                   bottomLeft: Radius.circular(24),
                 ),
@@ -133,7 +133,7 @@ class IncomeScreen extends StatelessWidget {
                         child: Card(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
-                            side: BorderSide(color: AppColors.borderLight),
+                            side: const BorderSide(color: AppColors.borderLight),
                           ),
                           color: Colors.white,
                           elevation: 0,

@@ -50,7 +50,7 @@ class TransactionDetailScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 // DIVIDER
-                Divider(color: AppColors.borderLight, thickness: 1, height: 1),
+                const Divider(color: AppColors.borderLight, thickness: 1, height: 1),
                 // DETAILS
                 _DetailRowsSection(transaction: transaction),
                 // FOOTER
@@ -313,7 +313,7 @@ class _FooterActions extends StatelessWidget {
                     color: AppColors.textPrimaryLight,
                   ),
                 ),
-                child: Text('Edit Transaction'),
+                child: const Text('Edit Transaction'),
               ),
             ),
           ),
