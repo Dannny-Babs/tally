@@ -23,7 +23,7 @@ class DashboardScreen extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 color: AppColors.backgroundLight,
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   bottomRight: Radius.circular(24),
                   bottomLeft: Radius.circular(24),
                 ),
@@ -40,10 +40,12 @@ class DashboardScreen extends StatelessWidget {
                       children: [
                         Text(
                           'Dashboard',
-                          style: AppTextStyles.displaySmall.copyWith(
+                          style: AppTextStyles.displayMedium.copyWith(
                             color: AppColors.textPrimaryLight,
                             fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
                             fontWeight: FontWeight.w600,
+                            letterSpacing: -0.5,
+                            fontSize: 24,
                           ),
                         ),
                         InkWell(
@@ -67,7 +69,7 @@ class DashboardScreen extends StatelessWidget {
                             ),
                             child: Row(
                               children: [
-                                HeroIcon(
+                                const HeroIcon(
                                   HeroIcons.plus,
                                   style: HeroIconStyle.solid,
                                   color: AppColors.neutral100,
@@ -97,15 +99,15 @@ class DashboardScreen extends StatelessWidget {
                       net: 2958.12,
                       currency: '\$',
                     ),
-                    _SavingsCard(current: 905.69, target: 1500),
-                    Row(
+                    const _SavingsCard(current: 905.69, target: 1500),
+                    const Row(
                       children: [
                         Expanded(
                           child: SizedBox(
                             height: 200,
                             child: _ExpensesCard(
                               total: 2148.02,
-                              breakdown: const {
+                              breakdown: {
                                 'Food': 480.0,
                                 'Subscriptions': 212.0,
                                 'Shopping': 180.0,
@@ -113,7 +115,7 @@ class DashboardScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        const SizedBox(width: 2),
+                        SizedBox(width: 2),
                         Expanded(
                           child: SizedBox(
                             height: 200,
@@ -135,7 +137,7 @@ class DashboardScreen extends StatelessWidget {
                           builder: (context) => const InsightModal(),
                         );
                       },
-                      child: _AIInsightsCard(
+                      child: const _AIInsightsCard(
                         message:
                             "You've saved 18% of your income. Want to hit 25% this month?",
                       ),
@@ -144,7 +146,7 @@ class DashboardScreen extends StatelessWidget {
                     Card(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
-                        side: BorderSide(color: AppColors.borderLight),
+                        side: const BorderSide(color: AppColors.borderLight),
                       ),
                       color: Colors.white,
                       elevation: 0,
@@ -176,9 +178,9 @@ class DashboardScreen extends StatelessWidget {
                           const SizedBox(height: 2),
                           ListView.separated(
                             shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
+                            physics: const NeverScrollableScrollPhysics(),
                             itemCount: 5,
-                            separatorBuilder: (_, __) => SizedBox(height: 1),
+                            separatorBuilder: (_, __) => const SizedBox(height: 1),
                             itemBuilder:
                                 (context, index) => ActivitiesCard(
                                   icon: Icons.shopping_bag,
@@ -225,7 +227,7 @@ class _TotalIncomeCard extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: AppColors.borderLight),
+        side: const BorderSide(color: AppColors.borderLight),
       ),
 
       color: Colors.white,
@@ -283,7 +285,7 @@ class _TaxNetCard extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
-        side: BorderSide(color: AppColors.neutral300),
+        side: const BorderSide(color: AppColors.neutral300),
       ),
       color: AppColors.neutral50,
       elevation: 0,
@@ -356,7 +358,7 @@ class _SavingsCard extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: AppColors.borderLight),
+        side: const BorderSide(color: AppColors.borderLight),
       ),
       color: Colors.white,
       elevation: 0,
@@ -426,7 +428,7 @@ class _SavingsCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(4),
                 value: percent.toDouble(),
                 backgroundColor: AppColors.neutral200,
-                valueColor: AlwaysStoppedAnimation<Color>(
+                valueColor: const AlwaysStoppedAnimation<Color>(
                   AppColors.textPrimaryLight,
                 ),
                 minHeight: 8,
@@ -449,7 +451,7 @@ class _ExpensesCard extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: AppColors.borderLight),
+        side: const BorderSide(color: AppColors.borderLight),
       ),
       color: Colors.white,
       elevation: 0,
@@ -482,7 +484,7 @@ class _ExpensesCard extends StatelessWidget {
                 ),
               ],
             ),
-            Spacer(),
+            const Spacer(),
             Container(
               decoration: BoxDecoration(
                 color: AppColors.neutral100,
@@ -547,7 +549,7 @@ class _IncomeBreakdownCard extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: AppColors.borderLight),
+        side: const BorderSide(color: AppColors.borderLight),
       ),
       color: Colors.white,
       elevation: 0,
@@ -638,7 +640,7 @@ class _AIInsightsCard extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: AppColors.borderLight),
+        side: const BorderSide(color: AppColors.borderLight),
       ),
       color: Colors.white,
       elevation: 0,
@@ -649,7 +651,7 @@ class _AIInsightsCard extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                HeroIcon(
+                const HeroIcon(
                   HeroIcons.sparkles,
                   style: HeroIconStyle.solid,
                   color: AppColors.textPrimaryLight,
@@ -700,7 +702,7 @@ class _AIInsightsCard extends StatelessWidget {
                       fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
                     ),
                   ),
-                  HeroIcon(
+                  const HeroIcon(
                     HeroIcons.chevronRight,
                     color: AppColors.textPrimaryLight,
                     size: 20,
@@ -785,7 +787,7 @@ class ActivitiesCard extends StatelessWidget {
                     Container(
                       width: 3,
                       height: 3,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: AppColors.primary500,
                         shape: BoxShape.circle,
                       ),
@@ -827,7 +829,7 @@ class InsightCard extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: AppColors.borderLight),
+        side: const BorderSide(color: AppColors.borderLight),
       ),
       color: Colors.white,
       elevation: 0,
@@ -835,7 +837,7 @@ class InsightCard extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 18),
         child: Row(
           children: [
-            Icon(Icons.insights, color: AppColors.textPrimaryLight, size: 28),
+            const Icon(Icons.insights, color: AppColors.textPrimaryLight, size: 28),
             const SizedBox(width: 12),
             Expanded(
               child: Text(
@@ -845,7 +847,7 @@ class InsightCard extends StatelessWidget {
                 ),
               ),
             ),
-            Icon(
+            const Icon(
               Icons.chevron_right,
               color: AppColors.textPrimaryLight,
               size: 28,

@@ -16,7 +16,7 @@ class CustomTabBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 72,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.white,
       ),
       child: SafeArea(
@@ -33,8 +33,8 @@ class CustomTabBar extends StatelessWidget {
 
   Widget _buildTabItem(BuildContext context, int index) {
     final isSelected = index == currentIndex;
-    final baseSize = 40.0;
-    final selectedSize = 54.0;
+    const baseSize = 40.0;
+    const selectedSize = 54.0;
 
     return GestureDetector(
       onTap: () => onTabSelected(index),

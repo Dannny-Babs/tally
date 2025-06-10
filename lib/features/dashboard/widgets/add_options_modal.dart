@@ -14,9 +14,9 @@ class _AddOptionsModalState extends State<AddOptionsModal> {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 20),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.white,
-        borderRadius: const BorderRadius.all(Radius.circular(12)),
+        borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
       child: SafeArea(
         child: Padding(

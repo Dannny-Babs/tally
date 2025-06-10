@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import '../theme/app_colors.dart';
+import '../theme/app_text_styles.dart';
 
 class EmptyStatePlaceholder extends StatelessWidget {
+  final String title;
   final String message;
   final IconData icon;
   final VoidCallback? onActionPressed;
@@ -8,6 +11,7 @@ class EmptyStatePlaceholder extends StatelessWidget {
 
   const EmptyStatePlaceholder({
     super.key,
+    required this.title,
     required this.message,
     required this.icon,
     this.onActionPressed,
@@ -18,26 +22,48 @@ class EmptyStatePlaceholder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
               icon,
-              size: 48,
-              color: Theme.of(context).colorScheme.secondary,
+              size: 64,
+                color: AppColors.textSecondaryLight,
             ),
             const SizedBox(height: 16),
             Text(
-              message,
+              title,
+              style: AppTextStyles.titleLarge,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              message,
+              style: AppTextStyles.body.copyWith(
+                color: AppColors.textSecondaryLight,
+              ),
+              textAlign: TextAlign.center,
             ),
             if (onActionPressed != null && actionLabel != null) ...[
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: onActionPressed,
-                child: Text(actionLabel!),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.neutral800,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 12,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: Text(
+                  actionLabel!,
+                  style: AppTextStyles.button,
+                ),
               ),
             ],
           ],

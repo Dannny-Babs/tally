@@ -67,31 +67,31 @@ class LabeledFormInput extends StatelessWidget {
             fillColor: AppColors.backgroundLight,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(
+              borderSide: const BorderSide(
                 color: AppColors.borderLight,
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(
+              borderSide: const BorderSide(
                 color: AppColors.borderLight,
               ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(
+              borderSide: const BorderSide(
                 color: AppColors.primary500,
               ),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(
+              borderSide: const BorderSide(
                 color: AppColors.error,
               ),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(
+              borderSide: const BorderSide(
                 color: AppColors.error,
               ),
             ),
