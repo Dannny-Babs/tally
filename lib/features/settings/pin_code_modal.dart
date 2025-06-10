@@ -7,7 +7,7 @@ import '../settings/bloc/preferences_state.dart';
 import '../settings/bloc/preferences_event.dart';
 
 class PinCodeModal extends StatefulWidget {
-  const PinCodeModal({Key? key}) : super(key: key);
+  const PinCodeModal({super.key});
 
   @override
   State<PinCodeModal> createState() => _PinCodeModalState();
