@@ -103,7 +103,10 @@ class SettingsScreen extends StatelessWidget {
                                   name: 'Daniel Baker',
                                   email: 'daniel.baker@gmail.com',
                                   onEditProfile: () {
-                                    Navigator.pushNamed(context, '/edit_profile');
+                                    Navigator.pushNamed(
+                                      context,
+                                      '/edit_profile',
+                                    );
                                   },
                                 ),
                                 const SizedBox(height: 32),
@@ -448,14 +451,18 @@ class _PreferencesCard extends StatelessWidget {
                         context: context,
                         isScrollControlled: true,
                         shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-                        ),
-                        builder: (context) => Padding(
-                          padding: EdgeInsets.only(
-                            bottom: MediaQuery.of(context).viewInsets.bottom,
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(24),
                           ),
-                          child: PinCodeModal(),
                         ),
+                        builder:
+                            (context) => Padding(
+                              padding: EdgeInsets.only(
+                                bottom:
+                                    MediaQuery.of(context).viewInsets.bottom,
+                              ),
+                              child: PinCodeModal(),
+                            ),
                       );
                     },
                   ),
@@ -481,26 +488,62 @@ class _PreferencesCard extends StatelessWidget {
                     onTap: () async {
                       final confirmed = await showDialog<bool>(
                         context: context,
-                        builder: (context) => AlertDialog(
-                          backgroundColor: AppColors.backgroundLight,
-                          title: Text('Confirm Logout', style: AppTextStyles.bodyMedium.copyWith(fontWeight: FontWeight.w600)),
-                          content: Text('Are you sure you want to log out?', style: AppTextStyles.bodyMedium),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.of(context).pop(false),
-                              child: Text('Cancel', style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondaryLight)),
-                            ),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.error,
-                                foregroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                        builder:
+                            (context) => AlertDialog(
+                              actionsAlignment: MainAxisAlignment.end,
+                              alignment: Alignment.center,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
                               ),
-                              onPressed: () => Navigator.of(context).pop(true),
-                              child: Text('Logout', style: AppTextStyles.bodyMedium.copyWith(color: Colors.white)),
+                              backgroundColor: Colors.white,
+                              title: Text(
+                                'Confirm Logout',
+                                style: AppTextStyles.bodyMedium.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 18,
+                                ),
+                              ),
+                              content: Text(
+                                'Are you sure you want to log out? You will be logged out of your account and will need to log in again to continue.',
+                                style: AppTextStyles.bodyMedium.copyWith(
+                                  fontSize: 14,
+                                  color: AppColors.textSecondaryLight,
+                                ),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed:
+                                      () => Navigator.of(context).pop(false),
+                                  child: Text(
+                                    'Cancel',
+                                    style: AppTextStyles.bodyMedium.copyWith(
+                                      color: AppColors.neutral800,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppColors.error,
+                                    foregroundColor: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(24),
+                                    ),
+                                  ),
+                                  onPressed:
+                                      () => Navigator.of(context).pop(true),
+                                  child: Text(
+                                    'Logout',
+                                    style: AppTextStyles.bodyMedium.copyWith(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
                       );
                       if (confirmed == true) {
                         context.read<AuthBloc>().add(LogoutRequested());
@@ -537,14 +580,14 @@ class _SettingsListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,
-      
+
       child: InkWell(
         borderRadius: BorderRadius.zero,
         onTap: onTap,
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
           constraints: const BoxConstraints(minHeight: 44),
-         
+
           child: Row(
             children: [
               leading,
