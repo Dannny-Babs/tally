@@ -4,7 +4,6 @@ import 'bloc/paybacks/paybacks_bloc.dart';
 import 'bloc/paybacks/paybacks_event.dart';
 import 'bloc/paybacks/paybacks_state.dart';
 import 'models/payback.dart';
-import 'package:flutter/material.dart';
 
 class FullWidthIndicator extends Decoration {
   final BoxDecoration decoration;
@@ -247,15 +246,15 @@ class _PaybacksScreenState extends State<PaybacksScreen>
                     Tab(
                         child: SizedBox(
                             width: tabWidth,
-                            child: Center(child: Text('Personal')))),
+                            child: const Center(child: Text('Personal')))),
                     Tab(
                         child: SizedBox(
                             width: tabWidth,
-                            child: Center(child: Text('Credit')))),
+                            child: const Center(child: Text('Credit')))),
                     Tab(
                         child: SizedBox(
                             width: tabWidth,
-                            child: Center(child: Text('Debt')))),
+                            child: const Center(child: Text('Debt')))),
                   ],
                 );
               },
