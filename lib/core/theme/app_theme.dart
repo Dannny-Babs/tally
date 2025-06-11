@@ -7,7 +7,7 @@ class AppTheme {
     return ThemeData(
       primaryColor: AppColors.neutral900,
       scaffoldBackgroundColor: AppColors.backgroundLight,
-      colorScheme: ColorScheme.light(
+      colorScheme: const ColorScheme.light(
         primary: AppColors.neutral900,
         secondary: AppColors.primary500,
         surface: AppColors.backgroundLight,
@@ -26,7 +26,7 @@ class AppTheme {
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
-          side: BorderSide(
+          side: const BorderSide(
             color: AppColors.borderLight,
             width: 1,
           ),
@@ -37,19 +37,19 @@ class AppTheme {
         fillColor: AppColors.backgroundLight,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
+          borderSide: const BorderSide(
             color: AppColors.borderLight,
           ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
+          borderSide: const BorderSide(
             color: AppColors.neutral500,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
+          borderSide: const BorderSide(
             color: AppColors.neutral500,
           ),
         ),

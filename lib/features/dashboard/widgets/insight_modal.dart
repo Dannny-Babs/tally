@@ -14,9 +14,9 @@ class InsightModal extends StatelessWidget {
       color: Colors.transparent,
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 20),
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.white,
-          borderRadius: const BorderRadius.all(Radius.circular(12)),
+          borderRadius: BorderRadius.all(Radius.circular(12)),
         ),
         child: SafeArea(
           child: Padding(
@@ -121,7 +121,7 @@ class InsightModal extends StatelessWidget {
                           onPressed: () {
                             // TODO: Implement chat action
                           },
-                          icon: HeroIcon(
+                          icon: const HeroIcon(
                             HeroIcons.chatBubbleLeftRight,
                             style: HeroIconStyle.solid,
                             color: Colors.white,
@@ -143,7 +143,7 @@ class InsightModal extends StatelessWidget {
                             shape: RoundedRectangleBorder(
 
                               borderRadius: BorderRadius.circular(12),
-                              side: BorderSide(
+                              side: const BorderSide(
                                 color: AppColors.neutral700,                                
                                 width: 2,
                               ),
@@ -338,7 +338,7 @@ class InsightModal extends StatelessWidget {
         children: [
           Row(
             children: [
-              HeroIcon(
+              const HeroIcon(
                 HeroIcons.lightBulb,
                 style: HeroIconStyle.solid,
                 color: AppColors.neutral800,
@@ -367,7 +367,7 @@ class InsightModal extends StatelessWidget {
                       margin: const EdgeInsets.only(top: 6),
                       width: 6,
                       height: 6,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: AppColors.textPrimaryLight,
                         shape: BoxShape.circle,
                       ),

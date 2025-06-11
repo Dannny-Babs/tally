@@ -1,17 +1,23 @@
-import 'package:flutter/material.dart';
+import '../../utils/utils.dart';
 
 class ErrorScreen extends StatelessWidget {
   final String? message;
   final VoidCallback? onRetry;
 
-  const ErrorScreen({
-    super.key,
-    this.message,
-    this.onRetry,
-  });
+  const ErrorScreen({super.key, this.message, this.onRetry});
 
   @override
   Widget build(BuildContext context) {
+    final message = switch (this.message) {
+      'no_internet' => 'No internet connection, please check your internet connection and try again',
+      'no_internet_connection' => 'No internet connection, please check your internet connection and try again',
+      'no_data' => 'No data found, we are having some issues. Please try again later.',
+      'server_error' => 'Server error, seems like we are having some issues. Please try again later.',
+      'unknown' => 'Something went wrong, we are having some issues',
+
+      _ => this.message,
+    };
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24.0),
@@ -33,7 +39,21 @@ class ErrorScreen extends StatelessWidget {
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: onRetry,
-                child: const Text('Try Again'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.backgroundDark,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                child: Text(
+                  'Try Again',
+                  style: AppTextStyles.bodyMedium.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                  ),
+                ),
               ),
             ],
           ],
@@ -41,4 +61,4 @@ class ErrorScreen extends StatelessWidget {
       ),
     );
   }
-} 
+}

@@ -27,7 +27,7 @@ class IncomeScreen extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 color: AppColors.backgroundLight,
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   bottomRight: Radius.circular(24),
                   bottomLeft: Radius.circular(24),
                 ),
@@ -54,16 +54,32 @@ class IncomeScreen extends StatelessWidget {
                     // Title
                     SliverToBoxAdapter(
                       child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Text(
-                          'Income',
-                          style: AppTextStyles.displaySmall.copyWith(
-                            color: AppColors.textPrimaryLight,
-                            fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
-                            fontSize: 22,
-                            letterSpacing: -0.5,
-                            fontWeight: FontWeight.w600,
-                          ),
+                        padding: const EdgeInsets.all(12),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Income',
+                              style: AppTextStyles.displaySmall.copyWith(
+                                color: AppColors.textPrimaryLight,
+                                fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                                fontSize: 22,
+                                letterSpacing: -0.5,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              'View all income',
+                              style: AppTextStyles.bodyMedium.copyWith(
+                                color: AppColors.neutral800,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: -0.15,
+                                fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -117,7 +133,7 @@ class IncomeScreen extends StatelessWidget {
                         child: Card(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
-                            side: BorderSide(color: AppColors.borderLight),
+                            side: const BorderSide(color: AppColors.borderLight),
                           ),
                           color: Colors.white,
                           elevation: 0,

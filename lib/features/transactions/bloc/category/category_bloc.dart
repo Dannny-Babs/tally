@@ -28,7 +28,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
         emit(CategoryLoaded(categories));
       }
     } catch (e) {
-      emit(CategoryError('Failed to load categories'));
+      emit(const CategoryError('Failed to load categories'));
     }
   }
 

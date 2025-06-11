@@ -15,7 +15,7 @@ class LabeledInput extends StatelessWidget {
     this.hint,
     this.errorText,
     required this.child,
-    this.isRequired = false,
+    this.isRequired = false, required bool enabled,
   });
 
   @override

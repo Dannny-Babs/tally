@@ -1,12 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '../features/dashboard/views/dashboard_screen.dart';
-import '../features/transactions/views/income/income_screen.dart';
-import '../features/transactions/views/expense/expense_screen.dart';
+
+
+import '../utils/utils.dart';
 import 'widgets/custom_tab_bar.dart';
-import '../features/transactions/bloc/transaction/transaction_bloc.dart';
-import '../features/transactions/bloc/transaction/transaction_event.dart';
-import '../features/transactions/bloc/transaction/transaction_state.dart';
 
 class AppShell extends StatefulWidget {
   const AppShell({super.key});
@@ -23,7 +18,7 @@ class _AppShellState extends State<AppShell> {
     const DashboardScreen(),
     const IncomeScreen(), // Income screen
     const ExpenseScreen(), // Expenses screen
-    const Placeholder(), // Settings screen
+    const SettingsScreen(), // Settings screen
   ];
 
   final List<String> _iconPaths = [

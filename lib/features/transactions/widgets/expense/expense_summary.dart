@@ -47,9 +47,9 @@ class ExpenseSummary extends StatelessWidget {
 
             const SizedBox(height: 16),
 
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4.0),
-              child: const TopCategoriesWidget(categoryTotals: {}),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 4.0),
+              child: TopCategoriesWidget(categoryTotals: {}),
             ),
 
             const SizedBox(height: 12),

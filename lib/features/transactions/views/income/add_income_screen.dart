@@ -107,14 +107,14 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
       maxChildSize: 0.95,
       builder: (context, scrollController) {
         return Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Colors.white,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
             boxShadow: [
               BoxShadow(
                 color: Colors.black54,
                 blurRadius: 10,
-                offset: const Offset(0, -2),
+                offset: Offset(0, -2),
               ),
             ],
           ),
@@ -232,6 +232,7 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
                       const SizedBox(height: 16),
 
                       LabeledInput(
+                        enabled: false,
                         label: 'Date & Time',
                         child: InkWell(
                           onTap: () async {

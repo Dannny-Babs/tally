@@ -47,7 +47,7 @@ class ExpenseHeader extends StatelessWidget {
                   builder: (_) => const AddExpenseModal(),
                 );
               },
-              icon: HeroIcon(
+              icon: const HeroIcon(
                 HeroIcons.plus,
                 color: AppColors.neutral900,
               ),

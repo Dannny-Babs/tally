@@ -31,7 +31,7 @@ class MultiSelector extends StatelessWidget {
             }
           },
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             decoration: BoxDecoration(
               color: isSelected ? AppColors.primary500 : AppColors.surfaceLight,
               borderRadius: BorderRadius.circular(20),

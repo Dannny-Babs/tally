@@ -2,14 +2,9 @@
 // TODO (Phase D): Move business logic (calculations, grouping, formatting) out of build() into Bloc or Utils
 // TODO (Phase E): Replace CircularProgressIndicator with ShimmerLoader in Phase B
 
-
-
 import 'dart:io';
 import 'package:flutter/services.dart';
 import '../../../../utils/utils.dart';
-
-
-
 
 class AddExpenseModal extends StatefulWidget {
   const AddExpenseModal({super.key});
@@ -127,7 +122,8 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
   Future<void> _selectRecurrenceEndDate() async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: _recurrenceEndDate ?? DateTime.now().add(const Duration(days: 30)),
+      initialDate:
+          _recurrenceEndDate ?? DateTime.now().add(const Duration(days: 30)),
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(const Duration(days: 365 * 2)),
     );
@@ -137,7 +133,6 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
       });
     }
   }
-
 
   Future<void> _pickReceipt(ImageSource source) async {
     if (_isPickerActive) return;
@@ -222,14 +217,14 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
       maxChildSize: 0.95,
       builder: (context, scrollController) {
         return Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Colors.white,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
             boxShadow: [
               BoxShadow(
                 color: Colors.black54,
                 blurRadius: 10,
-                offset: const Offset(0, -2),
+                offset: Offset(0, -2),
               ),
             ],
           ),
@@ -262,7 +257,8 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
                               'Add Expense',
                               style: AppTextStyles.displaySmall.copyWith(
                                 color: AppColors.neutral900,
-                                fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                                fontFamily:
+                                    GoogleFonts.spaceGrotesk().fontFamily,
                                 fontSize: 20,
                                 letterSpacing: -0.5,
                                 fontWeight: FontWeight.w600,
@@ -273,7 +269,8 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
                               style: AppTextStyles.bodyMedium.copyWith(
                                 color: AppColors.textSecondaryLight,
                                 letterSpacing: -0.15,
-                                fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                                fontFamily:
+                                    GoogleFonts.spaceGrotesk().fontFamily,
                                 fontSize: 14,
                               ),
                             ),
@@ -300,6 +297,7 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
                     children: [
                       const SizedBox(height: 8),
                       LabeledInput(
+                        enabled: false,
                         label: 'Amount',
                         child: TextFormField(
                           controller: _amountController,
@@ -329,9 +327,9 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
                           validator: _validateAmount,
                         ),
                       ),
-
                       const SizedBox(height: 16),
                       LabeledInput(
+                        enabled: false,
                         label: 'Date & Time',
                         child: InkWell(
                           onTap: () async {
@@ -355,7 +353,8 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
                                     fontWeight: FontWeight.w500,
                                     fontSize: 14,
                                     letterSpacing: -0.15,
-                                    fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                                    fontFamily:
+                                        GoogleFonts.spaceGrotesk().fontFamily,
                                   ),
                                 ),
                               ],
@@ -363,9 +362,9 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
                           ),
                         ),
                       ),
-
                       const SizedBox(height: 16),
                       LabeledInput(
+                        enabled: false,
                         label: 'Category',
                         child: BlocBuilder<CategoryBloc, CategoryState>(
                           builder: (context, state) {
@@ -375,7 +374,8 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
                                 decoration: BoxDecoration(
                                   color: AppColors.backgroundLight,
                                   borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(color: AppColors.borderLight),
+                                  border:
+                                      Border.all(color: AppColors.borderLight),
                                 ),
                                 child: DropdownButtonHideUnderline(
                                   child: DropdownButton2<String>(
@@ -396,21 +396,26 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
                                         fontWeight: FontWeight.w500,
                                         fontSize: 14,
                                         letterSpacing: -0.15,
-                                        fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                                        fontFamily: GoogleFonts.spaceGrotesk()
+                                            .fontFamily,
                                       ),
                                     ),
                                     items: state.categories
                                         .map(
-                                          (category) => DropdownMenuItem<String>(
+                                          (category) =>
+                                              DropdownMenuItem<String>(
                                             value: category.name,
                                             child: Text(
                                               category.name,
-                                              style: AppTextStyles.bodyMedium.copyWith(
+                                              style: AppTextStyles.bodyMedium
+                                                  .copyWith(
                                                 color: AppColors.neutral900,
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 16,
                                                 letterSpacing: -0.15,
-                                                fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                                                fontFamily:
+                                                    GoogleFonts.spaceGrotesk()
+                                                        .fontFamily,
                                               ),
                                             ),
                                           ),
@@ -430,9 +435,9 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
                           },
                         ),
                       ),
-
                       const SizedBox(height: 16),
                       LabeledInput(
+                        enabled: false,
                         label: 'Payment Method',
                         child: Container(
                           height: 48,
@@ -460,7 +465,8 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
                                   fontWeight: FontWeight.w500,
                                   fontSize: 14,
                                   letterSpacing: -0.15,
-                                  fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                                  fontFamily:
+                                      GoogleFonts.spaceGrotesk().fontFamily,
                                 ),
                               ),
                               items: _paymentMethods
@@ -469,12 +475,14 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
                                       value: method,
                                       child: Text(
                                         method,
-                                        style: AppTextStyles.bodyMedium.copyWith(
+                                        style:
+                                            AppTextStyles.bodyMedium.copyWith(
                                           color: AppColors.neutral900,
                                           fontWeight: FontWeight.w500,
                                           fontSize: 16,
                                           letterSpacing: -0.15,
-                                          fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                                          fontFamily: GoogleFonts.spaceGrotesk()
+                                              .fontFamily,
                                         ),
                                       ),
                                     ),
@@ -490,9 +498,9 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
                           ),
                         ),
                       ),
-
                       const SizedBox(height: 16),
                       LabeledInput(
+                        enabled: false,
                         label: 'Description',
                         child: TextFormField(
                           controller: _descriptionController,
@@ -513,9 +521,9 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
                           ),
                         ),
                       ),
-
                       const SizedBox(height: 16),
                       LabeledInput(
+                        enabled: false,
                         label: 'Receipt',
                         child: InkWell(
                           onTap: _showImageSourceSheet,
@@ -545,7 +553,7 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Icon(
+                                      const Icon(
                                         HugeIconsSolid.imageUpload01,
                                         size: 32,
                                         color: AppColors.neutral800,
@@ -553,12 +561,14 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
                                       const SizedBox(height: 8),
                                       Text(
                                         'Tap to attach receipt',
-                                        style: AppTextStyles.bodyMedium.copyWith(
+                                        style:
+                                            AppTextStyles.bodyMedium.copyWith(
                                           color: AppColors.neutral700,
                                           fontWeight: FontWeight.w500,
                                           fontSize: 14,
                                           letterSpacing: -0.15,
-                                          fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                                          fontFamily: GoogleFonts.spaceGrotesk()
+                                              .fontFamily,
                                         ),
                                       ),
                                     ],
@@ -578,9 +588,9 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
                           ),
                         ),
                       ),
-
                       const SizedBox(height: 16),
                       LabeledInput(
+                        enabled: false,
                         label: 'Notes',
                         child: TextFormField(
                           controller: _notesController,
@@ -602,10 +612,10 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
                           ),
                         ),
                       ),
-
                       const SizedBox(height: 16),
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 0),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 4, horizontal: 0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -638,27 +648,28 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
                             Transform.scale(
                               scale: 0.8, // Makes the switch smaller
                               child: Switch(
-                                
                                 value: _isRecurring,
                                 onChanged: (bool value) {
                                   setState(() {
                                     _isRecurring = value;
                                   });
                                 },
-                                trackOutlineColor: MaterialStateProperty.all(AppColors.neutral200),
+                                trackOutlineColor: WidgetStateProperty.all(
+                                    AppColors.neutral200),
                                 activeColor: AppColors.primary800,
                                 inactiveThumbColor: AppColors.neutral400,
                                 inactiveTrackColor: AppColors.neutral200,
-                                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                materialTapTargetSize:
+                                    MaterialTapTargetSize.shrinkWrap,
                               ),
                             ),
                           ],
                         ),
                       ),
-
                       if (_isRecurring) ...[
                         const SizedBox(height: 16),
                         LabeledInput(
+                          enabled: false,
                           label: 'Frequency',
                           child: Container(
                             height: 48,
@@ -686,7 +697,8 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
                                     fontWeight: FontWeight.w500,
                                     fontSize: 14,
                                     letterSpacing: -0.15,
-                                    fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                                    fontFamily:
+                                        GoogleFonts.spaceGrotesk().fontFamily,
                                   ),
                                 ),
                                 items: _recurrenceOptions
@@ -695,7 +707,8 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
                                         value: option,
                                         child: Text(
                                           option,
-                                          style: AppTextStyles.bodyMedium.copyWith(
+                                          style:
+                                              AppTextStyles.bodyMedium.copyWith(
                                             color: AppColors.neutral900,
                                             fontWeight: FontWeight.w500,
                                             fontSize: 14,
@@ -717,16 +730,19 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
                         ),
                         const SizedBox(height: 16),
                         LabeledInput(
+                          enabled: false,
                           label: 'End Date',
                           child: InkWell(
                             onTap: _selectRecurrenceEndDate,
                             child: Container(
                               height: 48,
-                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
                               decoration: BoxDecoration(
                                 color: AppColors.backgroundLight,
                                 borderRadius: BorderRadius.circular(8),
-                                border: Border.all(color: AppColors.borderLight),
+                                border:
+                                    Border.all(color: AppColors.borderLight),
                               ),
                               child: Row(
                                 children: [
@@ -739,7 +755,8 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
                                       fontWeight: FontWeight.w500,
                                       fontSize: 14,
                                       letterSpacing: -0.15,
-                                      fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                                      fontFamily:
+                                          GoogleFonts.spaceGrotesk().fontFamily,
                                     ),
                                   ),
                                 ],
@@ -748,7 +765,6 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
                           ),
                         ),
                       ],
-
                       const SizedBox(height: 24),
                       SizedBox(
                         width: double.infinity,
@@ -795,19 +811,19 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
                               }
 
                               context.read<TransactionBloc>().add(
-                                AddExpenseSubmitted(
-                                  amount: amount,
-                                  category: _selectedCategory!,
-                                  description: _descriptionController.text,
-                                  date: _selectedDate,
-                                  time: _selectedTime,
-                                  tags: [_selectedTag!],
-                                  notes: _notesController.text.isEmpty
-                                      ? null
-                                      : _notesController.text,
-                                  paymentMethod: _selectedPaymentMethod!,
-                                ),
-                              );
+                                    AddExpenseSubmitted(
+                                      amount: amount,
+                                      category: _selectedCategory!,
+                                      description: _descriptionController.text,
+                                      date: _selectedDate,
+                                      time: _selectedTime,
+                                      tags: [_selectedTag!],
+                                      notes: _notesController.text.isEmpty
+                                          ? null
+                                          : _notesController.text,
+                                      paymentMethod: _selectedPaymentMethod!,
+                                    ),
+                                  );
                               Navigator.pop(context);
                             }
                           },

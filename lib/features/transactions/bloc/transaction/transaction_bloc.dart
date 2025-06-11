@@ -270,7 +270,7 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
   Map<String, double> _calculateCategoryTotals(List<Transaction> transactions) {
     final Map<String, double> totals = {};
     for (final transaction in transactions) {
-      if (transaction.category == null || transaction.category.isEmpty) {
+      if (transaction.category.isEmpty) {
         continue;
       }
       totals[transaction.category] = (totals[transaction.category] ?? 0) + transaction.amount;
