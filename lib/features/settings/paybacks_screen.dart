@@ -269,77 +269,101 @@ class _PaybacksScreenState extends State<PaybacksScreen>
             final paybacks = state.paybacks;
             if (paybacks.isNotEmpty) {
               return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildSummaryCard(_tabController.index),
+                  const SizedBox(height: 8),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: Text(
+                      'Transactions',
+                      style: AppTextStyles.bodyMedium.copyWith(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 16,
+                          letterSpacing: -0.25),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
                   Expanded(
-                    child: TabBarView(
-                      controller: _tabController,
-                      children: [
-                        // Personal tab
-                        ListView(
-                          children: [
-                            buildPersonalPaybackCard(
-                              icon: Icons.account_circle,
-                              name: 'Sarah Chen',
-                              started: 'May 31',
-                              due: 'Jun 14',
-                              status: 'Due',
-                              amount: '\$4750',
-                              ofAmount: '\$4500',
-                              amountColor: Colors.green,
-                              isOverdue: false,
-                            ),
-                            buildPersonalPaybackCard(
-                              icon: Icons.account_circle,
-                              name: 'Mike Johnson',
-                              started: 'May 19',
-                              due: '',
-                              status: 'Overdue',
-                              amount: '\$4250',
-                              ofAmount: '\$4500',
-                              amountColor: Colors.red,
-                              isOverdue: true,
-                            ),
-                          ],
-                        ),
-                        // Credit tab
-                        ListView(
-                          children: [
-                            buildCreditCard(
-                              icon: Icons.credit_card,
-                              name: 'Chase Sapphire Preferred',
-                              type: 'Credit Card',
-                              started: 'Dec 31',
-                              status: 'Active',
-                              interest: '18.99%',
-                              utilization: 0.54,
-                              utilizationText: '54.0%',
-                              amount: '\$42,300',
-                              ofAmount: '\$45,000',
-                            ),
-                          ],
-                        ),
-                        // Debt tab
-                        ListView(
-                          children: [
-                            buildDebtCard(
-                              icon: Icons.account_balance,
-                              name: 'Personal Loan - Marcus',
-                              type: 'Personal Loan',
-                              started: 'Aug 14',
-                              status: 'Active',
-                              interest: '6.99%',
-                              progress: 0.83,
-                              amount: '\$412,500',
-                              ofAmount: '\$415,000',
-                            ),
-                          ],
-                        ),
-                      ],
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 8),
+                      margin: const EdgeInsets.symmetric(horizontal: 12),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: AppColors.neutral100),
+                      ),
+                      child: TabBarView(
+                        controller: _tabController,
+                        children: [
+                          // Personal tab
+                          ListView(
+                            children: [
+                              buildPersonalPaybackCard(
+                                icon: HugeIconsStroke.userCircle02,
+                                name: 'Sarah Chen',
+                                started: 'May 31',
+                                due: 'Jun 14',
+                                status: 'Due',
+                                amount: '\$4750',
+                                ofAmount: '\$4500',
+                                amountColor: Colors.green,
+                                isOverdue: false,
+                              ),
+                              buildPersonalPaybackCard(
+                                icon: HugeIconsStroke.userCircle02,
+                                name: 'Mike Johnson',
+                                started: 'May 19',
+                                due: '',
+                                status: 'Overdue',
+                                amount: '\$4250',
+                                ofAmount: '\$4500',
+                                amountColor: Colors.red,
+                                isOverdue: true,
+                              ),
+                            ],
+                          ),
+                          // Credit tab
+                          ListView(
+                            children: [
+                              buildCreditCard(
+                                icon: HugeIconsStroke.creditCard,
+                                name: 'TD Cashback Card',
+                                type: 'Credit Card',
+                                started: 'Dec 31',
+                                status: 'Due',
+                                interest: '18.99%',
+                                utilization: 0.90,
+                                utilizationText: '54.0%',
+                                amount: '\$42,300',
+                                ofAmount: '\$45,000',
+                              ),
+                            ],
+                          ),
+                          // Debt tab
+                          ListView(
+                            children: [
+                              buildDebtCard(
+                                icon: Icons.account_balance,
+                                name: 'Personal Loan - Marcus',
+                                type: 'Personal Loan',
+                                started: 'Aug 14',
+                                status: 'Active',
+                                interest: '6.99%',
+                                progress: 0.83,
+                                amount: '\$412,500',
+                                ofAmount: '\$415,000',
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
-              );
+              )
+              ;
             } else {
               return Center(
                 child: Column(
@@ -390,6 +414,11 @@ class _PaybacksScreenState extends State<PaybacksScreen>
             }
           },
         ),
+      ),
+    floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColors.primary500,
+        child: const Icon(Icons.add, color: Colors.white),
+        onPressed: () => {},
       ),
     );
   }
@@ -449,13 +478,24 @@ class _PaybacksScreenState extends State<PaybacksScreen>
     required bool isOverdue,
   }) {
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: const BorderSide(color: AppColors.neutral100),
+      ),
+      color: Colors.white,
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(12),
         child: Row(
           children: [
-            Icon(icon, size: 36, color: amountColor),
+            Container(
+              decoration: BoxDecoration(
+                color: amountColor.withAlpha(20),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              padding: const EdgeInsets.all(8),
+              child: Icon(icon, size: 24, color: amountColor),
+            ),
             const SizedBox(width: 16),
             Expanded(
               child: Row(
@@ -465,15 +505,41 @@ class _PaybacksScreenState extends State<PaybacksScreen>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                        Text('Started $started', style: const TextStyle(fontSize: 13)),
-                        Text(
-                          isOverdue ? 'Overdue' : 'Due $due',
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: isOverdue ? Colors.red : Colors.grey[700],
-                            fontWeight: isOverdue ? FontWeight.bold : FontWeight.normal,
-                          ),
+                        Text(name,
+                            style: AppTextStyles.bodyMedium.copyWith(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 18,
+                                letterSpacing: -0.2)),
+                        Row(
+                          children: [
+                            Text('Started $started',
+                                style: AppTextStyles.bodySmall.copyWith(
+                                    fontSize: 13,
+                                    color: AppColors.neutral700,
+                                    fontWeight: FontWeight.normal,
+                                    letterSpacing: -0.15)),
+                            const SizedBox(width: 4),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: AppColors.neutral300,
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 2, vertical: 2),
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              isOverdue ? 'Overdue' : 'Due $due',
+                              style: AppTextStyles.bodySmall.copyWith(
+                                color: isOverdue
+                                    ? AppColors.error
+                                    : AppColors.neutral700,
+                                fontWeight: isOverdue
+                                    ? FontWeight.w600
+                                    : FontWeight.w500,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -482,8 +548,14 @@ class _PaybacksScreenState extends State<PaybacksScreen>
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text(amount, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: amountColor)),
-                      Text('of $ofAmount', style: const TextStyle(fontSize: 13, color: Colors.grey)),
+                      Text(amount,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                              color: amountColor)),
+                      Text('of $ofAmount',
+                          style: const TextStyle(
+                              fontSize: 13, color: Colors.grey)),
                     ],
                   ),
                 ],
@@ -508,52 +580,133 @@ class _PaybacksScreenState extends State<PaybacksScreen>
     required String ofAmount,
   }) {
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: const BorderSide(color: AppColors.neutral200),
+      ),
+      color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.all(16),
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, size: 36, color: Colors.blue),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                  Text(type, style: const TextStyle(fontSize: 13, color: Colors.grey)),
-                  Text('Started $started', style: const TextStyle(fontSize: 13)),
-                  Text(status, style: const TextStyle(fontSize: 13, color: Colors.green)),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Text('$interest ', style: const TextStyle(fontSize: 13, color: Colors.grey)),
-                      const Text('Interest', style: TextStyle(fontSize: 13, color: Colors.grey)),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text(utilizationText, style: const TextStyle(fontSize: 13, color: Colors.grey)),
-                      const Text(' Utilization', style: TextStyle(fontSize: 13, color: Colors.grey)),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  LinearProgressIndicator(
-                    value: utilization,
-                    minHeight: 6,
-                    backgroundColor: Colors.grey[200],
-                    color: Colors.blue,
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(amount, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.blue)),
-                      Text(' of $ofAmount', style: const TextStyle(fontSize: 13, color: Colors.grey)),
-                    ],
-                  ),
-                ],
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.blue.withAlpha(20),
+                borderRadius: BorderRadius.circular(8),
               ),
+              padding: const EdgeInsets.all(8),
+              child: Icon(icon, size: 24, color: Colors.blue),
+            ),
+            const SizedBox(height: 16),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Text(name,
+                        style: AppTextStyles.bodyMedium.copyWith(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
+                            letterSpacing: -0.2)),
+                    const SizedBox(width: 8),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.neutral200,
+                        borderRadius: BorderRadius.circular(90),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 6, vertical: 2),
+                      child: Text(
+                        type,
+                        style: AppTextStyles.bodySmall.copyWith(
+                            fontSize: 12,
+                            color: AppColors.neutral800,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Text(
+                      'Started $started',
+                      style: AppTextStyles.bodySmall.copyWith(
+                          fontSize: 13,
+                          color: AppColors.neutral700,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(left: 6, right: 6),
+                      decoration: BoxDecoration(
+                        color: AppColors.neutral400,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 2, vertical: 2),
+                    ),
+                    Text(
+                      status,
+                      style: AppTextStyles.bodySmall.copyWith(
+                          fontSize: 13,
+                          color: Colors.blue,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(left: 6, right: 6),
+                      decoration: BoxDecoration(
+                        color: AppColors.neutral400,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 2, vertical: 2),
+                    ),
+                    Text(
+                      interest,
+                      style: AppTextStyles.bodySmall.copyWith(
+                          fontSize: 13,
+                          color: AppColors.neutral700,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [Text(' Utilization',
+                        style: AppTextStyles.bodySmall
+                            .copyWith(fontSize: 13, color: Colors.grey, fontWeight: FontWeight.normal)),
+                    Text(utilizationText,
+                        style: AppTextStyles.bodySmall
+                            .copyWith(fontSize: 13, color: Colors.grey, fontWeight: FontWeight.w600 )),
+                    
+                  ],
+                ),
+                const SizedBox(height: 8),
+                LinearProgressIndicator(
+                  value: utilization,
+                  minHeight: 6,
+                  backgroundColor: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(4),
+                  color: Colors.blue,
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(amount,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: Colors.blue)),
+                    Text(' of $ofAmount',
+                        style: const TextStyle(
+                            fontSize: 13, color: Colors.grey)),
+                  ],
+                ),
+              ],
             ),
           ],
         ),
@@ -573,46 +726,112 @@ class _PaybacksScreenState extends State<PaybacksScreen>
     required String ofAmount,
   }) {
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: const BorderSide(color: AppColors.neutral200),
+      ),
+      color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.all(16),
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, size: 36, color: Colors.deepPurple),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.deepPurple.withAlpha(20),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              padding: const EdgeInsets.all(8),
+              child: Icon(icon, size: 24, color: Colors.deepPurple),
+            ),
+            const SizedBox(height: 16),
+            Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                  Text(type, style: const TextStyle(fontSize: 13, color: Colors.grey)),
-                  Text('Started $started', style: const TextStyle(fontSize: 13)),
-                  Text(status, style: const TextStyle(fontSize: 13, color: Colors.green)),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Text('$interest ', style: const TextStyle(fontSize: 13, color: Colors.grey)),
-                      const Text('Interest', style: TextStyle(fontSize: 13, color: Colors.grey)),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
+                 Row(
+                  children: [
+                    Text(name,
+                        style: AppTextStyles.bodyMedium.copyWith(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
+                            letterSpacing: -0.2)),
+                    const SizedBox(width: 8),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.neutral200,
+                        borderRadius: BorderRadius.circular(90),
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      child: Text(type,
+                          style: AppTextStyles.bodySmall.copyWith(
+                              fontSize: 12,
+                              color: AppColors.neutral800,
+                              fontWeight: FontWeight.w600)),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Row(
+                  children: [
+                    Text('Started $started',
+                        style: AppTextStyles.bodySmall.copyWith(
+                            fontSize: 13, 
+                            color: AppColors.neutral700,
+                            fontWeight: FontWeight.w600)),
+                    const SizedBox(width: 4),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.neutral400,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+                    ),
+                    const SizedBox(width: 4),
+                    Text(status,  
+                        style: AppTextStyles.bodySmall.copyWith(
+                            fontSize: 13,
+                            color: Colors.green,
+                            fontWeight: FontWeight.w600)),
+                    const SizedBox(width: 4),
+                    Container(  
+                      decoration: BoxDecoration(
+                        color: AppColors.neutral400,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+                    ),
+                    const SizedBox(width: 4),
+                    Text(interest,
+                        style: AppTextStyles.bodySmall.copyWith(
+                            fontSize: 13,
+                            color: AppColors.neutral700,
+                            fontWeight: FontWeight.w600)),
+                  ],
+                ),
+                  const SizedBox(height:10),
                   LinearProgressIndicator(
                     value: progress,
                     minHeight: 6,
                     backgroundColor: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(4),
                     color: Colors.deepPurple,
                   ),
                   const SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(amount, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.deepPurple)),
-                      Text(' of $ofAmount', style: const TextStyle(fontSize: 13, color: Colors.grey)),
+                      Text(amount,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                              color: Colors.deepPurple)),
+                      Text(' of $ofAmount',
+                          style: const TextStyle(
+                              fontSize: 13, color: Colors.grey)),
                     ],
                   ),
-                ],
-              ),
+              ],
             ),
           ],
         ),
