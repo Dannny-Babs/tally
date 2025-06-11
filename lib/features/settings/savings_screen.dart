@@ -19,7 +19,9 @@ class SavingsScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: const PlatformBackButton(),
+        leading: const PlatformBackButton(
+          color: AppColors.textPrimaryLight,
+        ),
         title: Text(
           'Savings',
           style: AppTextStyles.titleLarge.copyWith(
@@ -51,11 +53,11 @@ class SavingsScreen extends StatelessWidget {
           final goals = state.goals;
           if (goals.isEmpty) {
             return EmptyStatePlaceholder(
-              icon: HugeIconsStroke.savings,
+              imagePath: 'assets/images/no_savings.png',
               message: 'No savings goals yet. Tap + to create one.',
               onActionPressed: () => _openAddGoalModal(context),
               actionLabel: 'Add Goal',
-              title: '',
+              title: 'No Savings Goals',
             );
           }
 

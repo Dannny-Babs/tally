@@ -5,17 +5,19 @@ import '../theme/app_text_styles.dart';
 class EmptyStatePlaceholder extends StatelessWidget {
   final String title;
   final String message;
-  final IconData icon;
+  final IconData? icon;
   final VoidCallback? onActionPressed;
   final String? actionLabel;
+  final String? imagePath;
 
   const EmptyStatePlaceholder({
     super.key,
     required this.title,
     required this.message,
-    required this.icon,
+     this.icon,
     this.onActionPressed,
     this.actionLabel,
+    this.imagePath,
   });
 
   @override
@@ -26,22 +28,40 @@ class EmptyStatePlaceholder extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              icon,
-              size: 64,
+            if (icon != null)
+              Icon(
+                icon!,
+                size: 64,
                 color: AppColors.textSecondaryLight,
+              ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.asset(
+                imagePath ?? '',
+                width: 220,
+                height: 220,
+                
+              ),
             ),
             const SizedBox(height: 16),
             Text(
               title,
-              style: AppTextStyles.titleLarge,
+              style: AppTextStyles.titleLarge.copyWith(
+                color: AppColors.textPrimaryLight,
+                fontWeight: FontWeight.w600,
+                fontSize: 24,
+                letterSpacing: -0.3,
+              ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 4),
             Text(
               message,
               style: AppTextStyles.body.copyWith(
                 color: AppColors.textSecondaryLight,
+                fontWeight: FontWeight.w500,
+                fontSize: 16,
+                letterSpacing: -0.3,
               ),
               textAlign: TextAlign.center,
             ),
@@ -50,7 +70,7 @@ class EmptyStatePlaceholder extends StatelessWidget {
               ElevatedButton(
                 onPressed: onActionPressed,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.neutral800,
+                  backgroundColor: AppColors.textPrimaryLight,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 24,
@@ -62,7 +82,12 @@ class EmptyStatePlaceholder extends StatelessWidget {
                 ),
                 child: Text(
                   actionLabel!,
-                  style: AppTextStyles.button,
+                  style: AppTextStyles.button.copyWith(
+                    color: AppColors.neutral50,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                    letterSpacing: -0.2,
+                  ),
                 ),
               ),
             ],

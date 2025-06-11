@@ -47,7 +47,6 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -150,10 +149,15 @@ class _ProfileHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const CircleAvatar(
-          radius: 40,
-          backgroundColor: AppColors.primary200,
-          child: Icon(Icons.person, size: 48, color: AppColors.primary700),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(900),
+          
+          child: Image.asset(
+            'assets/images/profile.png',
+            width: 100,
+            height: 100,
+            fit: BoxFit.cover,
+          ),
         ),
         const SizedBox(height: 16),
         Text(
@@ -191,7 +195,6 @@ class _ProfileHeader extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.neutral900,
               foregroundColor: Colors.white,
-
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(24),
                 side: const BorderSide(color: AppColors.neutral800),
@@ -225,7 +228,7 @@ class _AccountsCard extends StatelessWidget {
     final textPrimary =
         isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight;
     final textSecondary =
-        isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight;
+        isDark ? AppColors.textSecondaryDark : AppColors.neutral700;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -235,7 +238,6 @@ class _AccountsCard extends StatelessWidget {
           style: AppTextStyles.bodyMedium.copyWith(
             color: textSecondary,
             fontWeight: FontWeight.w500,
-
             fontSize: 14,
             letterSpacing: -0.15,
           ),
@@ -333,7 +335,7 @@ class _PreferencesCard extends StatelessWidget {
     final textPrimary =
         isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight;
     final textSecondary =
-        isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight;
+        isDark ? AppColors.textSecondaryDark : AppColors.neutral700;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -373,8 +375,7 @@ class _PreferencesCard extends StatelessWidget {
                       scale: 0.8,
                       child: Switch(
                         value: state.pushNotificationsEnabled,
-                        onChanged:
-                            (v) => context.read<PreferencesBloc>().add(
+                        onChanged: (v) => context.read<PreferencesBloc>().add(
                               PushNotificationsToggled(v),
                             ),
                         activeColor: Colors.white,
@@ -391,8 +392,7 @@ class _PreferencesCard extends StatelessWidget {
                         padding: EdgeInsets.zero,
                       ),
                     ),
-                    onTap:
-                        () => context.read<PreferencesBloc>().add(
+                    onTap: () => context.read<PreferencesBloc>().add(
                           PushNotificationsToggled(
                             !state.pushNotificationsEnabled,
                           ),
@@ -412,11 +412,9 @@ class _PreferencesCard extends StatelessWidget {
                       scale: 0.8,
                       child: Switch(
                         value: state.faceIdEnabled,
-                        onChanged:
-                            (v) => context.read<PreferencesBloc>().add(
+                        onChanged: (v) => context.read<PreferencesBloc>().add(
                               FaceIdToggled(v),
                             ),
-
                         activeColor: Colors.white,
                         inactiveThumbColor: AppColors.neutral300,
                         inactiveTrackColor: AppColors.neutral300,
@@ -431,8 +429,7 @@ class _PreferencesCard extends StatelessWidget {
                         padding: EdgeInsets.zero,
                       ),
                     ),
-                    onTap:
-                        () => context.read<PreferencesBloc>().add(
+                    onTap: () => context.read<PreferencesBloc>().add(
                           FaceIdToggled(!state.faceIdEnabled),
                         ),
                   ),
@@ -460,14 +457,12 @@ class _PreferencesCard extends StatelessWidget {
                             top: Radius.circular(24),
                           ),
                         ),
-                        builder:
-                            (context) => Padding(
-                              padding: EdgeInsets.only(
-                                bottom:
-                                    MediaQuery.of(context).viewInsets.bottom,
-                              ),
-                              child: const PinCodeModal(),
-                            ),
+                        builder: (context) => Padding(
+                          padding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).viewInsets.bottom,
+                          ),
+                          child: const PinCodeModal(),
+                        ),
                       );
                     },
                   ),
@@ -493,62 +488,59 @@ class _PreferencesCard extends StatelessWidget {
                     onTap: () async {
                       final confirmed = await showDialog<bool>(
                         context: context,
-                        builder:
-                            (context) => AlertDialog(
-                              actionsAlignment: MainAxisAlignment.end,
-                              alignment: Alignment.center,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              backgroundColor: Colors.white,
-                              title: Text(
-                                'Confirm Logout',
-                                style: AppTextStyles.bodyMedium.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 18,
-                                ),
-                              ),
-                              content: Text(
-                                'Are you sure you want to log out? You will be logged out of your account and will need to log in again to continue.',
-                                style: AppTextStyles.bodyMedium.copyWith(
-                                  fontSize: 14,
-                                  color: AppColors.neutral800,
-                                ),
-                              ),
-                              actions: [
-                                TextButton(
-                                  onPressed:
-                                      () => Navigator.of(context).pop(false),
-                                  child: Text(
-                                    'Cancel',
-                                    style: AppTextStyles.bodyMedium.copyWith(
-                                      color: AppColors.neutral800,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: AppColors.error,
-                                    foregroundColor: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(24),
-                                    ),
-                                  ),
-                                  onPressed:
-                                      () => Navigator.of(context).pop(true),
-                                  child: Text(
-                                    'Logout',
-                                    style: AppTextStyles.bodyMedium.copyWith(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                        builder: (context) => AlertDialog(
+                          actionsAlignment: MainAxisAlignment.end,
+                          alignment: Alignment.center,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          backgroundColor: Colors.white,
+                          title: Text(
+                            'Confirm Logout',
+                            style: AppTextStyles.bodyMedium.copyWith(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18,
                             ),
+                          ),
+                          content: Text(
+                            'Are you sure you want to log out? You will be logged out of your account and will need to log in again to continue.',
+                            style: AppTextStyles.bodyMedium.copyWith(
+                              fontSize: 14,
+                              color: AppColors.neutral800,
+                            ),
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(false),
+                              child: Text(
+                                'Cancel',
+                                style: AppTextStyles.bodyMedium.copyWith(
+                                  color: AppColors.neutral800,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.error,
+                                foregroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(24),
+                                ),
+                              ),
+                              onPressed: () => Navigator.of(context).pop(true),
+                              child: Text(
+                                'Logout',
+                                style: AppTextStyles.bodyMedium.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       );
                       if (confirmed == true) {
                         context.read<AuthBloc>().add(LogoutRequested());
@@ -585,14 +577,12 @@ class _SettingsListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,
-
       child: InkWell(
         borderRadius: BorderRadius.zero,
         onTap: onTap,
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
           constraints: const BoxConstraints(minHeight: 44),
-
           child: Row(
             children: [
               leading,

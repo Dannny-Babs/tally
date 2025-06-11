@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
             create: (context) => ProfileBloc(
               context.read<ProfileRepository>(),
             ),
-          ),
+        ),
           BlocProvider(
             create: (context) => PreferencesBloc(
               context.read<PreferencesRepository>(),
@@ -61,7 +61,7 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) => AuthBloc(),
-          ),
+        ),
           BlocProvider(
             create: (context) => DashboardBloc(),
           ),
@@ -69,26 +69,26 @@ class MyApp extends StatelessWidget {
             create: (context) => SavingsBloc(
               prefs: prefs,
             )..add(const LoadSavings()),
-          ),
+        ),
           BlocProvider(
             create: (context) => PaybacksBloc(
               prefs: prefs,
             )..add(LoadPaybacks()),
-          ),
-        ],
-        child: MaterialApp(
-          title: 'Tally',
-          theme: AppTheme.lightTheme,
-          debugShowCheckedModeBanner: false,
-          routes: {
-            '/savings': (context) => const SavingsScreen(),
+        ),  
+      ],
+      child: MaterialApp(
+        title: 'Tally',
+        theme: AppTheme.lightTheme,
+        debugShowCheckedModeBanner: false,
+        routes: {
+          '/savings': (context) => const SavingsScreen(),
             '/paybacks': (context) => const PaybacksScreen(),
-            '/edit_profile': (context) => const EditProfileScreen(),
-          },
-          initialRoute: '/',
-          onGenerateRoute: (settings) {
-            switch (settings.name) {
-              case '/savings':
+          '/edit_profile': (context) => const EditProfileScreen(),
+        },
+        initialRoute: '/',
+        onGenerateRoute: (settings) {
+          switch (settings.name) {
+            case '/savings':
                 return MaterialPageRoute(
                   builder: (context) => const SavingsScreen(),
                 );
@@ -96,18 +96,18 @@ class MyApp extends StatelessWidget {
                 return MaterialPageRoute(
                   builder: (context) => const PaybacksScreen(),
                 );
-              case '/edit_profile':
+            case '/edit_profile':
                 return MaterialPageRoute(
                   builder: (context) => const EditProfileScreen(),
                 );
-              default:
+            default:
                 return MaterialPageRoute(
                   builder: (context) => const NotFoundScreen(),
                 );
-            }
-          },
-          onUnknownRoute: (settings) => MaterialPageRoute(
-            builder: (context) => const NotFoundScreen(),
+          }
+        },
+        onUnknownRoute: (settings) => MaterialPageRoute(
+          builder: (context) => const NotFoundScreen(),
           ),
           home: const AppShell(),
         ),
