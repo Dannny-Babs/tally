@@ -36,6 +36,7 @@ class DashboardScreen extends StatelessWidget {
                 border: Border.all(color: AppColors.borderLight),
               ),
               height: MediaQuery.of(context).size.height,
+              padding: const EdgeInsets.symmetric(horizontal: 6),
               child: CustomScrollView(
                 slivers: [
                   SliverToBoxAdapter(
@@ -44,21 +45,36 @@ class DashboardScreen extends StatelessWidget {
                       children: [
                         Padding(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
                             vertical: 12,
+                            horizontal: 6,
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                'Dashboard',
-                                style: AppTextStyles.displayMedium.copyWith(
-                                  color: AppColors.textPrimaryLight,
-                                  fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
-                                  fontWeight: FontWeight.w600,
-                                  letterSpacing: -0.5,
-                                  fontSize: 24,
-                                ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Hi, Daniel',
+                                    style: AppTextStyles.displayMedium.copyWith(
+                                      color: AppColors.textPrimaryLight,
+                                      fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                                      fontWeight: FontWeight.w600,
+                                      letterSpacing: -0.5,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Welcome back to Tally',
+                                    style: AppTextStyles.bodySmall.copyWith(
+                                      color: AppColors.neutral700,
+                                      fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
+                                      fontWeight: FontWeight.w600,
+                                      letterSpacing: -0.5,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
                               ),
                               InkWell(
                                 onTap: () {
@@ -72,10 +88,10 @@ class DashboardScreen extends StatelessWidget {
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(
                                     horizontal: 12,
-                                    vertical: 6,
+                                    vertical: 10,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: AppColors.neutral800,
+                                    color: AppColors.textPrimaryLight,
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Row(
