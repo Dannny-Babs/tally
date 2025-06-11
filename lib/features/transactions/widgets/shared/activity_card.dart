@@ -73,7 +73,7 @@ class ActivityCard extends StatelessWidget {
           Text(
             '${isIncome ? '+' : '-'}\$${amount.toStringAsFixed(0)}',
             style: AppTextStyles.bodyMedium.copyWith(
-              color: isIncome ? AppColors.primary500 : AppColors.neutral600,
+              color: isIncome ? AppColors.successDark : AppColors.neutral700,
               fontWeight: FontWeight.w600,
               fontSize: 16,
               letterSpacing: -0.15,
