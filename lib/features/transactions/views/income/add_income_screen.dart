@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 
 import '../../../../utils/utils.dart';
 import '../../widgets/exports.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddIncomeModal extends StatefulWidget {
   const AddIncomeModal({super.key});
@@ -19,6 +20,7 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
   final _amountController = TextEditingController();
   final _notesController = TextEditingController();
   final _sourceController = TextEditingController();
+  final _payeeController = TextEditingController();
 
   String? _selectedSource;
   String? _selectedPaymentMethod;
@@ -27,6 +29,7 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
   bool _isTaxable = true;
   bool _isRecurring = false;
   String? _recurrenceFrequency;
+  String? _selectedCategory;
 
   final List<String> _sources = ['Freelance', 'Job', 'Business', 'Other'];
   final List<String> _paymentMethods = [
@@ -42,22 +45,19 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
     'Monthly',
     'Yearly',
   ];
-  String _selectedCategories = '';
-  final List<String> _categories = [
-    'Salary',
-    'Freelance',
-    'Bonus',
-    'Investment',
-    'Gift',
-    'Refund',
-    'Other',
-  ];
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<CategoryBloc>().add(CategoriesLoaded());
+  }
 
   @override
   void dispose() {
     _amountController.dispose();
     _notesController.dispose();
     _sourceController.dispose();
+    _payeeController.dispose();
     super.dispose();
   }
 
@@ -426,18 +426,25 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
                         ),
                       ),
                       const SizedBox(height: 4),
-                      MultiSelector(
-                        options: _categories,
-                        selectedOption: _selectedCategories,
-                        onOptionSelected: (option) {
-                          setState(() {
-                            _selectedCategories = option;
-                          });
-                        },
-                        onOptionDeselected: (option) {
-                          setState(() {
-                            _selectedCategories = '';
-                          });
+                      BlocBuilder<CategoryBloc, CategoryState>(
+                        builder: (context, state) {
+                          if (state is CategoryLoaded) {
+                            return MultiSelector(
+                              options: state.categories.map((c) => c.name).toList(),
+                              selectedOption: _selectedCategory ?? '',
+                              onOptionSelected: (option) {
+                                setState(() {
+                                  _selectedCategory = option;
+                                });
+                              },
+                              onOptionDeselected: (option) {
+                                setState(() {
+                                  _selectedCategory = null;
+                                });
+                              },
+                            );
+                          }
+                          return const Center(child: CircularProgressIndicator());
                         },
                       ),
                       const SizedBox(height: 16),
@@ -593,12 +600,10 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
                         child: ElevatedButton(
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
-                              if (_selectedCategories.isEmpty) {
+                              if (_selectedCategory == null) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
-                                    content: Text(
-                                      'Select at least one category',
-                                    ),
+                                    content: Text('Select a category'),
                                   ),
                                 );
                                 return;
@@ -618,17 +623,13 @@ class _AddIncomeModalState extends State<AddIncomeModal> {
 
                               context.read<TransactionBloc>().add(
                                 AddIncomeSubmitted(
-                                  
                                   amount: amount,
                                   source: _selectedSource!,
-                                  payee: _selectedSource!,
+                                  payee: _payeeController.text.isNotEmpty ? _payeeController.text : _selectedSource!,
                                   date: _selectedDate,
                                   time: _selectedTime,
-                                  category: _selectedCategories,
-                                  notes:
-                                      _notesController.text.isEmpty
-                                          ? null
-                                          : _notesController.text,
+                                  category: _selectedCategory!,
+                                  notes: _notesController.text.isEmpty ? null : _notesController.text,
                                 ),
                               );
                               Navigator.pop(context);

@@ -9,6 +9,7 @@ import 'features/settings/bloc/savings/savings_bloc.dart';
 import 'features/settings/bloc/savings/savings_event.dart';
 import 'features/settings/bloc/paybacks/paybacks_bloc.dart';
 import 'features/settings/bloc/paybacks/paybacks_event.dart';
+import 'features/transactions/bloc/category/category_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -74,21 +75,24 @@ class MyApp extends StatelessWidget {
             create: (context) => PaybacksBloc(
               prefs: prefs,
             )..add(LoadPaybacks()),
-        ),  
-      ],
-      child: MaterialApp(
-        title: 'Tally',
-        theme: AppTheme.lightTheme,
-        debugShowCheckedModeBanner: false,
-        routes: {
-          '/savings': (context) => const SavingsScreen(),
+        ),
+          BlocProvider(
+            create: (context) => CategoryBloc(),
+          ),
+        ],
+        child: MaterialApp(
+          title: 'Tally',
+          theme: AppTheme.lightTheme,
+          debugShowCheckedModeBanner: false,
+          routes: {
+            '/savings': (context) => const SavingsScreen(),
             '/paybacks': (context) => const PaybacksScreen(),
-          '/edit_profile': (context) => const EditProfileScreen(),
-        },
-        initialRoute: '/',
-        onGenerateRoute: (settings) {
-          switch (settings.name) {
-            case '/savings':
+            '/edit_profile': (context) => const EditProfileScreen(),
+          },
+          initialRoute: '/',
+          onGenerateRoute: (settings) {
+            switch (settings.name) {
+              case '/savings':
                 return MaterialPageRoute(
                   builder: (context) => const SavingsScreen(),
                 );
@@ -96,18 +100,18 @@ class MyApp extends StatelessWidget {
                 return MaterialPageRoute(
                   builder: (context) => const PaybacksScreen(),
                 );
-            case '/edit_profile':
+              case '/edit_profile':
                 return MaterialPageRoute(
                   builder: (context) => const EditProfileScreen(),
                 );
-            default:
+              default:
                 return MaterialPageRoute(
                   builder: (context) => const NotFoundScreen(),
                 );
-          }
-        },
-        onUnknownRoute: (settings) => MaterialPageRoute(
-          builder: (context) => const NotFoundScreen(),
+            }
+          },
+          onUnknownRoute: (settings) => MaterialPageRoute(
+            builder: (context) => const NotFoundScreen(),
           ),
           home: const AppShell(),
         ),

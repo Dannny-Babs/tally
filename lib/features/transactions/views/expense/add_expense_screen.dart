@@ -5,6 +5,8 @@
 import 'dart:io';
 import 'package:flutter/services.dart';
 import '../../../../utils/utils.dart';
+import '../../widgets/exports.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddExpenseModal extends StatefulWidget {
   const AddExpenseModal({super.key});
@@ -21,7 +23,7 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
   final _imagePicker = ImagePicker();
 
   String? _selectedCategory;
-  String? _selectedTag;
+  List<String> _selectedTags = [];
   String? _selectedPaymentMethod;
   DateTime _selectedDate = DateTime.now();
   TimeOfDay _selectedTime = TimeOfDay.now();
@@ -369,69 +371,22 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
                         child: BlocBuilder<CategoryBloc, CategoryState>(
                           builder: (context, state) {
                             if (state is CategoryLoaded) {
-                              return Container(
-                                height: 48,
-                                decoration: BoxDecoration(
-                                  color: AppColors.backgroundLight,
-                                  borderRadius: BorderRadius.circular(8),
-                                  border:
-                                      Border.all(color: AppColors.borderLight),
-                                ),
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton2<String>(
-                                    dropdownStyleData: DropdownStyleData(
-                                      decoration: BoxDecoration(
-                                        color: AppColors.backgroundLight,
-                                        borderRadius: BorderRadius.circular(8),
-                                        border: Border.all(
-                                          color: AppColors.borderLight,
-                                        ),
-                                      ),
-                                    ),
-                                    isExpanded: true,
-                                    hint: Text(
-                                      'Select category',
-                                      style: AppTextStyles.bodyMedium.copyWith(
-                                        color: AppColors.neutral800,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 14,
-                                        letterSpacing: -0.15,
-                                        fontFamily: GoogleFonts.spaceGrotesk()
-                                            .fontFamily,
-                                      ),
-                                    ),
-                                    items: state.categories
-                                        .map(
-                                          (category) =>
-                                              DropdownMenuItem<String>(
-                                            value: category.name,
-                                            child: Text(
-                                              category.name,
-                                              style: AppTextStyles.bodyMedium
-                                                  .copyWith(
-                                                color: AppColors.neutral900,
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 16,
-                                                letterSpacing: -0.15,
-                                                fontFamily:
-                                                    GoogleFonts.spaceGrotesk()
-                                                        .fontFamily,
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                        .toList(),
-                                    value: _selectedCategory,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        _selectedCategory = value;
-                                      });
-                                    },
-                                  ),
-                                ),
+                              return MultiSelector(
+                                options: state.categories.map((c) => c.name).toList(),
+                                selectedOption: _selectedCategory ?? '',
+                                onOptionSelected: (option) {
+                                  setState(() {
+                                    _selectedCategory = option;
+                                  });
+                                },
+                                onOptionDeselected: (option) {
+                                  setState(() {
+                                    _selectedCategory = null;
+                                  });
+                                },
                               );
                             }
-                            return const SizedBox.shrink();
+                            return const Center(child: CircularProgressIndicator());
                           },
                         ),
                       ),
@@ -780,10 +735,10 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
                                 return;
                               }
 
-                              if (_selectedTag == null) {
+                              if (_selectedTags.isEmpty) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
-                                    content: Text('Select a tag'),
+                                    content: Text('Select at least one tag'),
                                   ),
                                 );
                                 return;
@@ -817,7 +772,7 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
                                       description: _descriptionController.text,
                                       date: _selectedDate,
                                       time: _selectedTime,
-                                      tags: [_selectedTag!],
+                                      tags: _selectedTags,
                                       notes: _notesController.text.isEmpty
                                           ? null
                                           : _notesController.text,
