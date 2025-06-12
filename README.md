@@ -7,12 +7,14 @@
 ## 📌 Current Features
 
 ### Core Functionality
+
 - **Local Data Management**
   - Secure local storage using SharedPreferences
   - Efficient data serialization/deserialization
   - Automatic data persistence
 
 ### User Profile & Settings
+
 - **Profile Management**
   - Basic profile information (name, email)
   - Financial details (annual salary, tax rate)
@@ -26,6 +28,7 @@
   - Local data persistence
 
 ### Savings Management
+
 - **Savings Accounts**
   - Multiple account support
   - Balance tracking
@@ -38,6 +41,7 @@
 ## 🚧 Planned Features
 
 ### Authentication & Cloud Sync
+
 - **Authentication Options**
   - Supabase Authentication
   - Firebase Authentication
@@ -52,6 +56,7 @@
   - Offline support
 
 ### Enhanced Financial Tracking
+
 - **Income & Expenses**
   - Transaction categorization
   - Receipt attachment
@@ -67,6 +72,7 @@
   - Export capabilities
 
 ### Advanced Features
+
 - **AI-Powered Insights**
   - Spending pattern analysis
   - Budget recommendations
@@ -84,6 +90,7 @@
 ## 🛠️ Technical Implementation
 
 ### Architecture
+
 ```
 lib/
 ├── core/
@@ -110,7 +117,9 @@ lib/
 ```
 
 ### Data Models
+
 - **Profile**
+
   ```dart
   class Profile {
     final String name;
@@ -124,6 +133,7 @@ lib/
   ```
 
 - **SavingsAccount**
+
   ```dart
   class SavingsAccount {
     final String id;
@@ -135,6 +145,7 @@ lib/
   ```
 
 ### Storage Implementation
+
 - **Local Storage**
   - SharedPreferences for small data
   - Efficient serialization
@@ -156,17 +167,20 @@ lib/
 ## 🚀 Getting Started
 
 1. **Clone the Repository**
+
    ```bash
    git clone https://github.com/yourusername/tally.git
    cd tally
    ```
 
 2. **Install Dependencies**
+
    ```bash
    flutter pub get
    ```
 
 3. **Run the App**
+
    ```bash
    flutter run
    ```
@@ -176,6 +190,7 @@ lib/
 ## 🔧 Development Setup
 
 ### Local Development
+
 1. **Environment Setup**
    - Flutter SDK (latest stable)
    - Dart SDK (latest stable)
@@ -189,13 +204,16 @@ lib/
    - Write unit tests for business logic
 
 ### Future Cloud Setup
+
 1. **Supabase Setup**
+
    ```bash
    # Add to pubspec.yaml
    supabase_flutter: ^2.0.0
    ```
 
 2. **Firebase Setup**
+
    ```bash
    # Add to pubspec.yaml
    firebase_core: ^2.0.0
@@ -214,6 +232,7 @@ lib/
 5. Open a Pull Request
 
 ### Development Guidelines
+
 - Follow the existing architecture
 - Write tests for new features
 - Update documentation
@@ -230,24 +249,28 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🔮 Roadmap
 
 ### Phase 1: Core Features (Current)
+
 - ✅ Local data management
 - ✅ Basic profile management
 - ✅ Savings account tracking
 - ✅ User preferences
 
 ### Phase 2: Authentication & Sync
+
 - 🔄 Authentication implementation
 - 🔄 Cloud data sync
 - 🔄 Offline support
 - 🔄 Data migration
 
 ### Phase 3: Enhanced Features
+
 - 📅 Transaction management
 - 📅 Category system
 - 📅 Analytics & insights
 - 📅 Export functionality
 
 ### Phase 4: Advanced Features
+
 - 📅 AI integration
 - 📅 Gift tracking
 - 📅 Budget planning
@@ -255,4 +278,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-*Happy coding! 🚀* 
+*Happy coding! 🚀*
