@@ -1,71 +1,185 @@
-
 # Tally — Personal Finance Tracker
 
-**Tally** is a Flutter-based personal finance app designed to help you track income, expenses, savings, gifts/paybacks, and more—complete with rich visualizations, AI-powered insights, and powerful filtering/grouping. Everything is built with a clean, minimal aesthetic, BLoC state management, and sliver-based scrolls for iOS-grade smoothness.
+**Tally** is a Flutter-based personal finance app designed to help you track income, expenses, savings, and more. Built with a clean, minimal aesthetic and BLoC state management, it offers a smooth, native-like experience across platforms.
 
 ---
 
-## 📌 Key Features
+## 📌 Current Features
 
-- **Unified Dashboard**  
-  - Monthly summary cards: Income • Expenses • Savings  
-  - Recent activity feed + “Add more” quick-add modal  
-  - AI Insights modal: data-driven summary, trends, suggestions  
-- **Income & Expense Tabs**  
-  - **Summary**: total + category breakdown  
-  - **Custom Stacked Progress Bar** (Expenses)  
-  - **Weekly Spending Bar Chart**  
-  - **Sticky date-grouped transaction lists** (Today, This Week, Last Week, etc.)  
-  - **Infinite scroll** with “Oops, that’s all!” at end  
-  - **Date-range filter** (This Month / Last Month / This Year / Custom)  
-- **Add-Item Modals**  
-  - **Add Income** & **Add Expense** bottom sheets  
-  - Rich forms: Amount, Date & Time, Category, Tag, Payment Method, Receipt upload, Notes, Recurrence  
-  - Full validation, inline errors, BLoC integration  
-- **Categories Management**  
-  - Create/edit/delete custom categories  
-  - Color-coded swatches, per-category spend totals, drill-down pie charts  
-- **Settings & Security**  
-  - Profile details: country, salary, student status (for tax)  
-  - Notification toggles, data sync/backup, biometric lock  
-  - Error & 404 fallback screens  
+### Core Functionality
+
+- **Local Data Management**
+  - Secure local storage using SharedPreferences
+  - Efficient data serialization/deserialization
+  - Automatic data persistence
+
+### User Profile & Settings
+
+- **Profile Management**
+  - Basic profile information (name, email)
+  - Financial details (annual salary, tax rate)
+  - Regional settings (country, currency)
+  - Student status tracking
+
+- **Preferences**
+  - Push notification controls
+  - Biometric authentication (Face ID)
+  - PIN code protection
+  - Local data persistence
+
+### Savings Management
+
+- **Savings Accounts**
+  - Multiple account support
+  - Balance tracking
+  - Currency support
+  - Account descriptions
+  - Local data persistence
 
 ---
 
-## 🛠️ Installation & Setup
+## 🚧 Planned Features
 
-1. **Clone the repo**  
+### Authentication & Cloud Sync
+
+- **Authentication Options**
+  - Supabase Authentication
+  - Firebase Authentication
+  - Email/Password login
+  - Social login (Google, Apple)
+  - Biometric authentication
+
+- **Cloud Integration**
+  - Supabase real-time sync
+  - Firebase Firestore sync
+  - Automatic conflict resolution
+  - Offline support
+
+### Enhanced Financial Tracking
+
+- **Income & Expenses**
+  - Transaction categorization
+  - Receipt attachment
+  - Recurring transactions
+  - Payment method tracking
+  - Date-based filtering
+
+- **Visual Analytics**
+  - Monthly summaries
+  - Category breakdowns
+  - Spending trends
+  - Custom date ranges
+  - Export capabilities
+
+### Advanced Features
+
+- **AI-Powered Insights**
+  - Spending pattern analysis
+  - Budget recommendations
+  - Anomaly detection
+  - Smart categorization
+
+- **Gift & Payback Tracking**
+  - Gift tracking
+  - Debt management
+  - Payment reminders
+  - Settlement tracking
+
+---
+
+## 🛠️ Technical Implementation
+
+### Architecture
+
+```
+lib/
+├── core/
+│   ├── repositories/
+│   │   └── base_repository.dart      # Base storage implementation
+│   ├── theme/
+│   │   ├── app_colors.dart          # Color system
+│   │   ├── app_text_styles.dart     # Typography
+│   │   └── app_theme.dart           # Theme configuration
+│   └── widgets/                     # Shared UI components
+├── features/
+│   ├── settings/
+│   │   ├── repositories/
+│   │   │   ├── profile_repository.dart
+│   │   │   ├── preferences_repository.dart
+│   │   │   └── accounts_repository.dart
+│   │   ├── bloc/
+│   │   │   └── accounts/
+│   │   │       └── accounts_state.dart
+│   │   └── views/
+│   │       └── settings_screen.dart
+│   └── [other feature modules]
+└── main.dart
+```
+
+### Data Models
+
+- **Profile**
+
+  ```dart
+  class Profile {
+    final String name;
+    final String email;
+    final double? annualSalary;
+    final double? taxRate;
+    final String? country;
+    final String? currency;
+    final bool? studentStatus;
+  }
+  ```
+
+- **SavingsAccount**
+
+  ```dart
+  class SavingsAccount {
+    final String id;
+    final String name;
+    final double balance;
+    final String currency;
+    final String? description;
+  }
+  ```
+
+### Storage Implementation
+
+- **Local Storage**
+  - SharedPreferences for small data
+  - Efficient serialization
+  - Automatic persistence
+  - Type-safe access
+
+- **Future Cloud Options**
+  - Supabase
+    - Real-time subscriptions
+    - Row Level Security
+    - PostgreSQL database
+  - Firebase
+    - Firestore collections
+    - Security rules
+    - Offline persistence
+
+---
+
+## 🚀 Getting Started
+
+1. **Clone the Repository**
+
    ```bash
    git clone https://github.com/yourusername/tally.git
    cd tally
    ```
 
-2. **Install dependencies**
+2. **Install Dependencies**
 
    ```bash
    flutter pub get
    ```
 
-3. **iOS Setup**
-
-   * Add Info.plist keys in `ios/Runner/Info.plist`:
-
-     ```xml
-     <key>NSPhotoLibraryUsageDescription</key>
-     <string>We need access to your photos to attach receipts.</string>
-     <key>NSCameraUsageDescription</key>
-     <string>We need to use your camera for new receipts.</string>
-     <key>NSMicrophoneUsageDescription</key>
-     <string>We need mic for recording videos.</string>
-     ```
-   * Test on a real device to avoid HEIC simulator issues on iOS 14+.
-
-4. **Android Setup**
-
-   * No extra manifest changes required (SDK 21+).
-   * Ensure you handle lost data by calling `ImagePickerService.retrieveLostData()` in `initState()`.
-
-5. **Run**
+3. **Run the App**
 
    ```bash
    flutter run
@@ -73,125 +187,95 @@
 
 ---
 
-## 🏗️ Project Structure
+## 🔧 Development Setup
 
-```
-lib/
-├── core/
-│   ├── theme/
-│   │   ├── app_colors.dart       # Semantic color palette
-│   │   ├── app_text_styles.dart  # Space Grotesk/Mono text themes
-│   │   └── app_theme.dart        # Material ThemeData
-│   ├── widgets/
-│   │   ├── activity_card.dart
-│   │   ├── labeled_input.dart
-│   │   ├── custom_tab_bar.dart
-│   │   ├── empty_state_placeholder.dart
-│   │   ├── error_screen.dart
-│   │   └── platform_back_button.dart
-│   └── services/
-│       └── image_picker_service.dart
-├── features/
-│   ├── dashboard/
-│   │   ├── views/
-│   │   │   ├── dashboard_screen.dart
-│   │   │   ├── income_screen_refactored.dart
-│   │   │   └── expense_screen_refactored.dart
-│   │   ├── widgets/
-│   │   │   ├── date_filter_widget.dart
-│   │   │   ├── transaction_groups.dart
-│   │   │   ├── add_options_modal.dart
-│   │   │   └── insight_modal.dart
-│   │   └── bloc/
-│   │       ├── transaction_bloc.dart
-│   │       ├── transaction_event.dart
-│   │       └── transaction_state.dart
-│   ├── transactions/
-│   │   ├── views/
-│   │   │   ├── income_screen.dart
-│   │   │   ├── add_income_modal.dart
-│   │   │   ├── expense_screen.dart
-│   │   │   └── add_expense_modal.dart
-│   │   ├── bloc/
-│   │   │   ├── category_bloc.dart
-│   │   │   ├── category_event.dart
-│   │   │   ├── category_state.dart
-│   │   │   └── transaction_bloc.dart  (see above)
-│   │   └── repositories/             # Supabase / local storage stubs
-│   ├── savings/
-│   ├── paybacks/
-│   ├── gifting/
-│   ├── stats/
-│   └── settings/
-│       ├── views/settings_screen.dart
-│       └── widgets/profile_card.dart ...
-└── main.dart
-```
+### Local Development
+
+1. **Environment Setup**
+   - Flutter SDK (latest stable)
+   - Dart SDK (latest stable)
+   - Android Studio / VS Code
+   - iOS development tools (for iOS)
+
+2. **Code Style**
+   - Follow Flutter style guide
+   - Use BLoC pattern for state management
+   - Implement repository pattern for data access
+   - Write unit tests for business logic
+
+### Future Cloud Setup
+
+1. **Supabase Setup**
+
+   ```bash
+   # Add to pubspec.yaml
+   supabase_flutter: ^2.0.0
+   ```
+
+2. **Firebase Setup**
+
+   ```bash
+   # Add to pubspec.yaml
+   firebase_core: ^2.0.0
+   firebase_auth: ^4.0.0
+   cloud_firestore: ^4.0.0
+   ```
 
 ---
 
-## 🚀 Usage Guide
+## 📝 Contributing
 
-1. **Navigate Tabs**
-
-   * **🏠 Home**: overview, quick-add, AI insights
-   * **➕ Add**: opens Add-Options modal
-   * **⚙️ Settings**: profile, sync, notifications
-
-2. **Add Transactions**
-
-   * Tap “+ Add” or “+ Add Income/Expense” in tabs
-   * Fill required fields, attach receipt if any, and Save
-
-3. **Filter & Group**
-
-   * Use the dropdown/segmented control on Income/Expense tabs to change date range
-   * Scroll through grouped sections—headers stick as you scroll
-
-4. **Manage Categories**
-
-   * In Expenses tab, tap “Manage Categories” to add/edit/delete
-   * Colors auto-apply to charts and bars
-
-5. **View Insights**
-
-   * On Home, tap AI-bubble icon to see summary modal
-   * Follow actionable suggestions or open full Stats page
-
----
-
-## 🔧 Testing & QA
-
-* **Unit Tests**: add `bloc_test` cases for `TransactionBloc` and `CategoryBloc`.
-* **Widget Tests**: pump screens and verify placeholder, empty, error states.
-* **Manual QA**: run on iOS and Android, test keyboard insets, sliver stickiness, image picking, infinite scroll.
-
----
-
-## 📜 Changelog
-
-* **v1.0.0** – Initial release with Dashboard, Income, Expense, Add-modals, AI insights.
-* **v1.1.0** – Sliver refactor, date-range filter, sticky headers, stacked progress bar.
-* **v1.2.0** – Category management, image picker service, lost-data handling.
-
----
-
-## 🤝 Contributing
-
-1. Fork the repo
-2. Create a feature branch: `git checkout -b feature/YourFeature`
-3. Commit your changes: `git commit -m "feat: Add YourFeature"`
-4. Push to the branch: `git push origin feature/YourFeature`
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
 5. Open a Pull Request
 
-Please follow our [contribution guidelines](./CONTRIBUTING.md) and code style.
+### Development Guidelines
+
+- Follow the existing architecture
+- Write tests for new features
+- Update documentation
+- Use meaningful commit messages
 
 ---
 
 ## 📄 License
 
-This project is licensed under the [MIT License](./LICENSE).
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-*Happy budgeting! 💰*
+## 🔮 Roadmap
+
+### Phase 1: Core Features (Current)
+
+- ✅ Local data management
+- ✅ Basic profile management
+- ✅ Savings account tracking
+- ✅ User preferences
+
+### Phase 2: Authentication & Sync
+
+- 🔄 Authentication implementation
+- 🔄 Cloud data sync
+- 🔄 Offline support
+- 🔄 Data migration
+
+### Phase 3: Enhanced Features
+
+- 📅 Transaction management
+- 📅 Category system
+- 📅 Analytics & insights
+- 📅 Export functionality
+
+### Phase 4: Advanced Features
+
+- 📅 AI integration
+- 📅 Gift tracking
+- 📅 Budget planning
+- 📅 Multi-device sync
+
+---
+
+*Happy coding! 🚀*
